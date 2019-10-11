@@ -1,9 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.StoreWarehouseMongo1.StoreWarehouseMongo1ApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 3.162 s <<< FAILURE! - in com.example.StoreWarehouseMongo1.StoreWarehouseMongo1ApplicationTests
-contextLoads(com.example.StoreWarehouseMongo1.StoreWarehouseMongo1ApplicationTests)  Time elapsed: 0.016 s  <<< ERROR!
-java.lang.IllegalStateException: Failed to load ApplicationContext
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'securityConfiguration': Unsatisfied dependency expressed through field 'bCryptPasswordEncoder'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
-
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.215 s - in com.example.StoreWarehouseMongo1.StoreWarehouseMongo1ApplicationTests

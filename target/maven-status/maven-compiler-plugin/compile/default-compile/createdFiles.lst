@@ -3,8 +3,6 @@ com\example\StoreWarehouseMongo1\model\Token.class
 com\example\StoreWarehouseMongo1\StoreWarehouseMongo1Application.class
 com\example\StoreWarehouseMongo1\repositories\TokenRepository.class
 com\example\StoreWarehouseMongo1\model\Color.class
-com\example\StoreWarehouseMongo1\controllers\doLoginController.class
-com\example\StoreWarehouseMongo1\SecurityConfiguration.class
 com\example\StoreWarehouseMongo1\ServletInitializer.class
 com\example\StoreWarehouseMongo1\model\Store.class
 com\example\StoreWarehouseMongo1\model\Stock.class
