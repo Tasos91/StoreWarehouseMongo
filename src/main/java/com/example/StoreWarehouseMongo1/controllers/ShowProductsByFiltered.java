@@ -74,7 +74,7 @@ public class ShowProductsByFiltered {
     @RequestMapping(value = "/producer/{address}/{producerCode}/{pageNumber}", method = GET) //this controller shows all products for the specified store for the first page
     public List<Product> showProductsByPageAndAddressAndProducerCode(@PathVariable("address") String address, @PathVariable("producerCode") String producerCode,
             @PathVariable("pageNumber") int page) {
-        String test = "test";
+
         return Filter.getProductsPerStoreAndProducerCode(pagination.paginator(page), address, producerCode);
     }
 }
