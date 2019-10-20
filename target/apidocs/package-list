@@ -1,0 +1,10 @@
+com.example.StoreWarehouseMongo1
+com.example.StoreWarehouseMongo1.controllers
+com.example.StoreWarehouseMongo1.helpers
+com.example.StoreWarehouseMongo1.model
+com.example.StoreWarehouseMongo1.repositories
+com.springauth.springsecurityauth.domain
+com.springauth.springsecurityauth.domain.config
+com.springauth.springsecurityauth.domain.controllers
+com.springauth.springsecurityauth.domain.repository
+com.springauth.springsecurityauth.domain.service
