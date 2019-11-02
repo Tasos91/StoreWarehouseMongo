@@ -18,7 +18,7 @@ public class Filter {
     @Autowired
     ProductRepository productrepository;
 
-    @Cacheable
+    
     public static List<Product> getProductsForThisStore(List<Product> productsPerPage, String address) {
         List<Product> productsPerPageForThisStore = new ArrayList();
         for (Product product : productsPerPage) {
@@ -29,7 +29,7 @@ public class Filter {
         return productsPerPageForThisStore;
     }
 
-    @Cacheable
+    
     public static List<Product> getProductsPerStoreAndCategory(List<Product> productsPerPage, String address, String category) {
         List<Product> productsFilteredByStore = getProductsForThisStore(productsPerPage, address);
         List<Product> products = new ArrayList();
@@ -41,12 +41,12 @@ public class Filter {
         return products;
     }
 
-    @Cacheable
+    
     public List<Product> getProduct(String productCode) {
         return productrepository.findByproductcode(productCode);
     }
 
-    @Cacheable
+    
     public static List<Product> getProductsPerStoreAndProducerCode(List<Product> productsPerPage, String address, String producerCode) {
         List<Product> productsPerPageForThisStore = getProductsForThisStore(productsPerPage, address);
         List<Product> products = new ArrayList();

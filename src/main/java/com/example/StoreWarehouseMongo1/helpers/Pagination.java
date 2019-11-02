@@ -23,7 +23,7 @@ public class Pagination {
     @Autowired
     private ProductRepository productrepository;
 
-    @Cacheable
+    
     public List<Product> paginator(int page) {
         Pageable pageable = PageRequest.of(page, 5);
         List<Product> pageproduct = productrepository.findAll(pageable).getContent();
