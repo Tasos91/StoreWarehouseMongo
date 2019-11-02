@@ -5,6 +5,7 @@ import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,7 @@ public class Pagination {
     @Autowired
     private ProductRepository productrepository;
 
-
+    @Cacheable
     public List<Product> paginator(int page) {
         Pageable pageable = PageRequest.of(page, 5);
         List<Product> pageproduct = productrepository.findAll(pageable).getContent();

@@ -7,6 +7,7 @@ package com.example.StoreWarehouseMongo1.repositories;
 
 import com.example.StoreWarehouseMongo1.model.Product;
 import java.util.List;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -26,6 +27,8 @@ public interface ProductRepository extends MongoRepository<Product,String>, Pagi
     Page<Product> findAll(Pageable pageable);
     List<Product> findByproductcode(String productCode);
     List<Product> findByUsernameAndPassword(String username,String password);
+    
+    @Cacheable
     List<Product> findByAddress(String address);
     
 }

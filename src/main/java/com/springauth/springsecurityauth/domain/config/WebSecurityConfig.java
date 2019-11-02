@@ -27,7 +27,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
  * @author Tasos
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         UserDetailsService userDetailsService = mongoUserDetails();
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        
 
     }
 
