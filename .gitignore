@@ -1,2 +1,4 @@
 .idea/
+/target/
 StoreWarehouseMongo1.iml
+nb-configuration.xml
