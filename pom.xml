@@ -11,7 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>StoreWarehouseMongo1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>StoreWarehouseMongo1</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -47,11 +47,16 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.3</version>
         </dependency>
-        <dependency>
+        <dependency>    
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
             <version>2.1.8.RELEASE</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.11.2</version>
         </dependency>
         <dependency>    
             <groupId>org.springframework</groupId>
@@ -59,26 +64,9 @@
             <version>5.1.7.RELEASE</version>
             <type>jar</type>
         </dependency>
-        <!--        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <version>2.1.8.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>5.1.5.RELEASE</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>5.1.5.RELEASE</version>
-            <type>jar</type>
-        </dependency>-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
+            <artifactId>jjwt</artifactId>   
             <version>0.4</version>
             <type>jar</type>
         </dependency>

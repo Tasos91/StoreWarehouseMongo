@@ -10,6 +10,7 @@ import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.TokenRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,6 +56,7 @@ public class ShowProductsByFiltered {
         String usernameFromStore = stores.get(0).getUsername();
         Token token = new Token(alphanumeric, usersId, usernameFromStore, stores.get(0).getEnabledUser());
         tokenRepository.save(token);
+        
         return token;
     }
 
@@ -62,6 +64,12 @@ public class ShowProductsByFiltered {
     public List<Product> showProductsByPageAndAddress(@PathVariable("address") String address, @PathVariable("pageNumber") int page) {
         List<Product> prPerPage = pagination.paginator(page);
         return Filter.getProductsForThisStore(prPerPage, address);
+    }
+    
+    @RequestMapping(value = "/product", method = GET) //this controller shows all products for the specified store for the first page
+    public List<Product> getProduct() {
+        List<Product> pageproducts = productrepository.findByproductcode("duo");
+        return pageproducts;
     }
 
     @RequestMapping(value = "/category/{address}/{category}/{pageNumber}", method = GET) //this controller shows all products for the specified store for the first page
