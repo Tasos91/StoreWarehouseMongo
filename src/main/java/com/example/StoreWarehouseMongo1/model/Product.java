@@ -11,10 +11,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *
  * @author Tasos
  */
-
-@Document(collection="products")
+@Document(collection = "products")
 public class Product {
-    
+
     @Id
     private String id;
 
@@ -27,7 +26,7 @@ public class Product {
     }
     private String productcode;
     private String cost_usd;
-    private String cost_eu; 
+    private String cost_eu;
     private String price;
     private String producer_code;
     private String gold_weight;
@@ -40,9 +39,7 @@ public class Product {
     private int blackQ;
     private int bronzeQ;
     private String address;
-    private String username;
-    private String password;
-    private String category; 
+    private String category;
 
     public String getProductcode() {
         return productcode;
@@ -52,7 +49,8 @@ public class Product {
         this.productcode = productcode;
     }
 
-    public Product(String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, String karats, int goldQ, int whiteQ, int blackQ, int bronzeQ, String address, String username, String password, String category) {
+    public Product(String id, String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, String karats, int goldQ, int whiteQ, int blackQ, int bronzeQ, String address, String category) {
+        this.id = id;
         this.productcode = productcode;
         this.cost_usd = cost_usd;
         this.cost_eu = cost_eu;
@@ -67,8 +65,6 @@ public class Product {
         this.blackQ = blackQ;
         this.bronzeQ = bronzeQ;
         this.address = address;
-        this.username = username;
-        this.password = password;
         this.category = category;
     }
 
@@ -184,22 +180,6 @@ public class Product {
         this.address = address;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getCategory() {
         return category;
     }
@@ -208,27 +188,22 @@ public class Product {
         this.category = category;
     }
 
-
-
-
-    
-    
-    public Product(){
+    public Product() {
     }
-    
+
     @Override
     public String toString() {
-      ObjectMapper mapper = new ObjectMapper();
-      
-      String jsonString = "";
-    try {
-      mapper.enable(SerializationFeature.INDENT_OUTPUT);
-      jsonString = mapper.writeValueAsString(this);
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
+        ObjectMapper mapper = new ObjectMapper();
+
+        String jsonString = "";
+        try {
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            jsonString = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return jsonString;
     }
-    
-      return jsonString;
-    }
-    
+
 }

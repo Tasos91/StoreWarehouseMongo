@@ -5,25 +5,23 @@ import com.example.StoreWarehouseMongo1.helpers.Pagination;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.Token;
+import com.example.StoreWarehouseMongo1.model.User;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.TokenRepository;
+import com.example.StoreWarehouseMongo1.repositories.UserRepository;
+import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -47,25 +45,27 @@ public class ShowProductsByFiltered {
     @Autowired
     private Pagination pagination;
 
-    @PostMapping("/{username}/{password}") //login controller
-    public Token doLogin(@PathVariable("username") String username, @PathVariable("password") String password) {
+    @Autowired
+    private UserRepository userRepository;
 
-        String alphanumeric = UUID.randomUUID().toString();
-        List<Store> stores = storerepository.findByUsernameAndPassword(username, password);
-        String usersId = stores.get(0).getId();
-        String usernameFromStore = stores.get(0).getUsername();
-        Token token = new Token(alphanumeric, usersId, usernameFromStore, stores.get(0).getEnabledUser());
-        tokenRepository.save(token);
-        
-        return token;
-    }
-
+//    @PostMapping("/{username}/{password}") //login controller
+//    public Token doLogin(@PathVariable("username") String username, @PathVariable("password") String password) {
+//
+//        String alphanumeric = UUID.randomUUID().toString();
+//        List<Store> stores = storerepository.findByUsernameAndPassword(username, password);
+//        //String usersId = stores.get(0).getId();
+//        String usernameFromStore = stores.get(0).getUsername();
+//        Token token = new Token(alphanumeric, usersId, usernameFromStore, stores.get(0).getEnabledUser());
+//        tokenRepository.save(token);
+//
+//        return token;
+//    }
     @RequestMapping(value = "/store/{address}/{pageNumber}", method = GET) //this controller shows all products for the specified store for the first page
     public List<Product> showProductsByPageAndAddress(@PathVariable("address") String address, @PathVariable("pageNumber") int page) {
         List<Product> prPerPage = pagination.paginator(page);
         return Filter.getProductsForThisStore(prPerPage, address);
     }
-    
+
     @RequestMapping(value = "/product", method = GET) //this controller shows all products for the specified store for the first page
     public List<Product> getProduct() {
         List<Product> pageproducts = productrepository.findByproductcode("duo");
@@ -85,4 +85,5 @@ public class ShowProductsByFiltered {
 
         return Filter.getProductsPerStoreAndProducerCode(pagination.paginator(page), address, producerCode);
     }
+
 }

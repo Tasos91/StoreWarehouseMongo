@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
  *
  * @author Tasos
  */
-
 @CrossOrigin(origins = "*")
 @Repository
-public interface ProductRepository extends MongoRepository<Product,String>, PagingAndSortingRepository<Product,String> {
-    
+public interface ProductRepository extends MongoRepository<Product, String>, PagingAndSortingRepository<Product, String> {
+
     Page<Product> findAll(Pageable pageable);
+
     List<Product> findByproductcode(String productCode);
-    List<Product> findByUsernameAndPassword(String username,String password);
-    
+//  List<Product> findByUsernameAndPassword(String username,String password);
+
     @Cacheable
     List<Product> findByAddress(String address);
-    
+
 }
