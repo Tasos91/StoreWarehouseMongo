@@ -28,12 +28,11 @@ public class User {
     private List<Role> roles;
     private Store store;
 
-    public User(String username, String password, String email, String fullname, boolean enabled, Store store) {
+    public User(String username, String password, String email, String fullname, Store store) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.fullname = fullname;
-        this.enabled = enabled;
         this.store = store;
     }
 

@@ -12,48 +12,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *
  * @author Tasos
  */
-@Document(collection="colors")
+@Document(collection = "colors")
 public class Color {
-    
+
     @Id
     private String id;
-    private int yelloQ;
-    private int whiteQ;
-    private int blackQ;
-    private int bronzeQ;
-
-    public Color(int yelloQ, int whiteQ, int blackQ, int bronzeQ) {
-        this.yelloQ = yelloQ;
-        this.whiteQ = whiteQ;
-        this.blackQ = blackQ;
-        this.bronzeQ = bronzeQ;
-    }
-
-    
-
-    public Integer getWhiteQ() {
-        return whiteQ;
-    }
-
-    public void setWhiteQ(Integer whiteQ) {
-        this.whiteQ = whiteQ;
-    }
-
-    public Integer getBlackQ() {
-        return blackQ;
-    }
-
-    public void setBlackQ(Integer blackQ) {
-        this.blackQ = blackQ;
-    }
-
-    public Integer getBronzeQ() {
-        return bronzeQ;
-    }
-
-    public void setBronzeQ(Integer bronzeQ) {
-        this.bronzeQ = bronzeQ;
-    }
+    private int yelloQuantity;
+    private int whiteQuantity;
+    private int blackQuantity;
+    private int bronzeQuantity;
 
     public String getId() {
         return id;
@@ -63,13 +30,54 @@ public class Color {
         this.id = id;
     }
 
-    public Integer getYelloQ() {
-        return yelloQ;
+    public Integer getWhiteQ() {
+        return whiteQuantity;
     }
 
-    public void setYelloQ(Integer colorQ) {
-        this.yelloQ = colorQ;
+    public void setWhiteQ(Integer whiteQuantity) {
+        this.whiteQuantity = whiteQuantity;
     }
-    
-    
+
+    public Integer getBlackQuantity() {
+        return blackQuantity;
+    }
+
+    public void setBlackQuantity(Integer blackQuantity) {
+        this.blackQuantity = blackQuantity;
+    }
+
+    public Integer getBronzeQuantity() {
+        return bronzeQuantity;
+    }
+
+    public void setBronzeQuantity(Integer bronzeQuantity) {
+        this.bronzeQuantity = bronzeQuantity;
+    }
+
+    public Integer getYelloQuantity() {
+        return yelloQuantity;
+    }
+
+    public void setYelloQ(Integer colorQuantity) {
+        this.yelloQuantity = colorQuantity;
+    }
+
+    public Color() {
+    }
+
+    public Color(int yelloQuantity, int whiteQuantity, int blackQuantity, int bronzeQuantity) {
+        this.yelloQuantity = yelloQuantity;
+        this.whiteQuantity = whiteQuantity;
+        this.blackQuantity = blackQuantity;
+        this.bronzeQuantity = bronzeQuantity;
+    }
+
+    public Color(String id, int yelloQuantity, int whiteQuantity, int blackQuantity, int bronzeQuantity) {
+        this.id = id;
+        this.yelloQuantity = yelloQuantity;
+        this.whiteQuantity = whiteQuantity;
+        this.blackQuantity = blackQuantity;
+        this.bronzeQuantity = bronzeQuantity;
+    }
+
 }

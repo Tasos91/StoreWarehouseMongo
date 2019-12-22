@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
  * @author Tasos
  */
 @Repository
-@CrossOrigin(origins="*")
-public interface StoreRepository extends MongoRepository<Store,String>{
+@CrossOrigin(origins = "*")
+public interface StoreRepository extends MongoRepository<Store, String> {
     
-    List<Store> findByUsernameAndPassword(String username,String password);
-    
+    List<Store> findByaddress(String address);
 }

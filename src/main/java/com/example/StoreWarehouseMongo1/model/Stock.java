@@ -12,16 +12,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *
  * @author Tasos
  */
-@Document(collection="stock")
+@Document(collection = "stock")
 public class Stock {
-    
+
     @Id
     private String id;
-
-    public Stock(Color color) {
-        this.color = color;
-    }
     private Color color;
+    private Store store;
 
     public String getId() {
         return id;
@@ -38,6 +35,22 @@ public class Stock {
     public void setColor(Color color) {
         this.color = color;
     }
-    
-    
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public Stock(Color color, Store store) {
+        this.color = color;
+        this.store = store;
+    }
+
+    public Stock(Color color) {
+        this.color = color;
+    }
+
 }

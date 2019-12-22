@@ -30,9 +30,9 @@ public class ShowProductController {
         List<Product> productsPerPage = pageproduct.getContent(); //pagination
         List<Product> productsPerPageForThisStore = new ArrayList();
         for (Product pr : productsPerPage) {
-            if (pr.getAddress().equals(address)) {
-                productsPerPageForThisStore.add(pr);
-            }
+//            if (pr.getAddress().equals(address)) {
+//                productsPerPageForThisStore.add(pr);
+//            }
         }
 
         return productsPerPageForThisStore;

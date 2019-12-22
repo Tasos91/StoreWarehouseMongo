@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import java.util.List;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -34,12 +35,15 @@ public class Product {
     private String descr;
     private String karats;
     private List<Stone> stones; //proswrina vgazw ta stones apo to constructor
-    private int goldQ;
-    private int whiteQ;
-    private int blackQ;
-    private int bronzeQ;
-    private String address;
-    private String category;
+    private Category category;
+    @DBRef
+    private List<Stock> stock;
+
+    public Product(String productcode, Category category, List<Stock> stock) {
+        this.productcode = productcode;
+        this.category = category;
+        this.stock = stock;
+    }
 
     public String getProductcode() {
         return productcode;
@@ -49,7 +53,7 @@ public class Product {
         this.productcode = productcode;
     }
 
-    public Product(String id, String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, String karats, int goldQ, int whiteQ, int blackQ, int bronzeQ, String address, String category) {
+    public Product(String id, String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, String karats, Category category, List<Stock> stock) {
         this.id = id;
         this.productcode = productcode;
         this.cost_usd = cost_usd;
@@ -60,12 +64,8 @@ public class Product {
         this.silver_weight = silver_weight;
         this.descr = descr;
         this.karats = karats;
-        this.goldQ = goldQ;
-        this.whiteQ = whiteQ;
-        this.blackQ = blackQ;
-        this.bronzeQ = bronzeQ;
-        this.address = address;
         this.category = category;
+        this.stock = stock;
     }
 
     public String getCost_usd() {
@@ -140,52 +140,20 @@ public class Product {
         this.stones = stones;
     }
 
-    public int getGoldQ() {
-        return goldQ;
-    }
-
-    public void setGoldQ(int goldQ) {
-        this.goldQ = goldQ;
-    }
-
-    public int getWhiteQ() {
-        return whiteQ;
-    }
-
-    public void setWhiteQ(int whiteQ) {
-        this.whiteQ = whiteQ;
-    }
-
-    public int getBlackQ() {
-        return blackQ;
-    }
-
-    public void setBlackQ(int blackQ) {
-        this.blackQ = blackQ;
-    }
-
-    public int getBronzeQ() {
-        return bronzeQ;
-    }
-
-    public void setBronzeQ(int bronzeQ) {
-        this.bronzeQ = bronzeQ;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Stock> getStock() {
+        return stock;
+    }
+
+    public void setStock(List<Stock> stock) {
+        this.stock = stock;
     }
 
     public Product() {

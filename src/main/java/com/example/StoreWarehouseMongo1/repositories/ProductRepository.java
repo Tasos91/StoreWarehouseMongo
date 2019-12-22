@@ -28,7 +28,4 @@ public interface ProductRepository extends MongoRepository<Product, String>, Pag
     List<Product> findByproductcode(String productCode);
 //  List<Product> findByUsernameAndPassword(String username,String password);
 
-    @Cacheable
-    List<Product> findByAddress(String address);
-
 }

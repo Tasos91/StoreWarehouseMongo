@@ -1,6 +1,8 @@
 package com.example.StoreWarehouseMongo1.repositories;
 
+import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.User;
+import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  *
@@ -9,5 +11,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface UserRepository extends MongoRepository<User, String> {
 
     User findByEmail(String email);
+    List<User> findByusername(String address);
 
 }
