@@ -1,10 +1,9 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
-import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.User;
+import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.UserRepository;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +24,9 @@ public class UserControllerCRUD {
 
     @Autowired
     private UserRepository userrepository;
+    
+    @Autowired
+    private StoreRepository storeRepository;
 
     @RequestMapping(value = "/show/{username}", method = POST)
     public User showUserController(@PathVariable("username") String username) {
@@ -41,7 +43,7 @@ public class UserControllerCRUD {
         userrepository.save(updateUser(updateUserFromUi, usernameOld));
     }
 
-    @RequestMapping(value = "/delete/{address}", method = POST)
+    @RequestMapping(value = "/delete/{username}", method = POST)
     public void deleteUserController(@PathVariable("username") String username) {
         userrepository.delete(deleteUser(username));
     }
@@ -78,13 +80,12 @@ public class UserControllerCRUD {
     }
 
     public User createUser(String address, User user) {
-        Store store = new Store();
-        List<User> users = new ArrayList<User>();
-        List<Product> products = new ArrayList<Product>();
-        store.setAddress(address);
+        List<Store> stores = storeRepository.findByaddress(address);
+        Store store = stores.get(0);
+        List<User> users = store.getUsers();
+        users.add(user);
         store.setUsers(users);
-        store.setProducts(products);
-        user.setStore(store);
+        storeRepository.save(store);
         userrepository.save(user);
         return user;
     }
