@@ -2,7 +2,6 @@ package com.example.StoreWarehouseMongo1.model;
 
 import com.springauth.springsecurityauth.domain.Role;
 import java.util.List;
-import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -26,14 +25,12 @@ public class User {
     private boolean enabled;
     @DBRef
     private List<Role> roles;
-    private Store store;
 
-    public User(String username, String password, String email, String fullname, Store store) {
+    public User(String username, String password, String email, String fullname) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.fullname = fullname;
-        this.store = store;
     }
 
     public String getId() {
@@ -84,13 +81,6 @@ public class User {
         this.roles = roles;
     }
 
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
     public String getUsername() {
         return username;
     }
