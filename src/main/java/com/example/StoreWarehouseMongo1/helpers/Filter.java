@@ -31,9 +31,9 @@ public class Filter {
         List<Product> productsFilteredByStore = getProductsForThisStore(productsPerPage, address);
         List<Product> products = new ArrayList();
         for (Product product : productsFilteredByStore) {
-            if (product.getCategory().equals(category)) {
-                products.add(product);
-            }
+//            if (product.getCategory().equals(category)) {
+//                products.add(product);
+//            }
         }
         return products;
     }

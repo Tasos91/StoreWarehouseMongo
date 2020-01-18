@@ -1,6 +1,7 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
 import com.example.StoreWarehouseMongo1.model.Product;
+import com.example.StoreWarehouseMongo1.model.Stock;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.User;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
@@ -37,8 +38,8 @@ public class StoreControllerCRUD {
 
     public Store createStore(String address) {
         List<User> users = new ArrayList<User>();
-        List<Product> products = new ArrayList<Product>();
-        return new Store(address, users, products);
+        List<Stock> stock = new ArrayList<Stock>();
+        return new Store(address, users, stock);
     }
 
     @RequestMapping(value = "/update/{addressOld}/{addressNew}", method = POST)

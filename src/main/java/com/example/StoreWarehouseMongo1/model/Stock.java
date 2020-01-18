@@ -17,8 +17,29 @@ public class Stock {
 
     @Id
     private String id;
-    private Color color;
-    private Store store;
+    private String color;
+    private String productId;
+    private Integer quantity;
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public Stock() {
+    }
+    
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
     public String getId() {
         return id;
@@ -28,28 +49,21 @@ public class Stock {
         this.id = id;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public Stock(Color color, Store store) {
+    public Stock(String color, String productId, Integer quantity) {
         this.color = color;
-        this.store = store;
+        this.productId = productId;
+        this.quantity = quantity;
     }
 
-    public Stock(Color color) {
+    public Stock(String color) {
         this.color = color;
     }
 

@@ -17,15 +17,8 @@ public class Product {
 
     @Id
     private String id;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
     private String productcode;
+    private Category category;
     private String cost_usd;
     private String cost_eu;
     private String price;
@@ -35,14 +28,26 @@ public class Product {
     private String descr;
     private String karats;
     private List<Stone> stones; //proswrina vgazw ta stones apo to constructor
-    private Category category;
-    @DBRef
-    private List<Stock> stock;
 
-    public Product(String productcode, Category category, List<Stock> stock) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Product(String productcode, Category category) {
         this.productcode = productcode;
         this.category = category;
-        this.stock = stock;
     }
 
     public String getProductcode() {
@@ -53,8 +58,7 @@ public class Product {
         this.productcode = productcode;
     }
 
-    public Product(String id, String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, String karats, Category category, List<Stock> stock) {
-        this.id = id;
+    public Product(String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, String karats, Category category) {
         this.productcode = productcode;
         this.cost_usd = cost_usd;
         this.cost_eu = cost_eu;
@@ -65,7 +69,6 @@ public class Product {
         this.descr = descr;
         this.karats = karats;
         this.category = category;
-        this.stock = stock;
     }
 
     public String getCost_usd() {
@@ -138,22 +141,6 @@ public class Product {
 
     public void setStones(List<Stone> stones) {
         this.stones = stones;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public List<Stock> getStock() {
-        return stock;
-    }
-
-    public void setStock(List<Stock> stock) {
-        this.stock = stock;
     }
 
     public Product() {

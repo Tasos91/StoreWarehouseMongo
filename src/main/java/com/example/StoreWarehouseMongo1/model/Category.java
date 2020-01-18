@@ -5,81 +5,39 @@
  */
 package com.example.StoreWarehouseMongo1.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /**
  *
  * @author Tasos
  */
+@Document(collection = "category")
 public class Category {
 
-    private String babyPins;
-    private String pendants;
-    private String Necklaces;
-    private String Bracelets;
-    private String Earrings;
-    private String cross;
+    @Id
+    private String id;
+    private String kindOfCategory;
 
-    public Category(String babyPins, String pendants, String Necklaces, String Bracelets, String Earrings, String cross) {
-        this.babyPins = babyPins;
-        this.pendants = pendants;
-        this.Necklaces = Necklaces;
-        this.Bracelets = Bracelets;
-        this.Earrings = Earrings;
-        this.cross = cross;
+    public String getId() {
+        return id;
     }
 
-    public Category() {
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Category(String babyPins) {
-        this.babyPins = babyPins;
-
+    public String getKindOfCategory() {
+        return kindOfCategory;
     }
 
-    public String getBabyPins() {
-        return babyPins;
+    public void setKindOfCategory(String kindOfCategory) {
+        this.kindOfCategory = kindOfCategory;
     }
 
-    public void setBabyPins(String babyPins) {
-        this.babyPins = babyPins;
+    public Category(String id, String kindOfCategory) {
+        this.id = id;
+        this.kindOfCategory = kindOfCategory;
     }
-
-    public String getPendants() {
-        return pendants;
-    }
-
-    public void setPendants(String pendants) {
-        this.pendants = pendants;
-    }
-
-    public String getNecklaces() {
-        return Necklaces;
-    }
-
-    public void setNecklaces(String Necklaces) {
-        this.Necklaces = Necklaces;
-    }
-
-    public String getBracelets() {
-        return Bracelets;
-    }
-
-    public void setBracelets(String Bracelets) {
-        this.Bracelets = Bracelets;
-    }
-
-    public String getEarrings() {
-        return Earrings;
-    }
-
-    public void setEarrings(String Earrings) {
-        this.Earrings = Earrings;
-    }
-
-    public String getCross() {
-        return cross;
-    }
-
-    public void setCross(String cross) {
-        this.cross = cross;
-    }
+ 
 }
