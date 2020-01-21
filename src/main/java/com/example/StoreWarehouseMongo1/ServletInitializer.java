@@ -1,7 +1,5 @@
 package com.example.StoreWarehouseMongo1;
 
-import com.springauth.springsecurityauth.domain.Role;
-import com.springauth.springsecurityauth.domain.repository.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
