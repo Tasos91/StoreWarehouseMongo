@@ -36,13 +36,13 @@ public class StockControllerCRUD {
     @RequestMapping(value = "/add/{address}", method = PUT) //prwta tha dhmiourgeitai sth vash to product kai meta to stock!
     public void addStockController(@RequestBody Stock stock, @PathVariable("address") String addressToStored) {
         stockrepository.save(stock);
-        List<Store> stores = storerepository.findByaddress(addressToStored);
-        Store store = stores.get(0);
-        List<Stock> stock1 = null;
+        Store store = storerepository.findByaddress(addressToStored).get(0);
+        List<Stock> stock1 = null; 
         try {
             stock1 = store.getStock(); //kanw update th lista twn stock tou store
             stock1.add(stock);
         } catch (Exception thereIsNotPreviousStock) {
+            
         }
         store.setStock(stock1);
         storerepository.save(store);
