@@ -24,4 +24,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Repository
 public interface PseudoProductRepository extends MongoRepository<PseudoProduct, String> {
 
+    List<PseudoProduct> findByproductcode(String productCode);
+
 }
