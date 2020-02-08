@@ -47,11 +47,12 @@ public class ProductControllerCRUD {
     public ProductControllerCRUD(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
+    
 
-    @RequestMapping(value = "{isAdmin}/create/", method = POST)
+    @RequestMapping(value = "/{isAdmin}/create", method = POST)
     public ResponseEntity<?> createProductController(@RequestBody Product product, @PathVariable("isAdmin") boolean isAdmin, UriComponentsBuilder ucBuilder) {
         if (!isAdmin) {
-            return new ResponseEntity(new CustomErrorType("The specific user has not the previlige to create a product"),
+            return new ResponseEntity(new CustomErrorType("The specific user has not the privilege to create a product", HttpStatus.FORBIDDEN.value()),
                     HttpStatus.FORBIDDEN);
         } else {
             Product pr = new Product();
@@ -59,17 +60,18 @@ public class ProductControllerCRUD {
             try {
                 pr = productrepository.findByproductcode(product.getProductcode()).get(0);
             } catch (Exception e) {
-            }
-            if (pr != null) {
-                return new ResponseEntity(new CustomErrorType("A product with productcode " + product.getProductcode() + " already exist"),
-                        HttpStatus.CONFLICT);
-            } else {
                 productrepository.save(product);
                 HttpHeaders headers = new HttpHeaders();
                 headers.setLocation(ucBuilder.path("/create/{productcode}").buildAndExpand(product.getProductcode()).toUri());
-                return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+                return new ResponseEntity(new CustomErrorType("The product " + product.getProductcode() + " was succesfully created", HttpStatus.CREATED.value()),
+                        HttpStatus.CREATED);
+            }
+            if (pr != null) {
+                return new ResponseEntity(new CustomErrorType("A product with productcode " + product.getProductcode() + " already exist", HttpStatus.CONFLICT.value()),
+                        HttpStatus.CONFLICT);
             }
         }
+        return null;
     }
 
     @GetMapping(value = "/{productCode}")
@@ -82,13 +84,13 @@ public class ProductControllerCRUD {
         }
         if (product == null) {
             return new ResponseEntity(new CustomErrorType("User with productCode " + productCode
-                    + " not found"), HttpStatus.NOT_FOUND);
+                    + " not found",HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 
     @PutMapping
-    public void update(@RequestBody Product product) {
+        public void update(@RequestBody Product product) {
         this.mongoTemplate.save(product);
     }
 

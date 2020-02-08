@@ -7,12 +7,19 @@ package com.example.StoreWarehouseMongo1.controllers;
 public class CustomErrorType {
 
     private String errorMessage;
+    private Integer errorCode;
 
-    public CustomErrorType(String errorMessage) {
+    public CustomErrorType(String errorMessage, Integer errorCode) {
         this.errorMessage = errorMessage;
+        this.errorCode = errorCode;
     }
 
     public String getErrorMessage() {
         return errorMessage;
     }
+
+    public Integer getErrorCode() {
+        return errorCode;
+    }
+
 }

@@ -61,7 +61,7 @@ public class UserControllerCRUD {
         } catch (Exception userNotFound) {
         }
         if (user == null) {
-            return new ResponseEntity(new CustomErrorType("Unable to delete. User with username " + username + " not found."),
+            return new ResponseEntity(new CustomErrorType("Unable to delete. User with username " + username + " not found.", HttpStatus.NOT_FOUND.value()),
                     HttpStatus.NOT_FOUND);
         }
         userrepository.delete(user);
