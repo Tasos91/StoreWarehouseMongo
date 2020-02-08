@@ -32,6 +32,9 @@ public class User {
         this.enabled = enabled;
     }
 
+    public User() {
+    }
+
     public String getId() {
         return id;
     }

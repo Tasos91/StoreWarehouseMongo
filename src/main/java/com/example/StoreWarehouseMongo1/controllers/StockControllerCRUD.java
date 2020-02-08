@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,14 +34,14 @@ public class StockControllerCRUD {
     @Autowired
     private StoreRepository storerepository;
 
-    @RequestMapping(value = "/add/{address}", method = PUT) //prwta tha dhmiourgeitai sth vash to product kai meta to stock!
+    @RequestMapping(value = "/add/{address}", method = POST) //prwta tha dhmiourgeitai sth vash to product kai meta to stock!
     public void addStockController(@RequestBody Stock stock, @PathVariable("address") String addressToStored) {
         stockrepository.save(stock);
         Store store = storerepository.findByaddress(addressToStored).get(0);
         List<Stock> stock1 = null; 
         try {
             stock1 = store.getStock(); //kanw update th lista twn stock tou store
-            stock1.add(stock);
+            stock1.add(stock);//edw prepei na ginetai prwth fora save kai to stock sto history
         } catch (Exception thereIsNotPreviousStock) {
             
         }

@@ -5,24 +5,35 @@ import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.UserRepository;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  *
  * @author Tasos
  */
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/product/api")
 @CrossOrigin(origins = "*")
 public class ProductControllerCRUD {
+
+    private MongoTemplate mongoTemplate;
 
     @Autowired
     private ProductRepository productrepository;
@@ -33,43 +44,63 @@ public class ProductControllerCRUD {
     @Autowired
     private UserRepository userepository;
 
-    @RequestMapping(value = "/create/{isAdmin}", method = POST)
-    public void createProductController(@RequestBody Product product, @PathVariable("isAdmin") boolean isAdmin) {
+    public ProductControllerCRUD(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
-        if (isAdmin) {
-            productrepository.save(product);
+    @RequestMapping(value = "{isAdmin}/create/", method = POST)
+    public ResponseEntity<?> createProductController(@RequestBody Product product, @PathVariable("isAdmin") boolean isAdmin, UriComponentsBuilder ucBuilder) {
+        if (!isAdmin) {
+            return new ResponseEntity(new CustomErrorType("The specific user has not the previlige to create a product"),
+                    HttpStatus.FORBIDDEN);
+        } else {
+            Product pr = new Product();
+            pr = null;
+            try {
+                pr = productrepository.findByproductcode(product.getProductcode()).get(0);
+            } catch (Exception e) {
+            }
+            if (pr != null) {
+                return new ResponseEntity(new CustomErrorType("A product with productcode " + product.getProductcode() + " already exist"),
+                        HttpStatus.CONFLICT);
+            } else {
+                productrepository.save(product);
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(ucBuilder.path("/create/{productcode}").buildAndExpand(product.getProductcode()).toUri());
+                return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+            }
         }
-
     }
 
-    @RequestMapping(value = "/show/{productCode}", method = POST)
-    public Product findProductController(@PathVariable("productCode") String productCode,
-            @PathVariable("address") String address) {
-        Store store = storerepository.findByaddress(address).get(0);
-        return productrepository.findByproductcode(productCode).get(0);
+    @GetMapping(value = "/{productCode}")
+    public ResponseEntity<?> getProduct(@PathVariable("productCode") String productCode) {
+        Product product = new Product();
+        product = null;
+        try {
+            product = productrepository.findByproductcode(productCode).get(0);
+        } catch (Exception IndexOutOfBoundsException) {
+        }
+        if (product == null) {
+            return new ResponseEntity(new CustomErrorType("User with productCode " + productCode
+                    + " not found"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update/{productCode}", method = PUT)
-    public void updateProductController(@RequestBody Product updatedProduct, @PathVariable("productCode") String productCode) {
-        Product product1 = productrepository.findByproductcode(productCode).get(0);
-        product1.setCategory(updatedProduct.getCategory());
-        product1.setCost_eu(updatedProduct.getCost_eu());
-        product1.setCost_usd(updatedProduct.getCost_usd());
-        product1.setDescr(updatedProduct.getDescr());
-        product1.setGold_weight(updatedProduct.getGold_weight());
-        product1.setKarats(updatedProduct.getKarats());
-        product1.setPrice(updatedProduct.getPrice());
-        product1.setProducer_code(updatedProduct.getProducer_code());
-        product1.setProductcode(updatedProduct.getProductcode());
-        product1.setSilver_weight(updatedProduct.getSilver_weight());
-        product1.setStones(null);
-        productrepository.save(product1);
+    @PutMapping
+    public void update(@RequestBody Product product) {
+        this.mongoTemplate.save(product);
     }
 
     @RequestMapping(value = "/delete/{productCode}", method = DELETE)
     public void deleteProduct(@PathVariable("productCode") String productCode) {
         Product pr = productrepository.findByproductcode(productCode).get(0);
         productrepository.delete(pr);
+    }
+
+    @RequestMapping(value = "/showAll", method = GET)
+    public List<Product> getAll() {
+        return this.productrepository.findAll();
     }
 
 }

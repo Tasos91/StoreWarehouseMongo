@@ -6,7 +6,11 @@ import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,19 +22,24 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Tasos
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/api")
 @CrossOrigin(origins = "*")
 public class UserControllerCRUD {
 
     @Autowired
     private UserRepository userrepository;
-    
+
     @Autowired
     private StoreRepository storeRepository;
 
     @RequestMapping(value = "/show/{username}", method = POST)
     public User showUserController(@PathVariable("username") String username) {
         return showSpecificUser(username);
+    }
+
+    @GetMapping
+    public List<User> getUsers() {
+        return userrepository.findAll();
     }
 
     @RequestMapping(value = "/createUser/{address}", method = POST)
@@ -43,19 +52,20 @@ public class UserControllerCRUD {
         userrepository.save(updateUser(updateUserFromUi, usernameOld));
     }
 
-    @RequestMapping(value = "/delete/{username}", method = POST)
-    public void deleteUserController(@PathVariable("username") String username) {
-        userrepository.delete(deleteUser(username));
-    }
-
-    public User deleteUser(String username) {
-        User userForDelete = null;
+    @DeleteMapping(value = "/{username}")
+    public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
+        User user = new User();
+        user = null;
         try {
-            List<User> users = userrepository.findByusername(username);
-            userForDelete = users.get(0);
-        } catch (Exception e) {
+            user = userrepository.findByusername(username).get(0);
+        } catch (Exception userNotFound) {
         }
-        return userForDelete;
+        if (user == null) {
+            return new ResponseEntity(new CustomErrorType("Unable to delete. User with username " + username + " not found."),
+                    HttpStatus.NOT_FOUND);
+        }
+        userrepository.delete(user);
+        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
 
     public User showSpecificUser(String username) {
