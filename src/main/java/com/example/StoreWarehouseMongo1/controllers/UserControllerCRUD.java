@@ -57,7 +57,7 @@ public class UserControllerCRUD {
         User user = new User();
         user = null;
         try {
-            user = userrepository.findByusername(username).get(0);
+            user = userrepository.findByUsername(username).get(0);
         } catch (Exception userNotFound) {
         }
         if (user == null) {
@@ -71,7 +71,7 @@ public class UserControllerCRUD {
     public User showSpecificUser(String username) {
         User user = null;
         try {
-            List<User> users = userrepository.findByusername(username);
+            List<User> users = userrepository.findByUsername(username);
             user = users.get(0);
         } catch (Exception e) {
         }
@@ -79,7 +79,7 @@ public class UserControllerCRUD {
     }
 
     public User updateUser(User updatedUserFromUi, String username) { //tha erxetai oloklhro to json apo to ui
-        List<User> users = userrepository.findByusername(username);  //to opoio tha einai oi kainourgies times gia ta pedia tou user
+        List<User> users = userrepository.findByUsername(username);  //to opoio tha einai oi kainourgies times gia ta pedia tou user
         User userToBeUpdated = users.get(0);                         //kai epishs tha erxetai kai to pallio username!   
         userToBeUpdated.setUsername(updatedUserFromUi.getUsername());
         userToBeUpdated.setFullname(updatedUserFromUi.getFullname());

@@ -1,15 +1,17 @@
 package com.example.StoreWarehouseMongo1.model;
 
+import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 /**
  *
  * @author Tasos
  */
-@Document(collection = "user")
+@Document(collection = "users")
 public class User {
 
     @Id
@@ -22,6 +24,15 @@ public class User {
     private String fullname;
     private boolean enabled;
     private boolean admin;
+    private String[] roles;
+
+    public String[] getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String[] roles) {
+        this.roles = roles;
+    }
 
     public User(String username, String password, String email, String fullname, boolean admin, boolean enabled) {
         this.username = username;
@@ -30,6 +41,12 @@ public class User {
         this.fullname = fullname;
         this.admin = admin;
         this.enabled = enabled;
+    }
+
+    public User(String username, String password, String... roles) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
     }
 
     public User() {
