@@ -63,8 +63,8 @@ public class ProductControllerCRUD {
                 productrepository.save(product);
                 HttpHeaders headers = new HttpHeaders();
                 headers.setLocation(ucBuilder.path("/create/{productcode}").buildAndExpand(product.getProductcode()).toUri());
-                return new ResponseEntity(new CustomErrorType("The product " + product.getProductcode() + " was succesfully created", HttpStatus.CREATED.value()),
-                        HttpStatus.CREATED);
+                return new ResponseEntity(new CustomErrorType("The product " + product.getProductcode() + " was succesfully created", HttpStatus.OK.value()),
+                        HttpStatus.OK);
             }
             if (pr != null) {
                 return new ResponseEntity(new CustomErrorType("A product with productcode " + product.getProductcode() + " already exist", HttpStatus.CONFLICT.value()),

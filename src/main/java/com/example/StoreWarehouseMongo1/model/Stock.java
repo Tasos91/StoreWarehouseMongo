@@ -20,6 +20,22 @@ public class Stock {
     private String color;
     private String productId;
     private Integer quantity;
+    private String imageUrl;
+
+    public Stock(String color, String productId, Integer quantity, String imageUrl) {
+        this.color = color;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public String getProductId() {
         return productId;
@@ -31,7 +47,6 @@ public class Stock {
 
     public Stock() {
     }
-    
 
     public Integer getQuantity() {
         return quantity;
