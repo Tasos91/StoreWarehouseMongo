@@ -42,7 +42,7 @@ public class UserControllerCRUD {
         return userrepository.findAll();
     }
 
-    @RequestMapping(value = "/createUser/{address}", method = POST)
+    @RequestMapping(value = "/create/{address}", method = POST)
     public User createUserController(@RequestBody User user, @PathVariable("address") String address) {
         return createUser(address, user);
     }
@@ -95,8 +95,8 @@ public class UserControllerCRUD {
         List<User> users = store.getUsers();
         users.add(user);
         store.setUsers(users);
-        storeRepository.save(store);
         userrepository.save(user);
+        storeRepository.save(store);
         return user;
     }
 

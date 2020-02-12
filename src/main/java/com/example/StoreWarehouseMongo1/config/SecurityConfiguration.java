@@ -31,12 +31,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http 
                 .csrf().disable()
                 .authorizeRequests().anyRequest().authenticated()
+                .antMatchers("/product/api/**").hasAnyRole("ADMIN")
+                .antMatchers("/store/api/**").hasAnyRole("ADMIN")
+                .antMatchers("/user/api/**").hasAnyRole("ADMIN")
+                .antMatchers("/stock/api/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/pseudo/api/get/pseudoProducts/{address}").hasAnyRole("ADMIN", "USER")
                 .and().httpBasic()
                 .and().sessionManagement().disable();
     }
@@ -45,6 +50,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(userDetailsService);
     }
-    
-    
+
 }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Tasos
  */
 @RestController
-@RequestMapping("/store")
+@RequestMapping("/store/api")
 @CrossOrigin(origins = "*")
 public class StoreControllerCRUD {
 

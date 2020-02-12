@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Tasos
  */
 @RestController
-@RequestMapping("/addStock")
+@RequestMapping("/stock/api")
 @CrossOrigin(origins = "*")
 public class StockControllerCRUD {
 

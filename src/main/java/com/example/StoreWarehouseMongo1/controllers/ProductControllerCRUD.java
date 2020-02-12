@@ -49,7 +49,7 @@ public class ProductControllerCRUD {
     }
     
 
-    @RequestMapping(value = "/{isAdmin}/create", method = POST)
+    @RequestMapping(value = "/create", method = POST)
     public ResponseEntity<?> createProductController(@RequestBody Product product, @PathVariable("isAdmin") boolean isAdmin, UriComponentsBuilder ucBuilder) {
         if (!isAdmin) {
             return new ResponseEntity(new CustomErrorType("The specific user has not the privilege to create a product", HttpStatus.FORBIDDEN.value()),
