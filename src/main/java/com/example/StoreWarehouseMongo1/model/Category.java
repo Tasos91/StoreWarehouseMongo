@@ -35,9 +35,17 @@ public class Category {
         this.kindOfCategory = kindOfCategory;
     }
 
+    public Category() {
+
+    }
+
+    public Category(String kindOfCategory) {
+        this.kindOfCategory = kindOfCategory;
+    }
+
     public Category(String id, String kindOfCategory) {
         this.id = id;
         this.kindOfCategory = kindOfCategory;
     }
- 
+
 }
