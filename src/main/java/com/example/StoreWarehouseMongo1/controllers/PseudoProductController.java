@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -65,7 +62,11 @@ public class PseudoProductController {
                     HttpStatus.NOT_FOUND);
         }
         for (Stock st : stock) {
-            Product pr = productrepository.findByproductcode(st.getProductId()).get(0);
+            Product pr = new Product();
+            try {
+                pr = productrepository.findByproductcode(st.getProductId()).get(0);
+            } catch (Exception e) {
+            }
             PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
             PseudoProduct pseudoproduct = new PseudoProduct();
             try {
@@ -100,9 +101,14 @@ public class PseudoProductController {
         }
         stock.setQuantity(quantity);
         stockrepository.save(stock);
-        PseudoProduct pseudoproduct = pseudoproductrepository.findByproductcode(productcode).get(0);
-        pseudoproduct.setStock(stock);
-        pseudoproductrepository.save(pseudoproduct);
+        try {
+            PseudoProduct pseudoproduct = pseudoproductrepository.findByproductcode(productcode).get(0);
+            pseudoproduct.setStock(stock);
+            pseudoproductrepository.save(pseudoproduct);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("Product not found", 
+                    HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

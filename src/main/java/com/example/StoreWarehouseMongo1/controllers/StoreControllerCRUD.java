@@ -8,8 +8,12 @@ import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,9 +30,29 @@ public class StoreControllerCRUD {
     @Autowired
     private StoreRepository storerepository;
 
+    @GetMapping
+    public List<Store> getAll() {
+        return storerepository.findAll();
+    }
+
     @RequestMapping(value = "/show/{address}", method = POST)
-    public Store showStoreController(@PathVariable("address") String address) {
+    public Store getStore(@PathVariable("address") String address) {
         return showSpecificStore(address);
+    }
+
+    @GetMapping(value = "/store")
+    public ResponseEntity<?> getStoreByUser(@RequestBody User user) {
+        List<Store> stores = storerepository.findAll();
+        for (Store store : stores) {
+            List<User> users = store.getUsers();
+            for (User user1 : users) {
+                if (user1.getUsername().equals(user.getUsername())) {
+                    return new ResponseEntity<Store>(store, HttpStatus.OK);
+                }
+            }
+        }
+        return new ResponseEntity(new CustomErrorType("There is not user in this store",
+                HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/add/{address}", method = POST)
@@ -49,7 +73,7 @@ public class StoreControllerCRUD {
     }
 
     @RequestMapping(value = "/delete/{address}", method = POST)
-    public void updateStoreController(@PathVariable("address") String address) {
+    public void deleteStoreController(@PathVariable("address") String address) {
         storerepository.delete(deleteStore(address));
     }
 
@@ -83,5 +107,4 @@ public class StoreControllerCRUD {
         }
         return store;
     }
-
 }

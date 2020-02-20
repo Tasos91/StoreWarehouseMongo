@@ -5,29 +5,25 @@
  */
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.example.StoreWarehouseMongo1.model.Product;
+import com.example.StoreWarehouseMongo1.model.PseudoProduct;
 import com.example.StoreWarehouseMongo1.model.Stock;
 import com.example.StoreWarehouseMongo1.model.Store;
+import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
+import com.example.StoreWarehouseMongo1.repositories.PseudoProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StockRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -44,35 +40,69 @@ public class StockControllerCRUD {
     @Autowired
     private StoreRepository storerepository;
 
+    @Autowired
+    private ProductRepository productrepository;
+
+    @Autowired
+    private PseudoProductRepository pseudoproductrepository;
+
     @RequestMapping(value = "/add/{address}", method = POST) //prwta tha dhmiourgeitai sth vash to product kai meta to stock!
-    public void addStockController(@RequestBody Stock stock, @PathVariable("address") String addressToStored) {
-        stockrepository.save(stock);
-        Store store = storerepository.findByaddress(addressToStored).get(0);
-        List<Stock> stock1 = null;
+    public ResponseEntity<?> addStockController(@RequestBody Stock stock, @PathVariable("address") String addressToStored) {
         try {
-            stock1 = store.getStock(); //kanw update th lista twn stock tou store
-            stock1.add(stock);//edw prepei na ginetai prwth fora save kai to stock sto history
-        } catch (Exception thereIsNotPreviousStock) {
-
+            productrepository.findByproductcode(stock.getProductId()).get(0);
+            if (stock.getImageUrl() == null) {
+                stock.setImageUrl("");
+            }
+            stockrepository.save(stock);
+            Store store = storerepository.findByaddress(addressToStored).get(0);
+            List<Stock> stock1 = null;
+            try {
+                stock1 = store.getStock(); //kanw update th lista twn stock tou store
+                stock1.add(stock);//edw prepei na ginetai prwth fora save kai to stock sto history
+            } catch (Exception thereIsNotPreviousStock) {
+                if (stock1 == null || stock1.isEmpty()) {
+                    stock1.add(stock);
+                }
+            }
+            store.setStock(stock1);
+            storerepository.save(store);
+        } catch (Exception e) {
+            return new ResponseEntity<>("There is not product code", HttpStatus.NOT_FOUND);
         }
-        store.setStock(stock1);
-        storerepository.save(store);
+        return new ResponseEntity<>("Stock created succesfully", HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/delete/{productCode}")
+    public ResponseEntity<?> deleteStock(@PathVariable("productCode") String productCode) {
+        try {
+            Product pr = productrepository.findByproductcode(productCode).get(0);
+            try {
+                Stock stock = stockrepository.findByproductId(pr.getProductcode()).get(0);
+                stockrepository.delete(stock);
+            } catch (Exception e) {
+            }
+            try {
+                PseudoProduct pspr = pseudoproductrepository.findByproductcode(pr.getProductcode()).get(0);
+                pseudoproductrepository.delete(pspr);
+            } catch (Exception e) {
+            }
+            List<Store> stores = storerepository.findAll();
+            for (Store store : stores) {
+                List<Stock> stock1 = store.getStock();
+                for (Stock stock2 : stock1) {
+                    if (stock2.getProductId().equals(pr.getProductcode())) {
+                        stock1.remove(stock2);
+                        store.setStock(stock1);
+                        storerepository.save(store);
+                    }
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("stockId") String stockId) throws IOException {
-        String uploadUrl = "C:\\Tomcat\\images\\"+ file.getOriginalFilename();
-        File convertFile = new File(uploadUrl);
-        convertFile.createNewFile();
-        FileOutputStream fout = new FileOutputStream(convertFile);
-        fout.write(file.getBytes());
-        fout.close();
-        Optional<Stock> stock = stockrepository.findById(stockId);
-        Stock st = stock.get();
-        st.setImageUrl(uploadUrl);
-        stockrepository.save(st);
-        return new ResponseEntity<>("File is uploaded successfully", HttpStatus.OK);
     }
 
-}   
+}

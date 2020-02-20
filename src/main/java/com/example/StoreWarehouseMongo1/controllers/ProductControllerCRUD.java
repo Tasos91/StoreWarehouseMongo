@@ -2,15 +2,17 @@ package com.example.StoreWarehouseMongo1.controllers;
 
 import com.example.StoreWarehouseMongo1.model.Category;
 import com.example.StoreWarehouseMongo1.model.Product;
+import com.example.StoreWarehouseMongo1.model.PseudoProduct;
+import com.example.StoreWarehouseMongo1.model.Stock;
+import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.repositories.CategoryRepository;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
+import com.example.StoreWarehouseMongo1.repositories.PseudoProductRepository;
+import com.example.StoreWarehouseMongo1.repositories.StockRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
-import com.example.StoreWarehouseMongo1.repositories.UserRepository;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,11 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  *
@@ -39,6 +39,15 @@ public class ProductControllerCRUD {
     @Autowired
     private CategoryRepository categoryrepository;
 
+    @Autowired
+    private PseudoProductRepository pseudoproductrepository;
+
+    @Autowired
+    private StockRepository stockrepository;
+
+    @Autowired
+    private StoreRepository storerepository;
+
     @GetMapping
     public List<Product> getAll() {
         return productrepository.findAll();
@@ -53,8 +62,11 @@ public class ProductControllerCRUD {
             pr = productrepository.findByproductcode(product.getProductcode()).get(0);
         } catch (Exception e) {
             String kindOfCategory = product.getCategory().getKindOfCategory();
-            Category category = categoryrepository.findBykindOfCategory(kindOfCategory).get(0);
-            product.setCategory(category);
+            try {
+                Category category = categoryrepository.findBykindOfCategory(kindOfCategory).get(0);
+                product.setCategory(category);
+            } catch (Exception ex) {
+            }
             productrepository.save(product);
             return new ResponseEntity(new CustomErrorType("The product " + product.getProductcode() + " was succesfully created", HttpStatus.OK.value()),
                     HttpStatus.OK);
@@ -81,15 +93,61 @@ public class ProductControllerCRUD {
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 
+    //GINETAI KAI UPDATE TO PSEUDOPRODUCT KAI TO STOCK AN UPARXEI
     @PatchMapping(value = "/update")
-    public void update(@RequestBody Product product) {
-        productrepository.save(product);
+    public ResponseEntity<?> update(@RequestBody Product product) {
+        String pcode = product.getProductcode();
+        if (!pcode.isEmpty() || pcode != null) {
+            productrepository.save(product);
+            try {
+                PseudoProduct pspr = pseudoproductrepository.findByproductcode(pcode).get(0);
+                pspr.setProduct(product);
+                pseudoproductrepository.save(pspr);
+            } catch (Exception e) {
+            }
+            try {
+                Stock stock = stockrepository.findByproductId(pcode).get(0);
+                stock.setProductId(pcode);
+                stockrepository.save(stock);
+            } catch (Exception e) {
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity(new CustomErrorType("A product must have a product code", HttpStatus.CONFLICT.value()),
+                HttpStatus.CONFLICT);
     }
 
     @DeleteMapping(value = "/delete/{productCode}")
-    public void deleteProduct(@PathVariable("productCode") String productCode) {
-        Product pr = productrepository.findByproductcode(productCode).get(0);
-        productrepository.delete(pr);
+    public ResponseEntity<?> deleteProduct(@PathVariable("productCode") String productCode) {
+        try {
+            Product pr = productrepository.findByproductcode(productCode).get(0);
+            productrepository.delete(pr);
+            try {
+                Stock stock = stockrepository.findByproductId(pr.getProductcode()).get(0);
+                stockrepository.delete(stock);
+            } catch (Exception e) {
+            }
+            try {
+                PseudoProduct pspr = pseudoproductrepository.findByproductcode(pr.getProductcode()).get(0);
+                pseudoproductrepository.delete(pspr);
+            } catch (Exception e) {
+            }
+            List<Store> stores = storerepository.findAll();
+            for (Store store : stores) {
+                List<Stock> stock1 = store.getStock();
+                for (Stock stock2 : stock1) {
+                    if (stock2.getProductId().equals(pr.getProductcode())) {
+                        stock1.remove(stock2);
+                        store.setStock(stock1);
+                        storerepository.save(store);
+                    }
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
     }
 
 }

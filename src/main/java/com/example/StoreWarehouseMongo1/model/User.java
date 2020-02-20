@@ -34,18 +34,11 @@ public class User {
         this.roles = roles;
     }
 
-    public User(String username, String password, String email, String fullname, boolean admin, boolean enabled) {
+    public User(String username, String password, String email, String fullname, String... roles) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.fullname = fullname;
-        this.admin = admin;
-        this.enabled = enabled;
-    }
-
-    public User(String username, String password, String... roles) {
-        this.username = username;
-        this.password = password;
         this.roles = roles;
     }
 

@@ -1,17 +1,22 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.User;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -42,14 +47,42 @@ public class UserControllerCRUD {
         return userrepository.findAll();
     }
 
+    @PostMapping(value = "/addUserToStore/{address}")
+    public ResponseEntity<?> addUserToStore(@RequestBody User user, @PathVariable("address") String address) {
+        Store store = new Store();
+        try {
+            store = storeRepository.findByaddress(address).get(0);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("This store doesn't exist", HttpStatus.CONFLICT.value()),
+                    HttpStatus.CONFLICT);
+        }
+        List<User> users = store.getUsers();
+        if (!users.isEmpty()) {
+            for (User user1 : users) {
+                String username = user.getUsername();
+                String username1 = user1.getUsername();
+                if (username.equals(username1)) {
+                    return new ResponseEntity(new CustomErrorType("This user already exist in this store", HttpStatus.CONFLICT.value()),
+                            HttpStatus.CONFLICT);
+                }
+            }
+        }
+        users.add(user);
+        store.setUsers(users);
+        storeRepository.save(store);
+        return new ResponseEntity(new CustomErrorType("The user added into store = " + address, HttpStatus.OK.value()),
+                HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/create/{address}", method = POST)
     public User createUserController(@RequestBody User user, @PathVariable("address") String address) {
         return createUser(address, user);
     }
 
-    @RequestMapping(value = "/update/{usernameOld}", method = POST)//update
-    public void updateUserController(@RequestBody User updateUserFromUi, @PathVariable("usernameOld") String usernameOld) {
-        userrepository.save(updateUser(updateUserFromUi, usernameOld));
+    @PostMapping(value = "/update")//update,reset password
+    public void updateUserController(@RequestBody User user) {
+        user.setPassword(getHashedPassword(user.getPassword()));
+        userrepository.save(user);
     }
 
     @DeleteMapping(value = "/{username}")
@@ -90,6 +123,7 @@ public class UserControllerCRUD {
     }
 
     public User createUser(String address, User user) {
+        user.setPassword(getHashedPassword(user.getPassword()));
         List<Store> stores = storeRepository.findByaddress(address);
         Store store = stores.get(0);
         List<User> users = store.getUsers();
@@ -98,6 +132,10 @@ public class UserControllerCRUD {
         userrepository.save(user);
         storeRepository.save(store);
         return user;
+    }
+
+    private String getHashedPassword(String password) {
+        return new BCryptPasswordEncoder().encode(password);
     }
 
 }
