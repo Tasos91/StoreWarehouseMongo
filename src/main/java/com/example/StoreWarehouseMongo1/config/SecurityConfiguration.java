@@ -23,7 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+    
     @Autowired
     MongoUserDetailsService userDetailsService;
 

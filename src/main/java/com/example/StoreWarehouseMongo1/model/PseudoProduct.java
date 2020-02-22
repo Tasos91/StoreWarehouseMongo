@@ -14,6 +14,9 @@ public class PseudoProduct {
 
     @Id
     private String id;
+    private Product product;
+    private String productcode;
+    private Stock stock;
 
     public String getId() {
         return id;
@@ -29,9 +32,6 @@ public class PseudoProduct {
         this.productcode = productcode;
         this.stock = stock;
     }
-    private Product product;
-    private String productcode;
-    private Stock stock;
 
     public String getProductcode() {
         return productcode;

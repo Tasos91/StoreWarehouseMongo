@@ -1,13 +1,17 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.PseudoProduct;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Stock;
 import com.example.StoreWarehouseMongo1.model.Store;
+import com.example.StoreWarehouseMongo1.repositories.HistoryRepository;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.PseudoProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StockRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,9 @@ public class PseudoProductController {
 
     @Autowired
     private StockRepository stockrepository;
+
+    @Autowired
+    private HistoryRepository historyrepository;
 
     //EDW TAUTOXRONA GINETAI KAI CREATE PSEUDOPRODUCT STH VASH
     //GINETAI O ELEGXOS KAI AN YPARXEI TO SUGKEKRIMENO PSEUDOPRODUCT DEN APOTHIKEUETAI
@@ -101,12 +108,19 @@ public class PseudoProductController {
         }
         stock.setQuantity(quantity);
         stockrepository.save(stock);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        String timestamp = dtf.format(now);
+        History productHistory = new History();
+        productHistory.setTimestamp(timestamp);
+        productHistory.setStock(stock);
+        historyrepository.save(productHistory);
         try {
             PseudoProduct pseudoproduct = pseudoproductrepository.findByproductcode(productcode).get(0);
             pseudoproduct.setStock(stock);
             pseudoproductrepository.save(pseudoproduct);
         } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType("Product not found", 
+            return new ResponseEntity(new CustomErrorType("Product not found",
                     HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
