@@ -35,21 +35,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/product/api/**").hasAnyRole("ADMIN")
-                .antMatchers("/store/api/**").hasAnyRole("ADMIN")
-                .antMatchers("/user/api/**").hasAnyRole("ADMIN")
-                .antMatchers("/stock/api/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/pseudo/api/get/pseudoProducts/{address}").hasAnyRole("ADMIN", "USER")
-                .anyRequest().authenticated()
-                .and().httpBasic()
-                .and().sessionManagement().disable();
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/product/api/**").hasAnyRole("ADMIN")
+            .antMatchers("/store/api/**").hasAnyRole("ADMIN")
+            .antMatchers("/user/api/**").hasAnyRole("ADMIN")
+            .antMatchers("/stock/api/**").hasAnyRole("ADMIN", "USER")
+            .antMatchers("/pseudo/api/get/pseudoProducts/{address}").hasAnyRole("ADMIN", "USER")
+            .antMatchers("/health").permitAll()
+            .antMatchers("/info").permitAll()
+            .anyRequest().authenticated()
+            .and().httpBasic()
+            .and().sessionManagement().disable();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(userDetailsService);
     }
-
 }
