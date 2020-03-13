@@ -78,12 +78,20 @@ public class PseudoProductController {
             PseudoProduct pseudoproduct = new PseudoProduct();
             try {
                 pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
+                List<Stock> listStock = stockrepository.findByproductId(st.getProductId());
+                String color = pseudoproduct.getStock().getColor();
+                for (Stock sst : listStock) {
+                    String color1 = sst.getColor();
+                    if (!color.equals(color1)) {
+                        pseudoproductrepository.save(pspr);
+                    }
+                }
             } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
                 pseudoproductrepository.save(pspr);
             }
             pseudoproducts.add(pspr);
         }
-        return new ResponseEntity<List>(pseudoproducts, HttpStatus.OK);
+        return new ResponseEntity<List>(pseudoproductrepository.findAll(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/get/{productcode}")
