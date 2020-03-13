@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Tasos
  */
 @RestController
-@RequestMapping("/image/api")
+@RequestMapping("/api/image")
 @CrossOrigin(origins = "*")
 public class UploadController {
 

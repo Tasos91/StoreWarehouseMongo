@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Tasos
  */
 @RestController
-@RequestMapping("/store/api")
+@RequestMapping("/api/store")
 @CrossOrigin(origins = "*")
 public class StoreControllerCRUD {
 
@@ -35,12 +36,12 @@ public class StoreControllerCRUD {
         return storerepository.findAll();
     }
 
-    @RequestMapping(value = "/show/{address}", method = POST)
+    @RequestMapping(value = "/show/{address}", method = GET)
     public Store getStore(@PathVariable("address") String address) {
         return showSpecificStore(address);
     }
 
-    @GetMapping(value = "/store")
+    @GetMapping(value = "/specific")
     public ResponseEntity<?> getStoreByUser(@RequestBody User user) {
         List<Store> stores = storerepository.findAll();
         for (Store store : stores) {

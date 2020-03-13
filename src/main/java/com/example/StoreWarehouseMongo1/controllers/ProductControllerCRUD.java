@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Tasos
  */
 @RestController
-@RequestMapping("/product/api")
+@RequestMapping("/api/product")
 @CrossOrigin(origins = "*")
 public class ProductControllerCRUD {
 

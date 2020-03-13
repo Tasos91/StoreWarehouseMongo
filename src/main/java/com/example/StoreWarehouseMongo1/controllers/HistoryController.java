@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Tasos
  */
 @RestController
-@RequestMapping("/history/api")
+@RequestMapping("/api/history")
 @CrossOrigin(origins = "*")
 public class HistoryController {
 

@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Tasos
  */
 @RestController
-@RequestMapping("/user/api")
+@RequestMapping("/api/user")
 @CrossOrigin(origins = "*")
 public class UserControllerCRUD {
 
