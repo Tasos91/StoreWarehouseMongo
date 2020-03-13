@@ -68,6 +68,8 @@ public class PseudoProductController {
             return new ResponseEntity(new CustomErrorType("This store doesn't have stock", HttpStatus.NOT_FOUND.value()),
                     HttpStatus.NOT_FOUND);
         }
+        int size = stock.size();
+        Integer i = 0;
         for (Stock st : stock) {
             Product pr = new Product();
             try {
@@ -75,23 +77,20 @@ public class PseudoProductController {
             } catch (Exception e) {
             }
             PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
+            if (i < size) {
+                String s = i.toString();
+                pspr.setId(s);
+                i++;
+            }
             PseudoProduct pseudoproduct = new PseudoProduct();
             try {
                 pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
-                List<Stock> listStock = stockrepository.findByproductId(st.getProductId());
-                String color = pseudoproduct.getStock().getColor();
-                for (Stock sst : listStock) {
-                    String color1 = sst.getColor();
-                    if (!color.equals(color1)) {
-                        pseudoproductrepository.save(pspr);
-                    }
-                }
             } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
                 pseudoproductrepository.save(pspr);
             }
             pseudoproducts.add(pspr);
         }
-        return new ResponseEntity<List>(pseudoproductrepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<List>(pseudoproducts, HttpStatus.OK);
     }
 
     @GetMapping(value = "/get/{productcode}")
@@ -105,7 +104,7 @@ public class PseudoProductController {
 
     //UPDATE MONO GIA TO XRHSTH AFOU O XRHSTHS
     //THA MPOREI NA KANEI UPDATE MONO STH QUANTITY
-    @PatchMapping(value = "/update/pseudoProduct/{productcode}/{quantity}")
+    @PatchMapping(value = "/update/{productcode}/{quantity}")
     public ResponseEntity<?> updatePseudoproduct(@PathVariable("productcode") String productcode,
             @PathVariable("quantity") Integer quantity) {
         Stock stock = new Stock();
@@ -123,14 +122,6 @@ public class PseudoProductController {
         productHistory.setTimestamp(timestamp);
         productHistory.setStock(stock);
         historyrepository.save(productHistory);
-        try {
-            PseudoProduct pseudoproduct = pseudoproductrepository.findByproductcode(productcode).get(0);
-            pseudoproduct.setStock(stock);
-            pseudoproductrepository.save(pseudoproduct);
-        } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType("Product not found",
-                    HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
