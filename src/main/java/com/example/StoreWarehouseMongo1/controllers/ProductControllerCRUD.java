@@ -98,6 +98,9 @@ public class ProductControllerCRUD {
     public ResponseEntity<?> update(@RequestBody Product product) {
         String pcode = product.getProductcode();
         if (!pcode.isEmpty() || pcode != null) {
+            Product pr = productrepository.findByproductcode(product.getProductcode()).get(0);
+            String id = pr.getId();
+            product.setId(id);
             productrepository.save(product);
             try {
                 PseudoProduct pspr = pseudoproductrepository.findByproductcode(pcode).get(0);
