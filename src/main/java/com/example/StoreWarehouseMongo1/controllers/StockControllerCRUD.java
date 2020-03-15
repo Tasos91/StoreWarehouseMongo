@@ -72,25 +72,20 @@ public class StockControllerCRUD {
         return new ResponseEntity<>("Stock created succesfully", HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/delete/{productCode}")
-    public ResponseEntity<?> deleteStock(@PathVariable("productCode") String productCode) {
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<?> deleteStock(@PathVariable("id") String id) {
         try {
-            Product pr = productrepository.findByproductcode(productCode).get(0);
+            Stock stock = new Stock();
             try {
-                Stock stock = stockrepository.findByproductId(pr.getProductcode()).get(0);
+                stock = stockrepository.findById(id).get();
                 stockrepository.delete(stock);
-            } catch (Exception e) {
-            }
-            try {
-                PseudoProduct pspr = pseudoproductrepository.findByproductcode(pr.getProductcode()).get(0);
-                pseudoproductrepository.delete(pspr);
             } catch (Exception e) {
             }
             List<Store> stores = storerepository.findAll();
             for (Store store : stores) {
                 List<Stock> stock1 = store.getStock();
                 for (Stock stock2 : stock1) {
-                    if (stock2.getProductId().equals(pr.getProductcode())) {
+                    if (stock2.getId().equals(stock.getId())) {
                         stock1.remove(stock2);
                         store.setStock(stock1);
                         storerepository.save(store);
