@@ -126,8 +126,10 @@ public class ProductControllerCRUD {
             Product pr = productrepository.findByproductcode(productCode).get(0);
             productrepository.delete(pr);
             try {
-                Stock stock = stockrepository.findByproductId(pr.getProductcode()).get(0);
-                stockrepository.delete(stock);
+                List<Stock> stock = stockrepository.findByproductId(pr.getProductcode());
+                for (Stock st : stock) {
+                    stockrepository.delete(st);
+                }
             } catch (Exception e) {
             }
             try {
