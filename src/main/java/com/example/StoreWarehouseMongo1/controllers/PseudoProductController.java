@@ -93,10 +93,15 @@ public class PseudoProductController {
         return new ResponseEntity<List>(pseudoproducts, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/get/{productcode}")
-    public ResponseEntity<?> getPseudoproduct(@PathVariable("productcode") String productcode) {
+    @GetMapping(value = "/get/{stockId}")
+    public ResponseEntity<?> getPseudoproduct(@PathVariable("stockId") String id) {
         try {
-            return new ResponseEntity<PseudoProduct>(pseudoproductrepository.findByproductcode(productcode).get(0), HttpStatus.OK);
+            Stock stock = stockrepository.findById(id).get();
+            String productCode = stock.getProductId();
+            Product pr = productrepository.findByproductcode(productCode).get(0);
+            PseudoProduct pspr = new PseudoProduct(pr, productCode, stock);
+            pspr.setId("1");
+            return new ResponseEntity<PseudoProduct>(pspr, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(new CustomErrorType("Product not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
