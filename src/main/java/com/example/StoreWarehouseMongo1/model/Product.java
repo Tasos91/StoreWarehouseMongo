@@ -23,10 +23,7 @@ public class Product {
     private String cost_eu;
     private String price;
     private String producer_code;
-    private String gold_weight;
-    private String silver_weight;
     private String descr;
-    private String karats;
     private List<Stone> stones; //proswrina vgazw ta stones apo to constructor
 
     public String getId() {
@@ -58,16 +55,13 @@ public class Product {
         this.productcode = productcode;
     }
 
-    public Product(String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, String karats, Category category) {
+    public Product(String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, Category category) {
         this.productcode = productcode;
         this.cost_usd = cost_usd;
         this.cost_eu = cost_eu;
         this.price = price;
         this.producer_code = producer_code;
-        this.gold_weight = gold_weight;
-        this.silver_weight = silver_weight;
         this.descr = descr;
-        this.karats = karats;
         this.category = category;
     }
 
@@ -103,36 +97,12 @@ public class Product {
         this.producer_code = producer_code;
     }
 
-    public String getGold_weight() {
-        return gold_weight;
-    }
-
-    public void setGold_weight(String gold_weight) {
-        this.gold_weight = gold_weight;
-    }
-
-    public String getSilver_weight() {
-        return silver_weight;
-    }
-
-    public void setSilver_weight(String silver_weight) {
-        this.silver_weight = silver_weight;
-    }
-
     public String getDescr() {
         return descr;
     }
 
     public void setDescr(String descr) {
         this.descr = descr;
-    }
-
-    public String getKarats() {
-        return karats;
-    }
-
-    public void setKarats(String karats) {
-        this.karats = karats;
     }
 
     public List<Stone> getStones() {

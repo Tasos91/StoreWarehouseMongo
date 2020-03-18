@@ -155,4 +155,8 @@ public class ProductControllerCRUD {
         }
     }
 
+    @DeleteMapping(value = "/deleteAll")
+    public void deleteProducts() {
+        productrepository.deleteAll();
+    }
 }

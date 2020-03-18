@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -107,19 +109,191 @@ public class PseudoProductController {
         }
     }
 
-    //UPDATE MONO GIA TO XRHSTH AFOU O XRHSTHS
-    //THA MPOREI NA KANEI UPDATE MONO STH QUANTITY
-    @PatchMapping(value = "/update/{productcode}/{quantity}")
-    public ResponseEntity<?> updatePseudoproduct(@PathVariable("productcode") String productcode,
-            @PathVariable("quantity") Integer quantity) {
+    @PostMapping(value = "/create/{address}")
+    public ResponseEntity<?> createPseudoproduct(@RequestBody PseudoProduct pseudoProduct, @PathVariable("address") String addressToStored) {
+        Product product = new Product();
         Stock stock = new Stock();
         try {
-            stock = stockrepository.findByproductId(productcode).get(0);
+            Store store = storerepository.findByaddress(addressToStored).get(0);
+            List<Stock> stockList = null;
+            stockList = store.getStock();
+            product = pseudoProduct.getProduct();
+            productrepository.save(product);
+            stock = pseudoProduct.getStock();
+            stockrepository.save(stock);
+            stockList.add(stock);
+            store.setStock(stockList);
+            storerepository.save(store);
+            saveHistory(stock);
+            String goldW = stock.getGold_weight();
+            String silverW = stock.getSilver_weight();
+            String karats = stock.getKarats();
+            String productId = stock.getProductId();
+            if (stock.getColor().equals("White")) {
+                Stock st1 = new Stock();
+                st1.setGold_weight(goldW);
+                st1.setSilver_weight(silverW);
+                st1.setKarats(karats);
+                st1.setColor("Yellow");
+                st1.setImageUrl("");
+                st1.setProductId(productId);
+                st1.setQuantity(0);
+                stockList.add(st1);
+                store.setStock(stockList);
+                stockrepository.save(st1);
+                storerepository.save(store);
+                saveHistory(st1);
+                Stock st2 = new Stock();
+                st2.setGold_weight(goldW);
+                st2.setSilver_weight(silverW);
+                st2.setKarats(karats);
+                st2.setColor("Black");
+                st2.setProductId(productId);
+                st2.setQuantity(0);
+                st2.setImageUrl("");
+                stockrepository.save(st2);
+                stockList.add(st2);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(st2);
+                Stock st3 = new Stock();
+                st3.setGold_weight(goldW);
+                st3.setSilver_weight(silverW);
+                st3.setKarats(karats);
+                st3.setColor("Rose");
+                st3.setProductId(productId);
+                st3.setQuantity(0);
+                st3.setImageUrl("");
+                stockrepository.save(st3);
+                stockList.add(st3);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(st3);
+            }
+            if (stock.getColor().equals("Yellow")) {
+                Stock st1 = new Stock();
+                st1.setGold_weight(goldW);
+                st1.setSilver_weight(silverW);
+                st1.setKarats(karats);
+                st1.setColor("White");
+                st1.setImageUrl("");
+                st1.setProductId(productId);
+                st1.setQuantity(0);
+                stockList.add(st1);
+                store.setStock(stockList);
+                stockrepository.save(st1);
+                storerepository.save(store);
+                saveHistory(st1);
+                Stock st2 = new Stock();
+                st2.setGold_weight(goldW);
+                st2.setSilver_weight(silverW);
+                st2.setKarats(karats);
+                st2.setColor("Black");
+                st2.setProductId(productId);
+                st2.setQuantity(0);
+                st2.setImageUrl("");
+                stockrepository.save(st2);
+                stockList.add(st2);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(st2);
+                Stock st3 = new Stock();
+                st3.setGold_weight(goldW);
+                st3.setSilver_weight(silverW);
+                st3.setKarats(karats);
+                st3.setColor("Rose");
+                st3.setProductId(productId);
+                st3.setQuantity(0);
+                st3.setImageUrl("");
+                stockrepository.save(st3);
+                stockList.add(st3);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(st3);
+            }
+            if (stock.getColor().equals("Rose")) {
+                Stock st1 = new Stock();
+                st1.setGold_weight(goldW);
+                st1.setSilver_weight(silverW);
+                st1.setKarats(karats);
+                st1.setColor("Yellow");
+                st1.setImageUrl("");
+                st1.setProductId(productId);
+                st1.setQuantity(0);
+                stockList.add(st1);
+                store.setStock(stockList);
+                stockrepository.save(st1);
+                storerepository.save(store);
+                saveHistory(st1);
+                Stock st2 = new Stock();
+                st2.setGold_weight(goldW);
+                st2.setSilver_weight(silverW);
+                st2.setKarats(karats);
+                st2.setColor("Black");
+                st2.setProductId(productId);
+                st2.setQuantity(0);
+                st2.setImageUrl("");
+                stockrepository.save(st2);
+                stockList.add(st2);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(st2);
+                Stock st3 = new Stock();
+                st3.setGold_weight(goldW);
+                st3.setSilver_weight(silverW);
+                st3.setKarats(karats);
+                st3.setColor("Rose");
+                st3.setProductId(productId);
+                st3.setQuantity(0);
+                st3.setImageUrl("");
+                stockrepository.save(st3);
+                stockList.add(st3);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(st3);
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+            return new ResponseEntity(new CustomErrorType("Product not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    //UPDATE MONO GIA TO XRHSTH AFOU O XRHSTHS
+    //O ADMIN THA MPOREI NA KANEI UPDATE PANTOU ENW O USER MONO STH QUANTITY
+    @PatchMapping(value = "/update")
+    public ResponseEntity<?> updatePseudoproduct(@RequestBody PseudoProduct pseudoProduct) {
+        Product pr = new Product();
+        Stock st = new Stock();
+        try {
+            pr = productrepository.findById(pseudoProduct.getProduct().getId()).get();
+            st = stockrepository.findById(pseudoProduct.getStock().getId()).get();
         } catch (Exception e) {
             return new ResponseEntity(new CustomErrorType("Product not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
-        stock.setQuantity(quantity);
+        Product product = pseudoProduct.getProduct();
+        product.setId(pr.getId());
+
+        Stock stock = pseudoProduct.getStock();
+        stock.setId(st.getId());
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        String timestamp = dtf.format(now);
+        String quantity = st.getQuantity().toString(); //apo vash
+        String quant = stock.getQuantity().toString(); //apo ui
+        if (!quantity.equals(quant)) {
+            History productHistory = new History();
+            productHistory.setTimestamp(timestamp);
+            productHistory.setStock(stock);
+            historyrepository.save(productHistory);
+        }
+        productrepository.save(product);
         stockrepository.save(stock);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void saveHistory(Stock stock) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String timestamp = dtf.format(now);
@@ -127,6 +301,5 @@ public class PseudoProductController {
         productHistory.setTimestamp(timestamp);
         productHistory.setStock(stock);
         historyrepository.save(productHistory);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

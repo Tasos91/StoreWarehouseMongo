@@ -20,6 +20,53 @@ public class Stock {
     private String color;
     private String productId;
     private Integer quantity;
+    private String gold_weight;
+    private String stoneWeight;
+
+    public String getStoneWeight() {
+        return stoneWeight;
+    }
+
+    public void setStoneWeight(String stoneWeight) {
+        this.stoneWeight = stoneWeight;
+    }
+    private String karats;
+
+    public String getKarats() {
+        return karats;
+    }
+
+    public void setKarats(String karats) {
+        this.karats = karats;
+    }
+
+    public Stock(String color, String productId, Integer quantity, String gold_weight, String silver_weight, String imageUrl, String karats, String stoneWeight) {
+        this.color = color;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.gold_weight = gold_weight;
+        this.silver_weight = silver_weight;
+        this.imageUrl = imageUrl;
+        this.karats = karats;
+        this.stoneWeight = stoneWeight;
+    }
+    private String silver_weight;
+
+    public String getGold_weight() {
+        return gold_weight;
+    }
+
+    public void setGold_weight(String gold_weight) {
+        this.gold_weight = gold_weight;
+    }
+
+    public String getSilver_weight() {
+        return silver_weight;
+    }
+
+    public void setSilver_weight(String silver_weight) {
+        this.silver_weight = silver_weight;
+    }
     private String imageUrl;
 
     public Stock(String color, String productId, Integer quantity, String imageUrl) {

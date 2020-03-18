@@ -99,5 +99,10 @@ public class StockControllerCRUD {
         }
 
     }
+    
+    @DeleteMapping(value = "/deleteAll")
+    public void deleteStock() {
+        stockrepository.deleteAll();
+    }
 
 }
