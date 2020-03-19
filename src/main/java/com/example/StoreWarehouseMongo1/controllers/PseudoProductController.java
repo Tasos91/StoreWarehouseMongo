@@ -1,10 +1,12 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.example.StoreWarehouseMongo1.model.Category;
 import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.PseudoProduct;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Stock;
 import com.example.StoreWarehouseMongo1.model.Store;
+import com.example.StoreWarehouseMongo1.repositories.CategoryRepository;
 import com.example.StoreWarehouseMongo1.repositories.HistoryRepository;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.PseudoProductRepository;
@@ -34,6 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/pseudo")
 @CrossOrigin(origins = "*")
 public class PseudoProductController {
+
+    @Autowired
+    private CategoryRepository categoryrepository;
 
     @Autowired
     private PseudoProductRepository pseudoproductrepository;
@@ -118,6 +123,12 @@ public class PseudoProductController {
             List<Stock> stockList = null;
             stockList = store.getStock();
             product = pseudoProduct.getProduct();
+            try {
+                String kindOfCategory = product.getCategory().getKindOfCategory();
+                Category category = categoryrepository.findBykindOfCategory(kindOfCategory).get(0);
+                product.setCategory(category);
+            } catch (Exception ex) {
+            }
             productrepository.save(product);
             stock = pseudoProduct.getStock();
             stockrepository.save(stock);
