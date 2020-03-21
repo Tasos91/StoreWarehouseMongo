@@ -84,7 +84,7 @@ public class PseudoProductController {
             } catch (Exception e) {
             }
             PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
-            if (i < size) {
+            if (i < size) { //auto ginetai na gia na exoun ola ta pseudoproduct id apo 0 ews ...
                 String s = i.toString();
                 pspr.setId(s);
                 i++;
@@ -119,7 +119,17 @@ public class PseudoProductController {
         Product product = new Product();
         Stock stock = new Stock();
         try {
-            Store store = storerepository.findByaddress(addressToStored).get(0);
+            productrepository.findByproductcode(pseudoProduct.getProduct().getProductcode());
+            return new ResponseEntity(new CustomErrorType("This product is already exist", HttpStatus.CONFLICT.value()), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+        }
+        try {
+            Store store = new Store();
+            try {
+                store = storerepository.findByaddress(addressToStored).get(0);
+            } catch (Exception e) {
+                return new ResponseEntity(new CustomErrorType("Store not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+            }
             List<Stock> stockList = null;
             stockList = store.getStock();
             product = pseudoProduct.getProduct();
@@ -128,6 +138,7 @@ public class PseudoProductController {
                 Category category = categoryrepository.findBykindOfCategory(kindOfCategory).get(0);
                 product.setCategory(category);
             } catch (Exception ex) {
+                return new ResponseEntity(new CustomErrorType("This category not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
             }
             productrepository.save(product);
             stock = pseudoProduct.getStock();
