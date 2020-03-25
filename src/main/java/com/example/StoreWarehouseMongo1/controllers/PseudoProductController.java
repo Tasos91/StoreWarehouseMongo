@@ -61,8 +61,13 @@ public class PseudoProductController {
     @GetMapping(value = "/get/pseudoProducts/{address}")
     public ResponseEntity<?> getPseudoProducts(@PathVariable("address") String shop) { //fernei ta pseudoproducts kai kanei kai insert to kathena an den uparxei hdh
         Store store = new Store();
+        long start = System.currentTimeMillis();
         try {
+            long start1 = System.currentTimeMillis();
             store = storerepository.findByaddress(shop).get(0);
+            long end = System.currentTimeMillis();
+            System.out.println("DATABASE QUERY FOR STORE: " + (end - start1));
+
         } catch (Exception e) {
             return new ResponseEntity(new CustomErrorType("The specific store not found", HttpStatus.NOT_FOUND.value()),
                     HttpStatus.NOT_FOUND);
@@ -80,7 +85,10 @@ public class PseudoProductController {
         for (Stock st : stock) {
             Product pr = new Product();
             try {
+                long start1 = System.currentTimeMillis();
                 pr = productrepository.findByproductcode(st.getProductId()).get(0);
+                long end = System.currentTimeMillis();
+                System.out.println("DATABASE QUERY FOR PRODUCT: " + (end - start1));
             } catch (Exception e) {
             }
             PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
@@ -97,6 +105,8 @@ public class PseudoProductController {
             }
             pseudoproducts.add(pspr);
         }
+        long end = System.currentTimeMillis();
+        System.out.println("FINAL TIME FOR THIS API CALL:  " + (end - start));
         return new ResponseEntity<List>(pseudoproducts, HttpStatus.OK);
     }
 
@@ -119,8 +129,10 @@ public class PseudoProductController {
         Product product = new Product();
         Stock stock = new Stock();
         try {
-            productrepository.findByproductcode(pseudoProduct.getProduct().getProductcode());
-            return new ResponseEntity(new CustomErrorType("This product is already exist", HttpStatus.CONFLICT.value()), HttpStatus.NOT_FOUND);
+            List<Product> products = productrepository.findByproductcode(pseudoProduct.getProduct().getProductcode());
+            if (products.size() > 0 && products != null) {
+                return new ResponseEntity(new CustomErrorType("This product is already exist", HttpStatus.CONFLICT.value()), HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
         }
         try {
