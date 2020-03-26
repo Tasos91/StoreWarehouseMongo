@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -58,13 +59,14 @@ public class PseudoProductController {
     //EDW TAUTOXRONA GINETAI KAI CREATE PSEUDOPRODUCT STH VASH
     //GINETAI O ELEGXOS KAI AN YPARXEI TO SUGKEKRIMENO PSEUDOPRODUCT DEN APOTHIKEUETAI
     //KAI APLA GINETAI RETURN OLA TA PSEUDOPRODUCTS POU PERIMENEI NA DEI O XRHSTHS
-    @GetMapping(value = "/get/pseudoProducts/{address}")
-    public ResponseEntity<?> getPseudoProducts(@PathVariable("address") String shop) { //fernei ta pseudoproducts kai kanei kai insert to kathena an den uparxei hdh
+    @GetMapping(value = "/get/pseudoProducts")
+    public ResponseEntity<?> getPseudoProducts(@RequestParam("address") String address,
+            @RequestParam("page") Integer page) { //fernei ta pseudoproducts kai kanei kai insert to kathena an den uparxei hdh
         Store store = new Store();
         long start = System.currentTimeMillis();
         try {
             long start1 = System.currentTimeMillis();
-            store = storerepository.findByaddress(shop).get(0);
+            store = storerepository.findByaddress(address).get(0);
             long end = System.currentTimeMillis();
             System.out.println("DATABASE QUERY FOR STORE: " + (end - start1));
 
@@ -80,9 +82,27 @@ public class PseudoProductController {
             return new ResponseEntity(new CustomErrorType("This store doesn't have stock", HttpStatus.NOT_FOUND.value()),
                     HttpStatus.NOT_FOUND);
         }
-        int size = stock.size();
-        Integer i = 0;
-        for (Stock st : stock) {
+        int size = stock.size(); // 82 sunolika stock
+        Integer i = 0; // kai sou erxotan h 10h selida
+        int index = 8 * page; // px 40 ews 48  88
+        int result = (index - size);
+        if (result >= 8) {
+            return new ResponseEntity(new CustomErrorType("This page number exceed the number of real pages", HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
+        Stock st = new Stock();
+        for (int j = 1; j <= 8; j++) {
+            if (index > size) {
+                st = stock.get(size);
+                size++;
+            }
+            if (index == size) {
+                index = index - 8;
+                st = stock.get(index);
+            }
+            if (index < size) {
+                st = stock.get(index);
+            }
             Product pr = new Product();
             try {
                 long start1 = System.currentTimeMillis();
@@ -104,6 +124,7 @@ public class PseudoProductController {
                 pseudoproductrepository.save(pspr);
             }
             pseudoproducts.add(pspr);
+            index++;
         }
         long end = System.currentTimeMillis();
         System.out.println("FINAL TIME FOR THIS API CALL:  " + (end - start));

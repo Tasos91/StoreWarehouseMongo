@@ -7,6 +7,7 @@ import com.example.StoreWarehouseMongo1.model.User;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,11 +110,38 @@ public class StoreControllerCRUD {
         }
         return store;
     }
-    
+
     @DeleteMapping(value = "/deleteAll/{address}")
     public void deleteProducts(@PathVariable("address") String address) {
         Store store = storerepository.findByaddress(address).get(0);
         store.getStock().clear();
         storerepository.save(store);
     }
+
+    @RequestMapping(value = "/pages/{address}", method = GET)
+    public ResponseEntity<?> getPages(@PathVariable("address") String address) {
+        Store store = new Store();
+        try {
+            store = storerepository.findByaddress(address).get(0);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
+        List<Stock> stock = store.getStock();
+        int size = stock.size();
+        int pages = 0;
+        int j = 8;
+        for (int i = 0; i <= size; i++) {
+            if (i >= j && i <= j) {
+                j = 8 + j;
+                pages++;
+            }
+        }
+        int result = j - size;
+        if (result < 8) {
+            pages++;
+        }
+        return new ResponseEntity<>(pages, HttpStatus.OK);
+    }
+
 }
