@@ -82,53 +82,79 @@ public class PseudoProductController {
             return new ResponseEntity(new CustomErrorType("This store doesn't have stock", HttpStatus.NOT_FOUND.value()),
                     HttpStatus.NOT_FOUND);
         }
-        int size = stock.size(); // 82 sunolika stock
-        Integer i = 0; // kai sou erxotan h 10h selida
-        int index = 8 * page; // px 40 ews 48  88
-        int result = (index - size);
-        if (result >= 8) {
-            return new ResponseEntity(new CustomErrorType("This page number exceed the number of real pages", HttpStatus.NOT_FOUND.value()),
-                    HttpStatus.NOT_FOUND);
+        if (!stock.isEmpty() && stock != null && stock.size() > 0) {
+            int size = stock.size();
+            Integer i = 0;
+            if (page == 1) {
+                page = 0;
+            }
+            int index = 32 * page; // 87 products kai 
+            int result = (index - size); // 16 - 4 = 4
+            if (result >= 32) {
+                return new ResponseEntity(new CustomErrorType("This page number exceed the number of real pages", HttpStatus.NOT_FOUND.value()),
+                        HttpStatus.NOT_FOUND);
+            }
+            Stock st = new Stock();
+            int lastOfStock = (page - 1) * 32;
+            int whenSizeIsSmallerThanTheObjectsWeWantForAPage = 0;
+            for (int j = 1; j <= 32; j++) {
+                if (size > 32) {
+                    if (index > size) {
+                        if (lastOfStock < size) {
+                            st = stock.get(lastOfStock);
+                            lastOfStock++;
+                        }
+                    }
+                    if (index == size) {
+                        index = index - 32;
+                        st = stock.get(index);
+                    }
+                    if (index < size) {
+                        st = stock.get(index);
+                    }
+                }
+                if (size < 32) { //otan einai to size mikrotero apo to poso pou theloume na exei mia selida
+                    st = stock.get(j - 1);
+                    whenSizeIsSmallerThanTheObjectsWeWantForAPage++;
+                }
+                if (size == 32) {
+                    st = stock.get(j - 1);
+                }
+                Product pr = new Product();
+                try {
+                    long start1 = System.currentTimeMillis();
+                    pr = productrepository.findByproductcode(st.getProductId()).get(0);
+                    long end = System.currentTimeMillis();
+                    System.out.println("DATABASE QUERY FOR PRODUCT: " + (end - start1));
+                } catch (Exception e) {
+                }
+                PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
+                if (i < size) { //auto ginetai na gia na exoun ola ta pseudoproduct id apo 0 ews ...
+                    String s = i.toString();
+                    pspr.setId(s);
+                    i++;
+                }
+                PseudoProduct pseudoproduct = new PseudoProduct();
+                try {
+                    pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
+                } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
+                    //pseudoproductrepository.save(pspr);
+                }
+                pseudoproducts.add(pspr);
+                index++;
+                if (lastOfStock == size) {
+                    break;
+                }
+                if (whenSizeIsSmallerThanTheObjectsWeWantForAPage == size) {
+                    break;
+                }
+            }
+            long end = System.currentTimeMillis();
+            System.out.println("FINAL TIME FOR THIS API CALL:  " + (end - start));
+            return new ResponseEntity<List>(pseudoproducts, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("There is not content", HttpStatus.NO_CONTENT);
         }
-        Stock st = new Stock();
-        for (int j = 1; j <= 8; j++) {
-            if (index > size) {
-                st = stock.get(size);
-                size++;
-            }
-            if (index == size) {
-                index = index - 8;
-                st = stock.get(index);
-            }
-            if (index < size) {
-                st = stock.get(index);
-            }
-            Product pr = new Product();
-            try {
-                long start1 = System.currentTimeMillis();
-                pr = productrepository.findByproductcode(st.getProductId()).get(0);
-                long end = System.currentTimeMillis();
-                System.out.println("DATABASE QUERY FOR PRODUCT: " + (end - start1));
-            } catch (Exception e) {
-            }
-            PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
-            if (i < size) { //auto ginetai na gia na exoun ola ta pseudoproduct id apo 0 ews ...
-                String s = i.toString();
-                pspr.setId(s);
-                i++;
-            }
-            PseudoProduct pseudoproduct = new PseudoProduct();
-            try {
-                pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
-            } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
-                pseudoproductrepository.save(pspr);
-            }
-            pseudoproducts.add(pspr);
-            index++;
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("FINAL TIME FOR THIS API CALL:  " + (end - start));
-        return new ResponseEntity<List>(pseudoproducts, HttpStatus.OK);
     }
 
     @GetMapping(value = "/get/{stockId}")
@@ -357,4 +383,185 @@ public class PseudoProductController {
         productHistory.setStock(stock);
         historyrepository.save(productHistory);
     }
+
+    @PostMapping(value = "/GOD/create")
+    public void developerCreate(@RequestBody PseudoProduct pseudoProduct) {
+        Product prooduct = new Product();
+        int prCounter = 0;
+        int j = 0;
+        for (int i = 0; i <= 100; i++) {
+            String prCode = "B2";
+            prCounter = (100 + j);
+            String productCode = prCode + prCounter;
+            try {
+                Store store = new Store();
+                Stock stock = new Stock();
+                store = storerepository.findByaddress("Kifisia").get(0);
+                List<Stock> stockList = null;
+                stockList = store.getStock();
+                prooduct = pseudoProduct.getProduct(); // product 
+                Product product = new Product(productCode, prooduct.getCategory());
+                try {
+                    String kindOfCategory = product.getCategory().getKindOfCategory();
+                    Category category = categoryrepository.findBykindOfCategory(kindOfCategory).get(0);
+                    product.setCategory(category);
+                } catch (Exception ex) {
+                }
+                productrepository.save(product);
+                stock.setGold_weight("0.06");
+                stock.setSilver_weight("0.05");
+                stock.setKarats("9");
+                stock.setColor("White");
+                stock.setImageUrl("");
+                stock.setQuantity(25);
+                stock.setProductId(productCode);
+                stockrepository.save(stock);
+                stockList.add(stock);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(stock);
+                String goldW = stock.getGold_weight();
+                String silverW = stock.getSilver_weight();
+                String karats = stock.getKarats();
+                String productId = stock.getProductId();
+                if (stock.getColor().equals("White")) {
+                    Stock st1 = new Stock();
+                    st1.setGold_weight(goldW);
+                    st1.setSilver_weight(silverW);
+                    st1.setKarats(karats);
+                    st1.setColor("Yellow");
+                    st1.setImageUrl("");
+                    st1.setProductId(productId);
+                    st1.setQuantity(0);
+                    st1.setProductId(productCode);
+                    stockList.add(st1);
+                    store.setStock(stockList);
+                    stockrepository.save(st1);
+                    storerepository.save(store);
+                    saveHistory(st1);
+                    Stock st2 = new Stock();
+                    st2.setGold_weight(goldW);
+                    st2.setSilver_weight(silverW);
+                    st2.setKarats(karats);
+                    st2.setColor("Black");
+                    st2.setProductId(productId);
+                    st2.setQuantity(0);
+                    st2.setImageUrl("");
+                    st2.setProductId(productCode);
+                    stockrepository.save(st2);
+                    stockList.add(st2);
+                    store.setStock(stockList);
+                    storerepository.save(store);
+                    saveHistory(st2);
+                    Stock st3 = new Stock();
+                    st3.setGold_weight(goldW);
+                    st3.setSilver_weight(silverW);
+                    st3.setKarats(karats);
+                    st3.setColor("Rose");
+                    st3.setProductId(productId);
+                    st3.setQuantity(0);
+                    st3.setImageUrl("");
+                    st3.setProductId(productCode);
+                    stockrepository.save(st3);
+                    stockList.add(st3);
+                    store.setStock(stockList);
+                    storerepository.save(store);
+                    saveHistory(st3);
+                }
+                if (stock.getColor().equals("Yellow")) {
+                    Stock st1 = new Stock();
+                    st1.setGold_weight(goldW);
+                    st1.setSilver_weight(silverW);
+                    st1.setKarats(karats);
+                    st1.setColor("White");
+                    st1.setImageUrl("");
+                    st1.setProductId(productId);
+                    st1.setQuantity(0);
+                    stockList.add(st1);
+                    store.setStock(stockList);
+                    st1.setProductId(productCode);
+                    stockrepository.save(st1);
+                    storerepository.save(store);
+                    saveHistory(st1);
+                    Stock st2 = new Stock();
+                    st2.setGold_weight(goldW);
+                    st2.setSilver_weight(silverW);
+                    st2.setKarats(karats);
+                    st2.setColor("Black");
+                    st2.setProductId(productId);
+                    st2.setQuantity(0);
+                    st2.setImageUrl("");
+                    st2.setProductId(productCode);
+                    stockrepository.save(st2);
+                    stockList.add(st2);
+                    store.setStock(stockList);
+                    storerepository.save(store);
+                    saveHistory(st2);
+                    Stock st3 = new Stock();
+                    st3.setGold_weight(goldW);
+                    st3.setSilver_weight(silverW);
+                    st3.setKarats(karats);
+                    st3.setColor("Rose");
+                    st3.setProductId(productId);
+                    st3.setQuantity(0);
+                    st3.setImageUrl("");
+                    st3.setProductId(productCode);
+                    stockrepository.save(st3);
+                    stockList.add(st3);
+                    store.setStock(stockList);
+                    storerepository.save(store);
+                    saveHistory(st3);
+                }
+                if (stock.getColor().equals("Rose")) {
+                    Stock st1 = new Stock();
+                    st1.setGold_weight(goldW);
+                    st1.setSilver_weight(silverW);
+                    st1.setKarats(karats);
+                    st1.setColor("Yellow");
+                    st1.setImageUrl("");
+                    st1.setProductId(productId);
+                    st1.setQuantity(0);
+                    stockList.add(st1);
+                    store.setStock(stockList);
+                    st1.setProductId(productCode);
+                    stockrepository.save(st1);
+                    storerepository.save(store);
+                    saveHistory(st1);
+                    Stock st2 = new Stock();
+                    st2.setGold_weight(goldW);
+                    st2.setSilver_weight(silverW);
+                    st2.setKarats(karats);
+                    st2.setColor("Black");
+                    st2.setProductId(productId);
+                    st2.setQuantity(0);
+                    st2.setImageUrl("");
+                    st2.setProductId(productCode);
+                    stockrepository.save(st2);
+                    stockList.add(st2);
+                    store.setStock(stockList);
+                    storerepository.save(store);
+                    saveHistory(st2);
+                    Stock st3 = new Stock();
+                    st3.setGold_weight(goldW);
+                    st3.setSilver_weight(silverW);
+                    st3.setKarats(karats);
+                    st3.setColor("Rose");
+                    st3.setProductId(productId);
+                    st3.setQuantity(0);
+                    st3.setImageUrl("");
+                    st3.setProductId(productCode);
+                    stockrepository.save(st3);
+                    stockList.add(st3);
+                    store.setStock(stockList);
+                    storerepository.save(store);
+                    saveHistory(st3);
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR: " + e.getMessage());
+            }
+            j++;
+        }
+
+    }
+
 }

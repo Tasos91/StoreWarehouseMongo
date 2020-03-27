@@ -21,15 +21,71 @@ public class Stock {
     private String productId;
     private Integer quantity;
     private String gold_weight;
-    private String stoneWeight;
+    private String other_stoneWeight;
 
-    public String getStoneWeight() {
-        return stoneWeight;
+    public String getOther_stoneWeight() {
+        return other_stoneWeight;
     }
 
-    public void setStoneWeight(String stoneWeight) {
-        this.stoneWeight = stoneWeight;
+    public void setOther_stoneWeight(String other_stoneWeight) {
+        this.other_stoneWeight = other_stoneWeight;
     }
+    private boolean non_produce;
+    private String other_stone;
+    private String diamond_weight;
+
+    public Stock(String color, String productId, Integer quantity, String gold_weight, boolean non_produce, String other_stone, String diamond_weight, String karats, String silver_weight, String imageUrl, String other_stoneWeight) {
+        this.color = color;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.gold_weight = gold_weight;
+        this.non_produce = non_produce;
+        this.other_stone = other_stone;
+        this.diamond_weight = diamond_weight;
+        this.karats = karats;
+        this.silver_weight = silver_weight;
+        this.imageUrl = imageUrl;
+        this.other_stoneWeight = other_stoneWeight;
+    }
+
+    public Stock(String color, String productId, Integer quantity, String gold_weight, String other_stoneWeight, boolean non_produce, String other_stone, String diamond_weight, String karats, String silver_weight, String imageUrl) {
+        this.color = color;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.gold_weight = gold_weight;
+        this.other_stoneWeight = other_stoneWeight;
+        this.non_produce = non_produce;
+        this.other_stone = other_stone;
+        this.diamond_weight = diamond_weight;
+        this.karats = karats;
+        this.silver_weight = silver_weight;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getOther_stone() {
+        return other_stone;
+    }
+
+    public void setOther_stone(String other_stone) {
+        this.other_stone = other_stone;
+    }
+
+    public String getDiamond_weight() {
+        return diamond_weight;
+    }
+
+    public void setDiamond_weight(String diamond_weight) {
+        this.diamond_weight = diamond_weight;
+    }
+
+    public boolean isNon_produce() {
+        return non_produce;
+    }
+
+    public void setNon_produce(boolean non_produce) {
+        this.non_produce = non_produce;
+    }
+    
     private String karats;
 
     public String getKarats() {
@@ -40,7 +96,7 @@ public class Stock {
         this.karats = karats;
     }
 
-    public Stock(String color, String productId, Integer quantity, String gold_weight, String silver_weight, String imageUrl, String karats, String stoneWeight) {
+    public Stock(String color, String productId, Integer quantity, String gold_weight, String silver_weight, String imageUrl, String karats, String other_stoneWeight, boolean non_produce) {
         this.color = color;
         this.productId = productId;
         this.quantity = quantity;
@@ -48,7 +104,8 @@ public class Stock {
         this.silver_weight = silver_weight;
         this.imageUrl = imageUrl;
         this.karats = karats;
-        this.stoneWeight = stoneWeight;
+        this.other_stoneWeight = other_stoneWeight;
+        this.non_produce = non_produce;
     }
     private String silver_weight;
 

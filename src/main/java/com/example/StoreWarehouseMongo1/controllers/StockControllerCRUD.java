@@ -20,9 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -80,6 +82,8 @@ public class StockControllerCRUD {
                 stock = stockrepository.findById(id).get();
                 stockrepository.delete(stock);
             } catch (Exception e) {
+                return new ResponseEntity(new CustomErrorType("Cannot delete this stock", HttpStatus.NOT_FOUND.value()),
+                        HttpStatus.NOT_FOUND);
             }
             List<Store> stores = storerepository.findAll();
             for (Store store : stores) {
@@ -99,7 +103,26 @@ public class StockControllerCRUD {
         }
 
     }
-    
+
+    @PostMapping(value = "/nonProduce")
+    public ResponseEntity<?> makeItUnUsable(@RequestParam("id") String id) {
+        try {
+            Stock stock = new Stock();
+            try {
+                stock = stockrepository.findById(id).get();
+                stock.setNon_produce(true);
+                stockrepository.save(stock);
+            } catch (Exception e) {
+                return new ResponseEntity(new CustomErrorType("Cannot find this product", HttpStatus.NOT_FOUND.value()),
+                        HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping(value = "/deleteAll")
     public void deleteStock() {
         stockrepository.deleteAll();

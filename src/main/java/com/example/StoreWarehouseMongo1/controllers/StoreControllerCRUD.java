@@ -130,15 +130,15 @@ public class StoreControllerCRUD {
         List<Stock> stock = store.getStock();
         int size = stock.size();
         int pages = 0;
-        int j = 8;
+        int j = 32;
         for (int i = 0; i <= size; i++) {
             if (i >= j && i <= j) {
-                j = 8 + j;
+                j = 32 + j;
                 pages++;
             }
         }
         int result = j - size;
-        if (result < 8) {
+        if (result < 32) {
             pages++;
         }
         return new ResponseEntity<>(pages, HttpStatus.OK);
