@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,16 @@ public class HistoryController {
             return new ResponseEntity<List<History>>(historyrepository.findAll(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(new CustomErrorType("Product not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteHistory() {
+        try {
+            historyrepository.deleteAll();
+            return new ResponseEntity<>("History deleted", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("History is not deleted", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
     }
 

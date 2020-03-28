@@ -15,6 +15,8 @@ import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -157,6 +159,107 @@ public class PseudoProductController {
         }
     }
 
+    @GetMapping(value = "/category")
+    public ResponseEntity<?> getProductsByCategory(@RequestParam("categoryId") String categoryId,
+            @RequestParam("address") String address, @RequestParam("page") Integer page) {
+
+        List<Stock> stock = new ArrayList();
+        Store store = new Store();
+        try {
+            store = storerepository.findByaddress(address).get(0);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("Wrong address. This address does not exist", HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
+        try {
+            stock = store.getStock(); //an uparxei stock uparxei sigoura kai product
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("This store doesn't have stock", HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
+        if (!stock.isEmpty() && stock != null && stock.size() > 0) {
+            Comparator<Stock> compareProductId = (Stock stock1, Stock stock2) //sort by productId
+                    -> stock1.getProductId().compareTo(stock2.getProductId());
+            Collections.sort(stock, compareProductId);
+            List<Stock> stockByCategory = new ArrayList();
+            for (Stock st : stock) {
+                if (st.getCategoryId().equals(categoryId)) {
+                    stockByCategory.add(st);
+                }
+            }
+            int size = stock.size();
+            List<PseudoProduct> pseudoproducts = new ArrayList();
+            Integer i = 0;
+            if (page == 1) {
+                page = 0;
+            }
+            int index = 32 * page; // 87 products kai 
+            int result = (index - size); // 16 - 4 = 4
+            if (result >= 32) {
+                return new ResponseEntity(new CustomErrorType("This page number exceed the number of real pages", HttpStatus.NOT_FOUND.value()),
+                        HttpStatus.NOT_FOUND);
+            }
+            Stock st = new Stock();
+            int lastOfStock = (page - 1) * 32;
+            int whenSizeIsSmallerThanTheObjectsWeWantForAPage = 0;
+            for (int j = 1; j <= 32; j++) {
+                if (size > 32) {
+                    if (index > size) {
+                        if (lastOfStock < size) {
+                            st = stock.get(lastOfStock);
+                            lastOfStock++;
+                        }
+                    }
+                    if (index == size) {
+                        index = index - 32;
+                        st = stock.get(index);
+                    }
+                    if (index < size) {
+                        st = stock.get(index);
+                    }
+                }
+                if (size < 32) { //otan einai to size mikrotero apo to poso pou theloume na exei mia selida
+                    st = stock.get(j - 1);
+                    whenSizeIsSmallerThanTheObjectsWeWantForAPage++;
+                }
+                if (size == 32) {
+                    st = stock.get(j - 1);
+                }
+                Product pr = new Product();
+                try {
+                    long start1 = System.currentTimeMillis();
+                    pr = productrepository.findByproductcode(st.getProductId()).get(0);
+                    long end = System.currentTimeMillis();
+                    System.out.println("DATABASE QUERY FOR PRODUCT: " + (end - start1));
+                } catch (Exception e) {
+                }
+                PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
+                if (i < size) { //auto ginetai na gia na exoun ola ta pseudoproduct id apo 0 ews ...
+                    String s = i.toString();
+                    pspr.setId(s);
+                    i++;
+                }
+                PseudoProduct pseudoproduct = new PseudoProduct();
+                try {
+                    pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
+                } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
+                    //pseudoproductrepository.save(pspr);
+                }
+                pseudoproducts.add(pspr);
+                index++;
+                if (lastOfStock == size) {
+                    break;
+                }
+                if (whenSizeIsSmallerThanTheObjectsWeWantForAPage == size) {
+                    break;
+                }
+            }
+            return new ResponseEntity<List<PseudoProduct>>(pseudoproducts, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("There is not content", HttpStatus.NO_CONTENT);
+        }
+    }
+
     @GetMapping(value = "/get/{stockId}")
     public ResponseEntity<?> getPseudoproduct(@PathVariable("stockId") String id) {
         try {
@@ -192,15 +295,17 @@ public class PseudoProductController {
             List<Stock> stockList = null;
             stockList = store.getStock();
             product = pseudoProduct.getProduct();
+            Category category = new Category();
             try {
                 String kindOfCategory = product.getCategory().getKindOfCategory();
-                Category category = categoryrepository.findBykindOfCategory(kindOfCategory).get(0);
+                category = categoryrepository.findBykindOfCategory(kindOfCategory).get(0);
                 product.setCategory(category);
             } catch (Exception ex) {
                 return new ResponseEntity(new CustomErrorType("This category not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
             }
             productrepository.save(product);
             stock = pseudoProduct.getStock();
+            stock.setCategoryId(category.getId());
             stockrepository.save(stock);
             stockList.add(stock);
             store.setStock(stockList);
@@ -221,6 +326,7 @@ public class PseudoProductController {
                 st1.setQuantity(0);
                 stockList.add(st1);
                 store.setStock(stockList);
+                st1.setCategoryId(category.getId());
                 stockrepository.save(st1);
                 storerepository.save(store);
                 saveHistory(st1);
@@ -232,6 +338,7 @@ public class PseudoProductController {
                 st2.setProductId(productId);
                 st2.setQuantity(0);
                 st2.setImageUrl("");
+                st2.setCategoryId(category.getId());
                 stockrepository.save(st2);
                 stockList.add(st2);
                 store.setStock(stockList);
@@ -245,6 +352,7 @@ public class PseudoProductController {
                 st3.setProductId(productId);
                 st3.setQuantity(0);
                 st3.setImageUrl("");
+                st3.setCategoryId(category.getId());
                 stockrepository.save(st3);
                 stockList.add(st3);
                 store.setStock(stockList);
@@ -260,6 +368,7 @@ public class PseudoProductController {
                 st1.setImageUrl("");
                 st1.setProductId(productId);
                 st1.setQuantity(0);
+                st1.setCategoryId(category.getId());
                 stockList.add(st1);
                 store.setStock(stockList);
                 stockrepository.save(st1);
@@ -273,6 +382,7 @@ public class PseudoProductController {
                 st2.setProductId(productId);
                 st2.setQuantity(0);
                 st2.setImageUrl("");
+                st2.setCategoryId(category.getId());
                 stockrepository.save(st2);
                 stockList.add(st2);
                 store.setStock(stockList);
@@ -286,6 +396,7 @@ public class PseudoProductController {
                 st3.setProductId(productId);
                 st3.setQuantity(0);
                 st3.setImageUrl("");
+                st3.setCategoryId(category.getId());
                 stockrepository.save(st3);
                 stockList.add(st3);
                 store.setStock(stockList);
@@ -303,6 +414,7 @@ public class PseudoProductController {
                 st1.setQuantity(0);
                 stockList.add(st1);
                 store.setStock(stockList);
+                st1.setCategoryId(category.getId());
                 stockrepository.save(st1);
                 storerepository.save(store);
                 saveHistory(st1);
@@ -314,6 +426,7 @@ public class PseudoProductController {
                 st2.setProductId(productId);
                 st2.setQuantity(0);
                 st2.setImageUrl("");
+                st2.setCategoryId(category.getId());
                 stockrepository.save(st2);
                 stockList.add(st2);
                 store.setStock(stockList);
@@ -327,6 +440,51 @@ public class PseudoProductController {
                 st3.setProductId(productId);
                 st3.setQuantity(0);
                 st3.setImageUrl("");
+                st3.setCategoryId(category.getId());
+                stockrepository.save(st3);
+                stockList.add(st3);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(st3);
+            }
+            if (stock.getColor().equals("Black")) {
+                Stock st1 = new Stock();
+                st1.setGold_weight(goldW);
+                st1.setSilver_weight(silverW);
+                st1.setKarats(karats);
+                st1.setColor("Yellow");
+                st1.setImageUrl("");
+                st1.setProductId(productId);
+                st1.setQuantity(0);
+                st1.setCategoryId(category.getId());
+                stockList.add(st1);
+                store.setStock(stockList);
+                stockrepository.save(st1);
+                storerepository.save(store);
+                saveHistory(st1);
+                Stock st2 = new Stock();
+                st2.setGold_weight(goldW);
+                st2.setSilver_weight(silverW);
+                st2.setKarats(karats);
+                st2.setColor("White");
+                st2.setProductId(productId);
+                st2.setQuantity(0);
+                st2.setImageUrl("");
+                st2.setCategoryId(category.getId());
+                stockrepository.save(st2);
+                stockList.add(st2);
+                store.setStock(stockList);
+                storerepository.save(store);
+                saveHistory(st2);
+                Stock st3 = new Stock();
+                st3.setGold_weight(goldW);
+                st3.setSilver_weight(silverW);
+                st3.setKarats(karats);
+                st3.setColor("Rose");
+                st3.setProductId(productId);
+                st3.setQuantity(0);
+                st3.setImageUrl("");
+                st3.setCategoryId(category.getId());
                 stockrepository.save(st3);
                 stockList.add(st3);
                 store.setStock(stockList);
