@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -128,6 +129,39 @@ public class StoreControllerCRUD {
                     HttpStatus.NOT_FOUND);
         }
         List<Stock> stock = store.getStock();
+        int size = stock.size();
+        int pages = 0;
+        int j = 32;
+        for (int i = 0; i <= size; i++) {
+            if (i >= j && i <= j) {
+                j = 32 + j;
+                pages++;
+            }
+        }
+        int result = j - size;
+        if (result < 32) {
+            pages++;
+        }
+        return new ResponseEntity<>(pages, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/pages/category", method = GET)
+    public ResponseEntity<?> getPagesForCategory(@RequestParam("address") String address,
+            @RequestParam("categoryId") String categoryId) {
+        Store store = new Store();
+        try {
+            store = storerepository.findByaddress(address).get(0);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
+        List<Stock> stock1 = store.getStock();
+        List<Stock> stock = new ArrayList();
+        for (Stock st : stock1) {
+            if (st.getCategoryId().equals(categoryId)) {
+                stock.add(st);
+            }
+        }
         int size = stock.size();
         int pages = 0;
         int j = 32;

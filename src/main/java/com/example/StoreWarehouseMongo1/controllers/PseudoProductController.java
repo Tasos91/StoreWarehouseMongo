@@ -64,199 +64,206 @@ public class PseudoProductController {
     @GetMapping(value = "/get/pseudoProducts")
     public ResponseEntity<?> getPseudoProducts(@RequestParam("address") String address,
             @RequestParam("page") Integer page) { //fernei ta pseudoproducts kai kanei kai insert to kathena an den uparxei hdh
-        Store store = new Store();
-        long start = System.currentTimeMillis();
-        try {
-            long start1 = System.currentTimeMillis();
-            store = storerepository.findByaddress(address).get(0);
-            long end = System.currentTimeMillis();
-            System.out.println("DATABASE QUERY FOR STORE: " + (end - start1));
+        if (page > 0) {
+            Store store = new Store();
+            long start = System.currentTimeMillis();
+            try {
+                long start1 = System.currentTimeMillis();
+                store = storerepository.findByaddress(address).get(0);
+                long end = System.currentTimeMillis();
+                System.out.println("DATABASE QUERY FOR STORE: " + (end - start1));
 
-        } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType("The specific store not found", HttpStatus.NOT_FOUND.value()),
-                    HttpStatus.NOT_FOUND);
-        }
-        List<PseudoProduct> pseudoproducts = new ArrayList();
-        List<Stock> stock = new ArrayList();
-        try {
-            stock = store.getStock(); //an uparxei stock uparxei sigoura kai product
-        } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType("This store doesn't have stock", HttpStatus.NOT_FOUND.value()),
-                    HttpStatus.NOT_FOUND);
-        }
-        if (!stock.isEmpty() && stock != null && stock.size() > 0) {
-            int size = stock.size();
-            Integer i = 0;
-            if (page == 1) {
-                page = 0;
-            }
-            int index = 32 * page; // 87 products kai 
-            int result = (index - size); // 16 - 4 = 4
-            if (result >= 32) {
-                return new ResponseEntity(new CustomErrorType("This page number exceed the number of real pages", HttpStatus.NOT_FOUND.value()),
+            } catch (Exception e) {
+                return new ResponseEntity(new CustomErrorType("The specific store not found", HttpStatus.NOT_FOUND.value()),
                         HttpStatus.NOT_FOUND);
             }
-            Stock st = new Stock();
-            int lastOfStock = (page - 1) * 32;
-            int whenSizeIsSmallerThanTheObjectsWeWantForAPage = 0;
-            for (int j = 1; j <= 32; j++) {
-                if (size > 32) {
-                    if (index > size) {
-                        if (lastOfStock < size) {
-                            st = stock.get(lastOfStock);
-                            lastOfStock++;
+            List<PseudoProduct> pseudoproducts = new ArrayList();
+            List<Stock> stock = new ArrayList();
+            try {
+                stock = store.getStock(); //an uparxei stock uparxei sigoura kai product
+            } catch (Exception e) {
+                return new ResponseEntity(new CustomErrorType("This store doesn't have stock", HttpStatus.NOT_FOUND.value()),
+                        HttpStatus.NOT_FOUND);
+            }
+            if (!stock.isEmpty() && stock != null && stock.size() > 0) {
+                int size = stock.size();
+                Integer i = 0;
+                if (page == 1) {
+                    page = 0;
+                }
+                int index = 32 * page; // 87 products kai 
+                int result = (index - size); // 16 - 4 = 4
+                if (result >= 32) {
+                    return new ResponseEntity(new CustomErrorType("This page number exceed the number of real pages", HttpStatus.NOT_FOUND.value()),
+                            HttpStatus.NOT_FOUND);
+                }
+                Stock st = new Stock();
+                int lastOfStock = (page - 1) * 32;
+                int whenSizeIsSmallerThanTheObjectsWeWantForAPage = 0;
+                for (int j = 1; j <= 32; j++) {
+                    if (size > 32) {
+                        if (index > size) {
+                            if (lastOfStock < size) {
+                                st = stock.get(lastOfStock);
+                                lastOfStock++;
+                            }
+                        }
+                        if (index == size) {
+                            index = index - 32;
+                            st = stock.get(index);
+                        }
+                        if (index < size) {
+                            st = stock.get(index);
                         }
                     }
-                    if (index == size) {
-                        index = index - 32;
-                        st = stock.get(index);
+                    if (size < 32) { //otan einai to size mikrotero apo to poso pou theloume na exei mia selida
+                        st = stock.get(j - 1);
+                        whenSizeIsSmallerThanTheObjectsWeWantForAPage++;
                     }
-                    if (index < size) {
-                        st = stock.get(index);
+                    if (size == 32) {
+                        st = stock.get(j - 1);
+                    }
+                    Product pr = new Product();
+                    try {
+                        long start1 = System.currentTimeMillis();
+                        pr = productrepository.findByproductcode(st.getProductId()).get(0);
+                        long end = System.currentTimeMillis();
+                        System.out.println("DATABASE QUERY FOR PRODUCT: " + (end - start1));
+                    } catch (Exception e) {
+                    }
+                    PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
+                    if (i < size) { //auto ginetai na gia na exoun ola ta pseudoproduct id apo 0 ews ...
+                        String s = i.toString();
+                        pspr.setId(s);
+                        i++;
+                    }
+                    PseudoProduct pseudoproduct = new PseudoProduct();
+                    try {
+                        pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
+                    } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
+                        //pseudoproductrepository.save(pspr);
+                    }
+                    pseudoproducts.add(pspr);
+                    index++;
+                    if (lastOfStock == size) {
+                        break;
+                    }
+                    if (whenSizeIsSmallerThanTheObjectsWeWantForAPage == size) {
+                        break;
                     }
                 }
-                if (size < 32) { //otan einai to size mikrotero apo to poso pou theloume na exei mia selida
-                    st = stock.get(j - 1);
-                    whenSizeIsSmallerThanTheObjectsWeWantForAPage++;
-                }
-                if (size == 32) {
-                    st = stock.get(j - 1);
-                }
-                Product pr = new Product();
-                try {
-                    long start1 = System.currentTimeMillis();
-                    pr = productrepository.findByproductcode(st.getProductId()).get(0);
-                    long end = System.currentTimeMillis();
-                    System.out.println("DATABASE QUERY FOR PRODUCT: " + (end - start1));
-                } catch (Exception e) {
-                }
-                PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
-                if (i < size) { //auto ginetai na gia na exoun ola ta pseudoproduct id apo 0 ews ...
-                    String s = i.toString();
-                    pspr.setId(s);
-                    i++;
-                }
-                PseudoProduct pseudoproduct = new PseudoProduct();
-                try {
-                    pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
-                } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
-                    //pseudoproductrepository.save(pspr);
-                }
-                pseudoproducts.add(pspr);
-                index++;
-                if (lastOfStock == size) {
-                    break;
-                }
-                if (whenSizeIsSmallerThanTheObjectsWeWantForAPage == size) {
-                    break;
-                }
+                long end = System.currentTimeMillis();
+                System.out.println("FINAL TIME FOR THIS API CALL:  " + (end - start));
+                return new ResponseEntity<List>(pseudoproducts, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("There is not content", HttpStatus.NO_CONTENT);
             }
-            long end = System.currentTimeMillis();
-            System.out.println("FINAL TIME FOR THIS API CALL:  " + (end - start));
-            return new ResponseEntity<List>(pseudoproducts, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("There is not content", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Page must be bigger than zero", HttpStatus.CONFLICT);
         }
     }
 
     @GetMapping(value = "/category")
     public ResponseEntity<?> getProductsByCategory(@RequestParam("categoryId") String categoryId,
             @RequestParam("address") String address, @RequestParam("page") Integer page) {
-
-        List<Stock> stock = new ArrayList();
-        Store store = new Store();
-        try {
-            store = storerepository.findByaddress(address).get(0);
-        } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType("Wrong address. This address does not exist", HttpStatus.NOT_FOUND.value()),
-                    HttpStatus.NOT_FOUND);
-        }
-        try {
-            stock = store.getStock(); //an uparxei stock uparxei sigoura kai product
-        } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType("This store doesn't have stock", HttpStatus.NOT_FOUND.value()),
-                    HttpStatus.NOT_FOUND);
-        }
-        if (!stock.isEmpty() && stock != null && stock.size() > 0) {
-            Comparator<Stock> compareProductId = (Stock stock1, Stock stock2) //sort by productId
-                    -> stock1.getProductId().compareTo(stock2.getProductId());
-            Collections.sort(stock, compareProductId);
-            List<Stock> stockByCategory = new ArrayList();
-            for (Stock st : stock) {
-                if (st.getCategoryId().equals(categoryId)) {
-                    stockByCategory.add(st);
-                }
-            }
-            int size = stock.size();
-            List<PseudoProduct> pseudoproducts = new ArrayList();
-            Integer i = 0;
-            if (page == 1) {
-                page = 0;
-            }
-            int index = 32 * page; // 87 products kai 
-            int result = (index - size); // 16 - 4 = 4
-            if (result >= 32) {
-                return new ResponseEntity(new CustomErrorType("This page number exceed the number of real pages", HttpStatus.NOT_FOUND.value()),
+        if (page > 0) {
+            List<Stock> stock = new ArrayList();
+            Store store = new Store();
+            try {
+                store = storerepository.findByaddress(address).get(0);
+            } catch (Exception e) {
+                return new ResponseEntity(new CustomErrorType("Wrong address. This address does not exist", HttpStatus.NOT_FOUND.value()),
                         HttpStatus.NOT_FOUND);
             }
-            Stock st = new Stock();
-            int lastOfStock = (page - 1) * 32;
-            int whenSizeIsSmallerThanTheObjectsWeWantForAPage = 0;
-            for (int j = 1; j <= 32; j++) {
-                if (size > 32) {
-                    if (index > size) {
-                        if (lastOfStock < size) {
-                            st = stock.get(lastOfStock);
-                            lastOfStock++;
+            try {
+                stock = store.getStock(); //an uparxei stock uparxei sigoura kai product
+            } catch (Exception e) {
+                return new ResponseEntity(new CustomErrorType("This store doesn't have stock", HttpStatus.NOT_FOUND.value()),
+                        HttpStatus.NOT_FOUND);
+            }
+            if (!stock.isEmpty() && stock != null && stock.size() > 0) {
+                Comparator<Stock> compareProductId = (Stock stock1, Stock stock2) //sort by productId
+                        -> stock1.getProductId().compareTo(stock2.getProductId());
+                Collections.sort(stock, compareProductId);
+                List<Stock> stockByCategory = new ArrayList();
+                for (Stock st : stock) {
+                    if (st.getCategoryId().equals(categoryId)) {
+                        stockByCategory.add(st);
+                    }
+                }
+                int size = stockByCategory.size();
+                List<PseudoProduct> pseudoproducts = new ArrayList();
+                Integer i = 0;
+                if (page == 1) {
+                    page = 0;
+                }
+                int index = 32 * page; // 87 products kai 
+                int result = (index - size); // 16 - 4 = 4
+                if (result >= 32) {
+                    return new ResponseEntity(new CustomErrorType("This page number exceed the number of real pages", HttpStatus.NOT_FOUND.value()),
+                            HttpStatus.NOT_FOUND);
+                }
+                Stock st = new Stock();
+                int lastOfStock = (page - 1) * 32;
+                int whenSizeIsSmallerThanTheObjectsWeWantForAPage = 0;
+                for (int j = 1; j <= 32; j++) {
+                    if (size > 32) {
+                        if (index > size) {
+                            if (lastOfStock < size) {
+                                st = stockByCategory.get(lastOfStock);
+                                lastOfStock++;
+                            }
+                        }
+                        if (index == size) {
+                            index = index - 32;
+                            st = stockByCategory.get(index);
+                        }
+                        if (index < size) {
+                            st = stockByCategory.get(index);
                         }
                     }
-                    if (index == size) {
-                        index = index - 32;
-                        st = stock.get(index);
+                    if (size < 32) { //otan einai to size mikrotero apo to poso pou theloume na exei mia selida
+                        st = stockByCategory.get(j - 1);
+                        whenSizeIsSmallerThanTheObjectsWeWantForAPage++;
                     }
-                    if (index < size) {
-                        st = stock.get(index);
+                    if (size == 32) {
+                        st = stockByCategory.get(j - 1);
+                    }
+                    Product pr = new Product();
+                    try {
+                        long start1 = System.currentTimeMillis();
+                        pr = productrepository.findByproductcode(st.getProductId()).get(0);
+                        long end = System.currentTimeMillis();
+                        System.out.println("DATABASE QUERY FOR PRODUCT: " + (end - start1));
+                    } catch (Exception e) {
+                    }
+                    PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
+                    if (i < size) { //auto ginetai na gia na exoun ola ta pseudoproduct id apo 0 ews ...
+                        String s = i.toString();
+                        pspr.setId(s);
+                        i++;
+                    }
+                    PseudoProduct pseudoproduct = new PseudoProduct();
+                    try {
+                        pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
+                    } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
+                        //pseudoproductrepository.save(pspr);
+                    }
+                    pseudoproducts.add(pspr);
+                    index++;
+                    if (lastOfStock == size) {
+                        break;
+                    }
+                    if (whenSizeIsSmallerThanTheObjectsWeWantForAPage == size) {
+                        break;
                     }
                 }
-                if (size < 32) { //otan einai to size mikrotero apo to poso pou theloume na exei mia selida
-                    st = stock.get(j - 1);
-                    whenSizeIsSmallerThanTheObjectsWeWantForAPage++;
-                }
-                if (size == 32) {
-                    st = stock.get(j - 1);
-                }
-                Product pr = new Product();
-                try {
-                    long start1 = System.currentTimeMillis();
-                    pr = productrepository.findByproductcode(st.getProductId()).get(0);
-                    long end = System.currentTimeMillis();
-                    System.out.println("DATABASE QUERY FOR PRODUCT: " + (end - start1));
-                } catch (Exception e) {
-                }
-                PseudoProduct pspr = new PseudoProduct(pr, pr.getProductcode(), st);
-                if (i < size) { //auto ginetai na gia na exoun ola ta pseudoproduct id apo 0 ews ...
-                    String s = i.toString();
-                    pspr.setId(s);
-                    i++;
-                }
-                PseudoProduct pseudoproduct = new PseudoProduct();
-                try {
-                    pseudoproduct = pseudoproductrepository.findByproductcode(pspr.getProductcode()).get(0);
-                } catch (Exception e) { //an den uparxei to pseudoproduct mpainei sth catch kai ginetai save
-                    //pseudoproductrepository.save(pspr);
-                }
-                pseudoproducts.add(pspr);
-                index++;
-                if (lastOfStock == size) {
-                    break;
-                }
-                if (whenSizeIsSmallerThanTheObjectsWeWantForAPage == size) {
-                    break;
-                }
+                return new ResponseEntity<List<PseudoProduct>>(pseudoproducts, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("There is not content", HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<List<PseudoProduct>>(pseudoproducts, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("There is not content", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Page must be bigger than zero", HttpStatus.CONFLICT);
         }
     }
 
