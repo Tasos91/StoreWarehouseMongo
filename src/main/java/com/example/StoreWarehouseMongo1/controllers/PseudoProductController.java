@@ -313,6 +313,7 @@ public class PseudoProductController {
             productrepository.save(product);
             stock = pseudoProduct.getStock();
             stock.setCategoryId(category.getId());
+            stock.setProducerCode(product.getProducer_code());
             stockrepository.save(stock);
             stockList.add(stock);
             store.setStock(stockList);
@@ -331,6 +332,7 @@ public class PseudoProductController {
                 st1.setImageUrl("");
                 st1.setProductId(productId);
                 st1.setQuantity(0);
+                st1.setProducerCode(product.getProducer_code());
                 stockList.add(st1);
                 store.setStock(stockList);
                 st1.setCategoryId(category.getId());
@@ -345,6 +347,7 @@ public class PseudoProductController {
                 st2.setProductId(productId);
                 st2.setQuantity(0);
                 st2.setImageUrl("");
+                st2.setProducerCode(product.getProducer_code());
                 st2.setCategoryId(category.getId());
                 stockrepository.save(st2);
                 stockList.add(st2);
@@ -360,6 +363,7 @@ public class PseudoProductController {
                 st3.setQuantity(0);
                 st3.setImageUrl("");
                 st3.setCategoryId(category.getId());
+                st3.setProducerCode(product.getProducer_code());
                 stockrepository.save(st3);
                 stockList.add(st3);
                 store.setStock(stockList);
@@ -376,6 +380,7 @@ public class PseudoProductController {
                 st1.setProductId(productId);
                 st1.setQuantity(0);
                 st1.setCategoryId(category.getId());
+                st1.setProducerCode(product.getProducer_code());
                 stockList.add(st1);
                 store.setStock(stockList);
                 stockrepository.save(st1);
@@ -390,6 +395,7 @@ public class PseudoProductController {
                 st2.setQuantity(0);
                 st2.setImageUrl("");
                 st2.setCategoryId(category.getId());
+                st2.setProducerCode(product.getProducer_code());
                 stockrepository.save(st2);
                 stockList.add(st2);
                 store.setStock(stockList);
@@ -404,6 +410,7 @@ public class PseudoProductController {
                 st3.setQuantity(0);
                 st3.setImageUrl("");
                 st3.setCategoryId(category.getId());
+                st3.setProducerCode(product.getProducer_code());
                 stockrepository.save(st3);
                 stockList.add(st3);
                 store.setStock(stockList);
@@ -419,6 +426,7 @@ public class PseudoProductController {
                 st1.setImageUrl("");
                 st1.setProductId(productId);
                 st1.setQuantity(0);
+                st1.setProducerCode(product.getProducer_code());
                 stockList.add(st1);
                 store.setStock(stockList);
                 st1.setCategoryId(category.getId());
@@ -433,6 +441,7 @@ public class PseudoProductController {
                 st2.setProductId(productId);
                 st2.setQuantity(0);
                 st2.setImageUrl("");
+                st2.setProducerCode(product.getProducer_code());
                 st2.setCategoryId(category.getId());
                 stockrepository.save(st2);
                 stockList.add(st2);
@@ -448,6 +457,7 @@ public class PseudoProductController {
                 st3.setQuantity(0);
                 st3.setImageUrl("");
                 st3.setCategoryId(category.getId());
+                st3.setProducerCode(product.getProducer_code());
                 stockrepository.save(st3);
                 stockList.add(st3);
                 store.setStock(stockList);
@@ -464,6 +474,7 @@ public class PseudoProductController {
                 st1.setProductId(productId);
                 st1.setQuantity(0);
                 st1.setCategoryId(category.getId());
+                st1.setProducerCode(product.getProducer_code());
                 stockList.add(st1);
                 store.setStock(stockList);
                 stockrepository.save(st1);
@@ -478,6 +489,7 @@ public class PseudoProductController {
                 st2.setQuantity(0);
                 st2.setImageUrl("");
                 st2.setCategoryId(category.getId());
+                st2.setProducerCode(product.getProducer_code());
                 stockrepository.save(st2);
                 stockList.add(st2);
                 store.setStock(stockList);
@@ -492,6 +504,7 @@ public class PseudoProductController {
                 st3.setQuantity(0);
                 st3.setImageUrl("");
                 st3.setCategoryId(category.getId());
+                st3.setProducerCode(product.getProducer_code());
                 stockrepository.save(st3);
                 stockList.add(st3);
                 store.setStock(stockList);
@@ -580,6 +593,7 @@ public class PseudoProductController {
                 stock.setImageUrl("");
                 stock.setQuantity(25);
                 stock.setProductId(productCode);
+                stock.setProducerCode(product.getProducer_code());
                 stockrepository.save(stock);
                 stockList.add(stock);
                 store.setStock(stockList);
@@ -599,6 +613,7 @@ public class PseudoProductController {
                     st1.setProductId(productId);
                     st1.setQuantity(0);
                     st1.setProductId(productCode);
+                    st1.setProducerCode(product.getProducer_code());
                     stockList.add(st1);
                     store.setStock(stockList);
                     stockrepository.save(st1);
@@ -613,6 +628,7 @@ public class PseudoProductController {
                     st2.setQuantity(0);
                     st2.setImageUrl("");
                     st2.setProductId(productCode);
+                    st2.setProducerCode(product.getProducer_code());
                     stockrepository.save(st2);
                     stockList.add(st2);
                     store.setStock(stockList);
@@ -627,6 +643,7 @@ public class PseudoProductController {
                     st3.setQuantity(0);
                     st3.setImageUrl("");
                     st3.setProductId(productCode);
+                    st3.setProducerCode(product.getProducer_code());
                     stockrepository.save(st3);
                     stockList.add(st3);
                     store.setStock(stockList);
@@ -645,6 +662,7 @@ public class PseudoProductController {
                     stockList.add(st1);
                     store.setStock(stockList);
                     st1.setProductId(productCode);
+                    st1.setProducerCode(product.getProducer_code());
                     stockrepository.save(st1);
                     storerepository.save(store);
                     saveHistory(st1);
@@ -657,6 +675,7 @@ public class PseudoProductController {
                     st2.setQuantity(0);
                     st2.setImageUrl("");
                     st2.setProductId(productCode);
+                    st2.setProducerCode(product.getProducer_code());
                     stockrepository.save(st2);
                     stockList.add(st2);
                     store.setStock(stockList);
@@ -671,6 +690,7 @@ public class PseudoProductController {
                     st3.setQuantity(0);
                     st3.setImageUrl("");
                     st3.setProductId(productCode);
+                    st3.setProducerCode(product.getProducer_code());
                     stockrepository.save(st3);
                     stockList.add(st3);
                     store.setStock(stockList);
@@ -689,6 +709,7 @@ public class PseudoProductController {
                     stockList.add(st1);
                     store.setStock(stockList);
                     st1.setProductId(productCode);
+                    st1.setProducerCode(product.getProducer_code());
                     stockrepository.save(st1);
                     storerepository.save(store);
                     saveHistory(st1);
@@ -701,6 +722,7 @@ public class PseudoProductController {
                     st2.setQuantity(0);
                     st2.setImageUrl("");
                     st2.setProductId(productCode);
+                    st2.setProducerCode(product.getProducer_code());
                     stockrepository.save(st2);
                     stockList.add(st2);
                     store.setStock(stockList);
@@ -715,6 +737,7 @@ public class PseudoProductController {
                     st3.setQuantity(0);
                     st3.setImageUrl("");
                     st3.setProductId(productCode);
+                    st3.setProducerCode(product.getProducer_code());
                     stockrepository.save(st3);
                     stockList.add(st3);
                     store.setStock(stockList);

@@ -15,7 +15,7 @@ public class Stock implements Comparable<Stock> {
     private String color;
     private String productId;
     private Integer quantity;
-    private String gold_weight; 
+    private String gold_weight;
     private String other_stoneWeight;
     private String imageUrl;
     private String karats;
@@ -24,6 +24,31 @@ public class Stock implements Comparable<Stock> {
     private String other_stone;
     private String diamond_weight;
     private String categoryId;
+    private String producerCode;
+
+    public String getProducerCode() {
+        return producerCode;
+    }
+
+    public void setProducerCode(String producerCode) {
+        this.producerCode = producerCode;
+    }
+
+    public Stock(String color, String productId, Integer quantity, String gold_weight, String other_stoneWeight, String imageUrl, String karats, String silver_weight, boolean non_produce, String other_stone, String diamond_weight, String categoryId, String producerCode) {
+        this.color = color;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.gold_weight = gold_weight;
+        this.other_stoneWeight = other_stoneWeight;
+        this.imageUrl = imageUrl;
+        this.karats = karats;
+        this.silver_weight = silver_weight;
+        this.non_produce = non_produce;
+        this.other_stone = other_stone;
+        this.diamond_weight = diamond_weight;
+        this.categoryId = categoryId;
+        this.producerCode = producerCode;
+    }
 
     public String getCategoryId() {
         return categoryId;
@@ -209,10 +234,10 @@ public class Stock implements Comparable<Stock> {
     public int compareTo(Stock stock) {
         return this.getProductId().compareTo(stock.getProductId());
     }
-    
-     @Override
+
+    @Override
     public String toString() {
-        return "productId: " + productId +"";
+        return "productId: " + productId + "";
     }
 
 }

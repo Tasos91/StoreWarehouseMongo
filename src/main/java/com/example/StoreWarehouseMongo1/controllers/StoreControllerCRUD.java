@@ -127,19 +127,7 @@ public class StoreControllerCRUD {
                     HttpStatus.NOT_FOUND);
         }
         List<Stock> stock = store.getStock();
-        int size = stock.size();
-        int pages = 0;
-        int j = 32;
-        for (int i = 0; i <= size; i++) {
-            if (i >= j && i <= j) {
-                j = 32 + j;
-                pages++;
-            }
-        }
-        int result = j - size;
-        if (result < 32) {
-            pages++;
-        }
+        int pages = getPages(stock.size());
         return new ResponseEntity<>(pages, HttpStatus.OK);
     }
 
@@ -160,20 +148,45 @@ public class StoreControllerCRUD {
                 stock.add(st);
             }
         }
-        int size = stock.size();
+        int pages = getPages(stock.size());
+        return new ResponseEntity<>(pages, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/pages/producer", method = GET)
+    public ResponseEntity<?> getPagesForProducer(@RequestParam("address") String address,
+            @RequestParam("producerCode") String producerCode) {
+        Store store = new Store();
+        try {
+            store = storerepository.findByaddress(address).get(0);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
+        List<Stock> stock1 = store.getStock();
+        List<Stock> stock = new ArrayList();
+        for (Stock st : stock1) {
+            if (st.getProducerCode().equals(producerCode)) {
+                stock.add(st);
+            }
+        }
+        int pages = getPages(stock.size());
+        return new ResponseEntity<>(pages, HttpStatus.OK);
+    }
+
+    private int getPages(int stocksize) {
         int pages = 0;
         int j = 32;
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i <= stocksize; i++) {
             if (i >= j && i <= j) {
                 j = 32 + j;
                 pages++;
             }
         }
-        int result = j - size;
+        int result = j - stocksize;
         if (result < 32) {
             pages++;
         }
-        return new ResponseEntity<>(pages, HttpStatus.OK);
+        return pages;
     }
 
 }
