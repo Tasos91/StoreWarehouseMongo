@@ -42,15 +42,15 @@ public class Filter {
         return productrepository.findByproductcode(productCode);
     }
 
-    public static List<Product> getProductsPerStoreAndProducerCode(List<Product> productsPerPage, String address, String producerCode) {
-        List<Product> productsPerPageForThisStore = getProductsForThisStore(productsPerPage, address);
-        List<Product> products = new ArrayList();
-        for (Product product : productsPerPageForThisStore) {
-            if (product.getProducer_code().equals(producerCode)) {
-                products.add(product);
-            }
-        }
-        return products;
-    }
+//    public static List<Product> getProductsPerStoreAndProducerCode(List<Product> productsPerPage, String address, String producerCode) {
+//        List<Product> productsPerPageForThisStore = getProductsForThisStore(productsPerPage, address);
+//        List<Product> products = new ArrayList();
+//        for (Product product : productsPerPageForThisStore) {
+//            if (product.getProducer_code().equals(producerCode)) {
+//                products.add(product);
+//            }
+//        }
+//        return products;
+//    }
 
 }

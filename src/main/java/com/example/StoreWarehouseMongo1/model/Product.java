@@ -22,9 +22,28 @@ public class Product {
     private String cost_usd;
     private String cost_eu;
     private String price;
-    private String producer_code;
     private String descr;
     private List<Stone> stones; //proswrina vgazw ta stones apo to constructor
+    private Producer producer;
+
+    public Producer getProducer() {
+        return producer;
+    }
+
+    public void setProducer(Producer producer) {
+        this.producer = producer;
+    }
+
+    public Product(String productcode, Category category, String cost_usd, String cost_eu, String price, String producer_code, String descr, List<Stone> stones, Producer producer) {
+        this.productcode = productcode;
+        this.category = category;
+        this.cost_usd = cost_usd;
+        this.cost_eu = cost_eu;
+        this.price = price;
+        this.descr = descr;
+        this.stones = stones;
+        this.producer = producer;
+    }
 
     public String getId() {
         return id;
@@ -55,12 +74,11 @@ public class Product {
         this.productcode = productcode;
     }
 
-    public Product(String productcode, String cost_usd, String cost_eu, String price, String producer_code, String gold_weight, String silver_weight, String descr, Category category) {
+    public Product(String productcode, String cost_usd, String cost_eu, String price, String gold_weight, String silver_weight, String descr, Category category) {
         this.productcode = productcode;
         this.cost_usd = cost_usd;
         this.cost_eu = cost_eu;
         this.price = price;
-        this.producer_code = producer_code;
         this.descr = descr;
         this.category = category;
     }
@@ -87,14 +105,6 @@ public class Product {
 
     public void setPrice(String price) {
         this.price = price;
-    }
-
-    public String getProducer_code() {
-        return producer_code;
-    }
-
-    public void setProducer_code(String producer_code) {
-        this.producer_code = producer_code;
     }
 
     public String getDescr() {

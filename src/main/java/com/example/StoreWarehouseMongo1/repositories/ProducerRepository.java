@@ -5,7 +5,9 @@
  */
 package com.example.StoreWarehouseMongo1.repositories;
 
-import com.example.StoreWarehouseMongo1.model.History;
+import com.example.StoreWarehouseMongo1.model.Category;
+import com.example.StoreWarehouseMongo1.model.Producer;
+import com.example.StoreWarehouseMongo1.model.Product;
 import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -18,8 +20,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
  */
 @CrossOrigin(origins = "*")
 @Repository
-public interface HistoryRepository extends MongoRepository<History, String>, PagingAndSortingRepository<History, String> {
+public interface ProducerRepository extends MongoRepository<Producer, String>, PagingAndSortingRepository<Producer, String> {
 
-    List<History> findBystockId(String stockId);
-    List<History> findByStockIdAndStoreId(String stockId, String storeId);
+    
+    List<Producer> findByproducerCode(String producerCode);
+
 }

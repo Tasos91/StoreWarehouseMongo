@@ -15,6 +15,22 @@ public class History {
     private String timestamp;
     private Stock stock;
     private String stockId;
+    private String storeId;
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public History(String timestamp, Stock stock, String stockId, String storeId) {
+        this.timestamp = timestamp;
+        this.stock = stock;
+        this.stockId = stockId;
+        this.storeId = storeId;
+    }
 
     
     public String getStockId() {

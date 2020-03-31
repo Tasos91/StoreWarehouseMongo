@@ -154,7 +154,7 @@ public class StoreControllerCRUD {
     
     @RequestMapping(value = "/pages/producer", method = GET)
     public ResponseEntity<?> getPagesForProducer(@RequestParam("address") String address,
-            @RequestParam("producerCode") String producerCode) {
+            @RequestParam("producerCode") String producerId) {
         Store store = new Store();
         try {
             store = storerepository.findByaddress(address).get(0);
@@ -165,7 +165,7 @@ public class StoreControllerCRUD {
         List<Stock> stock1 = store.getStock();
         List<Stock> stock = new ArrayList();
         for (Stock st : stock1) {
-            if (st.getProducerCode().equals(producerCode)) {
+            if (st.getProducerId().equals(producerId)) {
                 stock.add(st);
             }
         }

@@ -34,7 +34,7 @@ public class CategoryControllerCRUD {
 
     @Autowired
     private CategoryRepository categoryrepository;
-    
+
     @Autowired
     private StockRepository stockRepository;
 
@@ -49,6 +49,7 @@ public class CategoryControllerCRUD {
                     categoryrepository.save(category);
                 }
             }
+            categoryrepository.save(category);
         } catch (Exception e) {
             return new ResponseEntity<>("", HttpStatus.CONFLICT);
         }

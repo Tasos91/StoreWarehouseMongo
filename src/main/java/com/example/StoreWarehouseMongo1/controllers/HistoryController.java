@@ -13,6 +13,7 @@ import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -55,5 +57,24 @@ public class HistoryController {
             return new ResponseEntity(new CustomErrorType("History is not deleted", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
     }
+    
+    @GetMapping(value = "/product")
+    public ResponseEntity<?> getHistoryByDate(@RequestParam("storeId") String storeId,
+            @RequestParam("stockId") String stockId) {
+        try {
+            return new ResponseEntity<List<History>>(historyrepository.findByStockIdAndStoreId(stockId, storeId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("Product not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    private void dateFromString(History history) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        Date dt = (Date) dtf.parse(history.getTimestamp());
+//        String timestamp = dtf.format(now);
+        History productHistory = new History();
+    }
+    
+    
 
 }

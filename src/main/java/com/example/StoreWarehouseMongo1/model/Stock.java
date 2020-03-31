@@ -24,17 +24,17 @@ public class Stock implements Comparable<Stock> {
     private String other_stone;
     private String diamond_weight;
     private String categoryId;
-    private String producerCode;
+    private String producerId;
 
-    public String getProducerCode() {
-        return producerCode;
+    public String getProducerId() {
+        return producerId;
     }
 
-    public void setProducerCode(String producerCode) {
-        this.producerCode = producerCode;
+    public void setProducerId(String producerId) {
+        this.producerId = producerId;
     }
 
-    public Stock(String color, String productId, Integer quantity, String gold_weight, String other_stoneWeight, String imageUrl, String karats, String silver_weight, boolean non_produce, String other_stone, String diamond_weight, String categoryId, String producerCode) {
+    public Stock(String color, String productId, Integer quantity, String gold_weight, String other_stoneWeight, String imageUrl, String karats, String silver_weight, boolean non_produce, String other_stone, String diamond_weight, String categoryId, String producerId) {
         this.color = color;
         this.productId = productId;
         this.quantity = quantity;
@@ -47,7 +47,22 @@ public class Stock implements Comparable<Stock> {
         this.other_stone = other_stone;
         this.diamond_weight = diamond_weight;
         this.categoryId = categoryId;
-        this.producerCode = producerCode;
+        this.producerId = producerId;
+    }
+
+    public Stock(String color, String productId, Integer quantity, String gold_weight, String other_stoneWeight, String imageUrl, String karats, String silver_weight, boolean non_produce, String other_stone, String diamond_weight, String categoryId) {
+        this.color = color;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.gold_weight = gold_weight;
+        this.other_stoneWeight = other_stoneWeight;
+        this.imageUrl = imageUrl;
+        this.karats = karats;
+        this.silver_weight = silver_weight;
+        this.non_produce = non_produce;
+        this.other_stone = other_stone;
+        this.diamond_weight = diamond_weight;
+        this.categoryId = categoryId;
     }
 
     public String getCategoryId() {

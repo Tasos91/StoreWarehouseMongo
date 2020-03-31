@@ -3,23 +3,14 @@ package com.example.StoreWarehouseMongo1.controllers;
 import com.example.StoreWarehouseMongo1.helpers.Filter;
 import com.example.StoreWarehouseMongo1.helpers.Pagination;
 import com.example.StoreWarehouseMongo1.model.Product;
-import com.example.StoreWarehouseMongo1.model.Store;
-import com.example.StoreWarehouseMongo1.model.Token;
-import com.example.StoreWarehouseMongo1.model.User;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.TokenRepository;
 import com.example.StoreWarehouseMongo1.repositories.UserRepository;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,11 +70,11 @@ public class ShowProductsByFiltered {
         return Filter.getProductsPerStoreAndCategory(prPerPage, address, category);
     }
 
-    @RequestMapping(value = "/producer/{address}/{producerCode}/{pageNumber}", method = GET) //this controller shows all products for the specified store for the first page
-    public List<Product> showProductsByPageAndAddressAndProducerCode(@PathVariable("address") String address, @PathVariable("producerCode") String producerCode,
-            @PathVariable("pageNumber") int page) {
-
-        return Filter.getProductsPerStoreAndProducerCode(pagination.paginator(page), address, producerCode);
-    }
+//    @RequestMapping(value = "/producer/{address}/{producerCode}/{pageNumber}", method = GET) //this controller shows all products for the specified store for the first page
+//    public List<Product> showProductsByPageAndAddressAndProducerCode(@PathVariable("address") String address, @PathVariable("producerCode") String producerCode,
+//            @PathVariable("pageNumber") int page) {
+//
+//        return Filter.getProductsPerStoreAndProducerCode(pagination.paginator(page), address, producerCode);
+//    }
 
 }
