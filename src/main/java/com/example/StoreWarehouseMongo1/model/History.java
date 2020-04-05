@@ -9,55 +9,33 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "history")
 public class History {
-    
+
     @Id
     private String id;
     private String timestamp;
-    private Stock stock;
-    private String stockId;
+    private Product product;
+    private String productId;
     private String storeId;
+    private String producerId;
+    private String categoryId;
 
-    public String getStoreId() {
-        return storeId;
+    public History(String timestamp, Product product, String productId, String storeId, String producerId, String categoryId) {
+        this.timestamp = timestamp;
+        this.product = product;
+        this.productId = productId;
+        this.storeId = storeId;
+        this.producerId = producerId;
+        this.categoryId = categoryId;
     }
 
-    public void setStoreId(String storeId) {
+    public History(String timestamp, Product product, String productId, String storeId) {
+        this.timestamp = timestamp;
+        this.product = product;
+        this.productId = productId;
         this.storeId = storeId;
     }
 
-    public History(String timestamp, Stock stock, String stockId, String storeId) {
-        this.timestamp = timestamp;
-        this.stock = stock;
-        this.stockId = stockId;
-        this.storeId = storeId;
-    }
-
-    
-    public String getStockId() {
-        return stockId;
-    }
-
-    public History(String timestamp, String stockId) {
-        this.timestamp = timestamp;
-        this.stockId = stockId;
-    }
-
-    public void setStockId(String stockId) {
-        this.stockId = stockId;
-    }
-
-    public History(String timestamp, Stock stock, String stockId) {
-        this.timestamp = timestamp;
-        this.stock = stock;
-        this.stockId = stockId;
-    }
-    
-    public History(){
-    }
-
-    public History(String timestamp, Stock stock) {
-        this.timestamp = timestamp;
-        this.stock = stock;
+    public History() {
     }
 
     public String getId() {
@@ -67,7 +45,7 @@ public class History {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getTimestamp() {
         return timestamp;
     }
@@ -76,12 +54,46 @@ public class History {
         this.timestamp = timestamp;
     }
 
-    public Stock getStock() {
-        return stock;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getProducerId() {
+        return producerId;
+    }
+
+    public void setProducerId(String producerId) {
+        this.producerId = producerId;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
     
+    
+
 }

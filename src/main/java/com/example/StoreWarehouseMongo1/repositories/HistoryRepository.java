@@ -20,6 +20,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Repository
 public interface HistoryRepository extends MongoRepository<History, String>, PagingAndSortingRepository<History, String> {
 
-    List<History> findBystockId(String stockId);
-    List<History> findByStockIdAndStoreId(String stockId, String storeId);
+    List<History> findByProductId(String productId);
+    List<History> findByProductIdAndStoreId(String productId, String storeId);
 }

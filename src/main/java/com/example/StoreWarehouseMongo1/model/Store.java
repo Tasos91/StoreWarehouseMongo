@@ -17,24 +17,13 @@ public class Store {
     private String address;
     @DBRef
     private List<User> users;
-    @DBRef
-    private List<Stock> stock;
 
     public Store() {
     }
 
-    public Store(String address, List<User> users, List<Stock> stock) {
+    public Store(String address, List<User> users) {
         this.address = address;
         this.users = users;
-        this.stock = stock;
-    }
-
-    public List<Stock> getStock() {
-        return stock;
-    }
-
-    public void setStock(List<Stock> stock) {
-        this.stock = stock;
     }
 
     public List<User> getUsers() {
