@@ -24,6 +24,7 @@ public class Pagination {
     private MongoTemplate mongoTemplate;
 
     public List<Product> getProductsPaginated(int page, String categoryId, String storeId, String producerId) {
+        page = page - 1;
         final Pageable pageableRequest = PageRequest.of(page, 28);
         Query query = new Query();
         query.with(new Sort(Sort.Direction.ASC, "productcode"));
@@ -51,7 +52,7 @@ public class Pagination {
     public Integer getMaxSizeForCategory(String categoryId, String storeId) {
         Query query = new Query();
         query.with(new Sort(Sort.Direction.ASC, "productcode"));
-        query.addCriteria(Criteria.where("storeId").is("storeId")
+        query.addCriteria(Criteria.where("storeId").is(storeId)
                 .and("categoryId").is(categoryId));
         long maxSizelong = mongoTemplate.count(query, Product.class);
         Integer maxSize = (int) (long) maxSizelong;
@@ -61,7 +62,7 @@ public class Pagination {
     public Integer getMaxSizeForProducer(String producerId, String storeId) {
         Query query = new Query();
         query.with(new Sort(Sort.Direction.ASC, "productcode"));
-        query.addCriteria(Criteria.where("storeId").is("storeId")
+        query.addCriteria(Criteria.where("storeId").is(storeId)
                 .and("producerId").is(producerId));
         long maxSizelong = mongoTemplate.count(query, Product.class);
         Integer maxSize = (int) (long) maxSizelong;
