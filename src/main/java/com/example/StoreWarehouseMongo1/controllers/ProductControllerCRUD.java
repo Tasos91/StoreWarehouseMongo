@@ -69,19 +69,19 @@ public class ProductControllerCRUD {
         productDao.insert(product);
     }
 
-    @GetMapping(value = "/get") 
-    public ResponseEntity<?> getProduct(@RequestParam("productCode") String productCode,
+    @GetMapping(value = "/get")
+    public ResponseEntity<?> getProduct(@RequestParam("productId") String productId,
             @RequestParam("storeId") String storeId) {
-        List<Product> products = new ArrayList();
+        Product product = new Product();
         try {
-            products = productrepository.findByproductcodeAndStoreId(productCode, storeId);
+            product = productrepository.findById(productId).get();
         } catch (Exception IndexOutOfBoundsException) {
         }
-        if (products.isEmpty() || products == null) {
-            return new ResponseEntity(new CustomErrorType("Product with productCode " + productCode
+        if (product.getProductcode() == null) {
+            return new ResponseEntity(new CustomErrorType("Product with productCode " + product.getProductcode()
                     + " not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+        return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 
 //    @PatchMapping(value = "/update")
