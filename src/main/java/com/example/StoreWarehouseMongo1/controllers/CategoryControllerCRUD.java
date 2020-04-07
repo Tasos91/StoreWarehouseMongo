@@ -70,40 +70,12 @@ public class CategoryControllerCRUD {
         }
     }
 
-//    @PatchMapping(value = "/update/{categoryId}")
-//    public ResponseEntity<?> updateCategory(@RequestBody Category category, @PathVariable("categoryId") String categoryId) {
-//        try {
-//            String kind = category.getKindOfCategory();
-//            for (Category cat : categoryrepository.findAll()) {
-//                if ((cat.getId().equals(categoryId))) {
-//                    Category categoryTosave = categoryrepository.findById(categoryId).get();
-//                    categoryTosave.setKindOfCategory(kind);
-//                    categoryrepository.save(categoryTosave);
-//                    for (Product product : productrepository.findAll()) {
-//                        if (product.getCategory().getId().equals(categoryId)) {
-//                            product.setCategory(categoryTosave);
-//                            String id = productrepository.findById(product.getId()).get().getId();
-//                            product.setId(id);
-//                            productrepository.save(product);
-//                        }
-//                    }
-//                    Category category1 = categoryrepository.findBykindOfCategory(kind).get(0);
-//                    for (Stock stock : stockRepository.findAll()) {
-//                        if (stock.getCategoryId().equals(categoryId)) {
-//                            stock.setCategoryId(category1.getId());
-//                            String id = stockRepository.findById(stock.getId()).get().getId();
-//                            stock.setId(id);
-//                            stockRepository.save(stock);
-//                        }
-//                    }
-//                    return new ResponseEntity<>("Category updated", HttpStatus.OK);
-//                }
-//            }
-//            return new ResponseEntity<>("This kind of category not found", HttpStatus.NOT_FOUND);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("", HttpStatus.CONFLICT);
-//        }
-//    }
+    @PatchMapping(value = "/update")
+    public void updateCategory(@RequestBody Category category) {
+        Category category1 = categoryrepository.findById(category.getId()).get();
+        category1.setKindOfCategory(category.getKindOfCategory());
+        categoryrepository.save(category1);
+    }
 
     @DeleteMapping(value = "/{categoryId}")
     public ResponseEntity<?> delete(@PathVariable("categoryId") String categoryId) {
