@@ -35,6 +35,7 @@ public class Product implements Comparable<Product> {
     private String storeId;
     private Category category;
     private Producer producer;
+    private String address;
 
     public Product(String productcode, String cost_usd, String cost_eu, String price, String descr, String karats, String gold_weight, String silver_weight, String color, Integer quantity, String imageUrl, boolean non_produce, String other_stone, String other_stoneWeight, String diamond_weight, String categoryId, String producerId, String storeId, Category category, Producer producer) {
         this.productcode = productcode;
@@ -79,6 +80,39 @@ public class Product implements Comparable<Product> {
         this.producerId = producerId;
         this.storeId = storeId;
     }
+
+    public Product(String productcode, String cost_usd, String cost_eu, String price, String descr, String karats, String gold_weight, String silver_weight, String color, Integer quantity, String imageUrl, boolean non_produce, String other_stone, String other_stoneWeight, String diamond_weight, String categoryId, String producerId, Category category, Producer producer, String address) {
+        this.productcode = productcode;
+        this.cost_usd = cost_usd;
+        this.cost_eu = cost_eu;
+        this.price = price;
+        this.descr = descr;
+        this.karats = karats;
+        this.gold_weight = gold_weight;
+        this.silver_weight = silver_weight;
+        this.color = color;
+        this.quantity = quantity;
+        this.imageUrl = imageUrl;
+        this.non_produce = non_produce;
+        this.other_stone = other_stone;
+        this.other_stoneWeight = other_stoneWeight;
+        this.diamond_weight = diamond_weight;
+        this.categoryId = categoryId;
+        this.producerId = producerId;
+        this.category = category;
+        this.producer = producer;
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
+    
     
     
 
@@ -283,8 +317,6 @@ public class Product implements Comparable<Product> {
     public void setProducer(Producer producer) {
         this.producer = producer;
     }
-    
-    
 
     @Override
     public String toString() {

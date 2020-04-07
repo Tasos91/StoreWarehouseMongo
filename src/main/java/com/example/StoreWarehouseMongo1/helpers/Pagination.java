@@ -23,12 +23,13 @@ public class Pagination {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<Product> getProductsPaginated(int page, String categoryId, String storeId, String producerId) {
+    public List<Product> getProductsPaginated(int page, String categoryId, String address, String producerId, String limitString) {
         page = page - 1;
-        final Pageable pageableRequest = PageRequest.of(page, 28);
+        int limit = Integer.valueOf(limitString);
+        final Pageable pageableRequest = PageRequest.of(page, limit);
         Query query = new Query();
         query.with(new Sort(Sort.Direction.ASC, "productcode"));
-        query.addCriteria(Criteria.where("storeId").is(storeId));
+        query.addCriteria(Criteria.where("address").is(address));
         if (!categoryId.isEmpty()) {
             query.addCriteria(Criteria.where("categoryId").is(categoryId));
         }
@@ -40,45 +41,45 @@ public class Pagination {
         return products;
     }
 
-    public Integer getMaxSize(String storeId) {
+    public Integer getMaxSize(String address) {
         Query query = new Query();
         query.with(new Sort(Sort.Direction.ASC, "productcode"));
-        query.addCriteria(Criteria.where("storeId").is(storeId));
+        query.addCriteria(Criteria.where("address").is(address));
         long maxSizelong = mongoTemplate.count(query, Product.class);
         Integer maxSize = (int) (long) maxSizelong;
         return maxSize;
     }
 
-    public Integer getMaxSizeForCategory(String categoryId, String storeId) {
+    public Integer getMaxSizeForCategory(String categoryId, String address) {
         Query query = new Query();
         query.with(new Sort(Sort.Direction.ASC, "productcode"));
-        query.addCriteria(Criteria.where("storeId").is(storeId)
+        query.addCriteria(Criteria.where("address").is(address)
                 .and("categoryId").is(categoryId));
         long maxSizelong = mongoTemplate.count(query, Product.class);
         Integer maxSize = (int) (long) maxSizelong;
         return maxSize;
     }
 
-    public Integer getMaxSizeForProducer(String producerId, String storeId) {
+    public Integer getMaxSizeForProducer(String producerId, String address) {
         Query query = new Query();
         query.with(new Sort(Sort.Direction.ASC, "productcode"));
-        query.addCriteria(Criteria.where("storeId").is(storeId)
+        query.addCriteria(Criteria.where("address").is(address)
                 .and("producerId").is(producerId));
         long maxSizelong = mongoTemplate.count(query, Product.class);
         Integer maxSize = (int) (long) maxSizelong;
         return maxSize;
     }
 
-    public Map<String, Integer> getMaxSize(String storeId, String producerId, String categoryId) {
+    public Map<String, Integer> getMaxSize(String address, String producerId, String categoryId) {
         Map<String, Integer> maxSize = new HashMap<>();
         if (!producerId.isEmpty() && producerId != null) {
-            maxSize.put("maxSize", getMaxSizeForProducer(producerId, storeId));
+            maxSize.put("maxSize", getMaxSizeForProducer(producerId, address));
         }
         if (!categoryId.isEmpty() && categoryId != null) {
-            maxSize.put("maxSize", getMaxSizeForProducer(categoryId, storeId));
+            maxSize.put("maxSize", getMaxSizeForProducer(categoryId, address));
         }
         if (categoryId.isEmpty() && producerId.isEmpty()) {
-            maxSize.put("maxSize", getMaxSize(storeId));
+            maxSize.put("maxSize", getMaxSize(address));
         }
         return maxSize;
     }

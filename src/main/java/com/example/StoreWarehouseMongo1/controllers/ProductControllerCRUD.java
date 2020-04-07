@@ -54,14 +54,13 @@ public class ProductControllerCRUD {
     @GetMapping(value = "/all")
     public ResponseEntity<?> getProductsPaginatedAndFiltered(@RequestParam("page") int page,
             @RequestParam("categoryId") String categoryId, @RequestParam("producerId") String producerId,
-            @RequestParam("storeId") String storeId) {
-        List<Product> products = pagination.getProductsPaginated(page, categoryId, storeId, producerId);
-        List<Map<String, Integer>> listMaxSize = new ArrayList();
-        listMaxSize.add(pagination.getMaxSize(storeId, producerId, categoryId));
-        List<List<?>> productsWithMaxSize = new ArrayList();
-        productsWithMaxSize.add(products);
-        productsWithMaxSize.add(listMaxSize);
-        return new ResponseEntity<List<List<?>>>(productsWithMaxSize, HttpStatus.OK);
+            @RequestParam("address") String address, @RequestParam("limit") String limit) {
+        try {
+            return new ResponseEntity<List<List<?>>>(productDao.getProductsPerFilterCase(page, categoryId, producerId, address, limit), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("Error: " + e.getMessage()
+                    + " ", HttpStatus.GATEWAY_TIMEOUT.value()), HttpStatus.GATEWAY_TIMEOUT);
+        }
     }
 
     @PostMapping(value = "/create")
@@ -70,8 +69,7 @@ public class ProductControllerCRUD {
     }
 
     @GetMapping(value = "/get")
-    public ResponseEntity<?> getProduct(@RequestParam("productId") String productId,
-            @RequestParam("storeId") String storeId) {
+    public ResponseEntity<?> getProduct(@RequestParam("productId") String productId) {
         Product product = new Product();
         try {
             product = productrepository.findById(productId).get();
@@ -84,7 +82,36 @@ public class ProductControllerCRUD {
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 
-//    @PatchMapping(value = "/update")
+    @DeleteMapping(value = "/deleteAll")
+    public void deleteProducts() {
+        productrepository.deleteAll();
+    }
+
+    @PatchMapping(value = "/disable")
+    public ResponseEntity<Product> disableProduct(@RequestBody Product product) {
+        try {
+            productDao.makeItDisable(product);
+            return new ResponseEntity(new CustomErrorType("The product is not produced anymore", HttpStatus.OK.value()),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("", HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity deleteWholeProduct(@RequestParam("productCode") String productCode) {
+        try {
+            productDao.deleteProduct(productCode);
+            return new ResponseEntity(new CustomErrorType("The product is succesfully deleted", HttpStatus.OK.value()),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new CustomErrorType("This productCode not found", HttpStatus.NOT_FOUND.value()),
+                    HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    //    @PatchMapping(value = "/update")
 //    public ResponseEntity<?> updatePseudoproduct(@RequestBody PseudoProduct pseudoProduct) {
 //        Product pr = new Product();
 //        Stock st = new Stock();
@@ -127,8 +154,4 @@ public class ProductControllerCRUD {
 //        }
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
-    @DeleteMapping(value = "/deleteAll")
-    public void deleteProducts() {
-        productrepository.deleteAll();
-    }
 }

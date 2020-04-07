@@ -6,6 +6,7 @@
 package com.example.StoreWarehouseMongo1.dao;
 
 import com.example.StoreWarehouseMongo1.controllers.CustomErrorType;
+import com.example.StoreWarehouseMongo1.helpers.Pagination;
 import com.example.StoreWarehouseMongo1.model.Category;
 import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.Producer;
@@ -18,6 +19,9 @@ import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +50,9 @@ public class ProductDAO {
     @Autowired
     private ProducerRepository producerRepository;
 
+    @Autowired
+    private Pagination pagination;
+
     public void insert(Product product) {
         if (!productRepository.findByproductcode(product.getProductcode()).equals(product.getProductcode())) {
             Category category = categoryRepository.findById(product.getCategoryId()).get();
@@ -53,6 +60,7 @@ public class ProductDAO {
             product.setCategory(category);
             product.setProducer(producer);
             productRepository.save(product);
+            saveHistory(product, product.getAddress());
             instantiateOtherProducts(product);
             instantiateOtherProductsToOtherStores(product);
         }
@@ -79,12 +87,12 @@ public class ProductDAO {
             pr1.setOther_stoneWeight(product.getOther_stoneWeight());
             pr1.setPrice(product.getPrice());
             pr1.setProducerId(product.getProducerId());
-            pr1.setStoreId(product.getStoreId());
+            pr1.setAddress(product.getAddress());
             pr1.setSilver_weight(product.getSilver_weight());
             pr1.setProductcode(product.getProductcode());
             pr1.setQuantity(0);
             productRepository.save(pr1);
-            saveHistory(pr1, product.getStoreId());
+            saveHistory(pr1, product.getAddress());
             Product pr2 = new Product();
             pr2.setColor("Black");
             pr2.setCategoryId(product.getCategoryId());
@@ -102,12 +110,12 @@ public class ProductDAO {
             pr2.setOther_stoneWeight(product.getOther_stoneWeight());
             pr2.setPrice(product.getPrice());
             pr2.setProducerId(product.getProducerId());
-            pr2.setStoreId(product.getStoreId());
+            pr2.setAddress(product.getAddress());
             pr2.setSilver_weight(product.getSilver_weight());
             pr2.setProductcode(product.getProductcode());
             pr2.setQuantity(0);
             productRepository.save(pr2);
-            saveHistory(pr2, product.getStoreId());
+            saveHistory(pr2, product.getAddress());
             Product pr3 = new Product();
             pr3.setColor("Rose");
             pr3.setCategoryId(product.getCategoryId());
@@ -125,12 +133,12 @@ public class ProductDAO {
             pr3.setOther_stoneWeight(product.getOther_stoneWeight());
             pr3.setPrice(product.getPrice());
             pr3.setProducerId(product.getProducerId());
-            pr3.setStoreId(product.getStoreId());
+            pr3.setAddress(product.getAddress());
             pr3.setSilver_weight(product.getSilver_weight());
             pr3.setProductcode(product.getProductcode());
             pr3.setQuantity(0);
             productRepository.save(pr3);
-            saveHistory(pr3, product.getStoreId());
+            saveHistory(pr3, product.getAddress());
         }
         if (product.getColor().equals("Black")) {
             Product pr1 = new Product();
@@ -150,12 +158,12 @@ public class ProductDAO {
             pr1.setOther_stoneWeight(product.getOther_stoneWeight());
             pr1.setPrice(product.getPrice());
             pr1.setProducerId(product.getProducerId());
-            pr1.setStoreId(product.getStoreId());
+            pr1.setAddress(product.getAddress());
             pr1.setSilver_weight(product.getSilver_weight());
             pr1.setProductcode(product.getProductcode());
             pr1.setQuantity(0);
             productRepository.save(pr1);
-            saveHistory(pr1, product.getStoreId());
+            saveHistory(pr1, product.getAddress());
             Product pr2 = new Product();
             pr2.setColor("White");
             pr2.setCategoryId(product.getCategoryId());
@@ -173,12 +181,12 @@ public class ProductDAO {
             pr2.setOther_stoneWeight(product.getOther_stoneWeight());
             pr2.setPrice(product.getPrice());
             pr2.setProducerId(product.getProducerId());
-            pr2.setStoreId(product.getStoreId());
+            pr2.setAddress(product.getAddress());
             pr2.setSilver_weight(product.getSilver_weight());
             pr2.setProductcode(product.getProductcode());
             pr2.setQuantity(0);
             productRepository.save(pr2);
-            saveHistory(pr2, product.getStoreId());
+            saveHistory(pr2, product.getAddress());
             Product pr3 = new Product();
             pr3.setColor("Rose");
             pr3.setCategoryId(product.getCategoryId());
@@ -196,12 +204,12 @@ public class ProductDAO {
             pr3.setOther_stoneWeight(product.getOther_stoneWeight());
             pr3.setPrice(product.getPrice());
             pr3.setProducerId(product.getProducerId());
-            pr3.setStoreId(product.getStoreId());
+            pr3.setAddress(product.getAddress());
             pr3.setSilver_weight(product.getSilver_weight());
             pr3.setProductcode(product.getProductcode());
             pr3.setQuantity(0);
             productRepository.save(pr3);
-            saveHistory(pr3, product.getStoreId());
+            saveHistory(pr3, product.getAddress());
         }
         if (product.getColor().equals("Yellow")) {
             Product pr1 = new Product();
@@ -221,12 +229,12 @@ public class ProductDAO {
             pr1.setOther_stoneWeight(product.getOther_stoneWeight());
             pr1.setPrice(product.getPrice());
             pr1.setProducerId(product.getProducerId());
-            pr1.setStoreId(product.getStoreId());
+            pr1.setAddress(product.getAddress());
             pr1.setSilver_weight(product.getSilver_weight());
             pr1.setProductcode(product.getProductcode());
             pr1.setQuantity(0);
             productRepository.save(pr1);
-            saveHistory(pr1, product.getStoreId());
+            saveHistory(pr1, product.getAddress());
             Product pr2 = new Product();
             pr2.setColor("Black");
             pr2.setCategoryId(product.getCategoryId());
@@ -244,12 +252,12 @@ public class ProductDAO {
             pr2.setOther_stoneWeight(product.getOther_stoneWeight());
             pr2.setPrice(product.getPrice());
             pr2.setProducerId(product.getProducerId());
-            pr2.setStoreId(product.getStoreId());
+            pr2.setAddress(product.getAddress());
             pr2.setSilver_weight(product.getSilver_weight());
             pr2.setProductcode(product.getProductcode());
             pr2.setQuantity(0);
             productRepository.save(pr2);
-            saveHistory(pr2, product.getStoreId());
+            saveHistory(pr2, product.getAddress());
             Product pr3 = new Product();
             pr3.setColor("Rose");
             pr3.setCategoryId(product.getCategoryId());
@@ -267,12 +275,12 @@ public class ProductDAO {
             pr3.setOther_stoneWeight(product.getOther_stoneWeight());
             pr3.setPrice(product.getPrice());
             pr3.setProducerId(product.getProducerId());
-            pr3.setStoreId(product.getStoreId());
+            pr3.setAddress(product.getAddress());
             pr3.setSilver_weight(product.getSilver_weight());
             pr3.setProductcode(product.getProductcode());
             pr3.setQuantity(0);
             productRepository.save(pr3);
-            saveHistory(pr3, product.getStoreId());
+            saveHistory(pr3, product.getAddress());
         }
         if (product.getColor().equals("Rose")) {
             Product pr1 = new Product();
@@ -292,12 +300,12 @@ public class ProductDAO {
             pr1.setOther_stoneWeight(product.getOther_stoneWeight());
             pr1.setPrice(product.getPrice());
             pr1.setProducerId(product.getProducerId());
-            pr1.setStoreId(product.getStoreId());
+            pr1.setAddress(product.getAddress());
             pr1.setSilver_weight(product.getSilver_weight());
             pr1.setProductcode(product.getProductcode());
             pr1.setQuantity(0);
             productRepository.save(pr1);
-            saveHistory(pr1, product.getStoreId());
+            saveHistory(pr1, product.getAddress());
             Product pr2 = new Product();
             pr2.setColor("Black");
             pr2.setCategoryId(product.getCategoryId());
@@ -315,12 +323,12 @@ public class ProductDAO {
             pr2.setOther_stoneWeight(product.getOther_stoneWeight());
             pr2.setPrice(product.getPrice());
             pr2.setProducerId(product.getProducerId());
-            pr2.setStoreId(product.getStoreId());
+            pr2.setAddress(product.getAddress());
             pr2.setSilver_weight(product.getSilver_weight());
             pr2.setProductcode(product.getProductcode());
             pr2.setQuantity(0);
             productRepository.save(pr2);
-            saveHistory(pr2, product.getStoreId());
+            saveHistory(pr2, product.getAddress());
             Product pr3 = new Product();
             pr3.setColor("White");
             pr3.setCategoryId(product.getCategoryId());
@@ -338,12 +346,12 @@ public class ProductDAO {
             pr3.setOther_stoneWeight(product.getOther_stoneWeight());
             pr3.setPrice(product.getPrice());
             pr3.setProducerId(product.getProducerId());
-            pr3.setStoreId(product.getStoreId());
+            pr3.setAddress(product.getAddress());
             pr3.setSilver_weight(product.getSilver_weight());
             pr3.setProductcode(product.getProductcode());
             pr3.setQuantity(0);
             productRepository.save(pr3);
-            saveHistory(pr3, product.getStoreId());
+            saveHistory(pr3, product.getAddress());
         }
     }
 
@@ -351,7 +359,7 @@ public class ProductDAO {
         Category category = categoryRepository.findById(product.getCategoryId()).get();
         Producer producer = producerRepository.findById(product.getProducerId()).get();
         for (Store store : storeRepository.findAll()) {
-            if (!product.getStoreId().equals(store.getId())) {
+            if (!product.getAddress().equals(store.getAddress())) {
                 if (product.getColor().equals("White")) {
                     Product pr1 = new Product();
                     pr1.setColor("Yellow");
@@ -370,12 +378,12 @@ public class ProductDAO {
                     pr1.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr1.setPrice(product.getPrice());
                     pr1.setProducerId(product.getProducerId());
-                    pr1.setStoreId(store.getId());
+                    pr1.setAddress(store.getAddress());
                     pr1.setSilver_weight(product.getSilver_weight());
                     pr1.setProductcode(product.getProductcode());
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
-                    saveHistory(pr1, store.getId());
+                    saveHistory(pr1, store.getAddress());
                     Product pr2 = new Product();
                     pr2.setColor("Black");
                     pr2.setCategoryId(product.getCategoryId());
@@ -393,12 +401,12 @@ public class ProductDAO {
                     pr2.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr2.setPrice(product.getPrice());
                     pr2.setProducerId(product.getProducerId());
-                    pr2.setStoreId(store.getId());
+                    pr2.setAddress(store.getAddress());
                     pr2.setSilver_weight(product.getSilver_weight());
                     pr2.setProductcode(product.getProductcode());
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
-                    saveHistory(pr2, store.getId());
+                    saveHistory(pr2, store.getAddress());
                     Product pr3 = new Product();
                     pr3.setColor("Rose");
                     pr3.setCategoryId(product.getCategoryId());
@@ -416,12 +424,12 @@ public class ProductDAO {
                     pr3.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr3.setPrice(product.getPrice());
                     pr3.setProducerId(product.getProducerId());
-                    pr3.setStoreId(store.getId());
+                    pr3.setAddress(store.getAddress());
                     pr3.setSilver_weight(product.getSilver_weight());
                     pr3.setProductcode(product.getProductcode());
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
-                    saveHistory(pr3, store.getId());
+                    saveHistory(pr3, store.getAddress());
                     Product pr4 = new Product();
                     pr4.setColor("White");
                     pr4.setCategoryId(product.getCategoryId());
@@ -439,12 +447,12 @@ public class ProductDAO {
                     pr4.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr4.setPrice(product.getPrice());
                     pr4.setProducerId(product.getProducerId());
-                    pr4.setStoreId(store.getId());
+                    pr4.setAddress(store.getAddress());
                     pr4.setSilver_weight(product.getSilver_weight());
                     pr4.setProductcode(product.getProductcode());
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
-                    saveHistory(pr4, store.getId());
+                    saveHistory(pr4, store.getAddress());
                 }
                 if (product.getColor().equals("Black")) {
                     Product pr1 = new Product();
@@ -464,12 +472,12 @@ public class ProductDAO {
                     pr1.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr1.setPrice(product.getPrice());
                     pr1.setProducerId(product.getProducerId());
-                    pr1.setStoreId(store.getId());
+                    pr1.setAddress(store.getAddress());
                     pr1.setSilver_weight(product.getSilver_weight());
                     pr1.setProductcode(product.getProductcode());
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
-                    saveHistory(pr1, store.getId());
+                    saveHistory(pr1, store.getAddress());
                     Product pr2 = new Product();
                     pr2.setColor("White");
                     pr2.setCategoryId(product.getCategoryId());
@@ -487,12 +495,12 @@ public class ProductDAO {
                     pr2.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr2.setPrice(product.getPrice());
                     pr2.setProducerId(product.getProducerId());
-                    pr2.setStoreId(store.getId());
+                    pr2.setAddress(store.getAddress());
                     pr2.setSilver_weight(product.getSilver_weight());
                     pr2.setProductcode(product.getProductcode());
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
-                    saveHistory(pr2, store.getId());
+                    saveHistory(pr2, store.getAddress());
                     Product pr3 = new Product();
                     pr3.setColor("Rose");
                     pr3.setCategoryId(product.getCategoryId());
@@ -510,12 +518,12 @@ public class ProductDAO {
                     pr3.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr3.setPrice(product.getPrice());
                     pr3.setProducerId(product.getProducerId());
-                    pr3.setStoreId(store.getId());
+                    pr3.setAddress(store.getAddress());
                     pr3.setSilver_weight(product.getSilver_weight());
                     pr3.setProductcode(product.getProductcode());
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
-                    saveHistory(pr3, store.getId());
+                    saveHistory(pr3, store.getAddress());
                     Product pr4 = new Product();
                     pr4.setColor("Black");
                     pr4.setCategoryId(product.getCategoryId());
@@ -533,12 +541,12 @@ public class ProductDAO {
                     pr4.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr4.setPrice(product.getPrice());
                     pr4.setProducerId(product.getProducerId());
-                    pr4.setStoreId(store.getId());
+                    pr4.setAddress(store.getAddress());
                     pr4.setSilver_weight(product.getSilver_weight());
                     pr4.setProductcode(product.getProductcode());
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
-                    saveHistory(pr4, store.getId());
+                    saveHistory(pr4, store.getAddress());
                 }
                 if (product.getColor().equals("Yellow")) {
                     Product pr1 = new Product();
@@ -558,12 +566,12 @@ public class ProductDAO {
                     pr1.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr1.setPrice(product.getPrice());
                     pr1.setProducerId(product.getProducerId());
-                    pr1.setStoreId(store.getId());
+                    pr1.setAddress(store.getAddress());
                     pr1.setSilver_weight(product.getSilver_weight());
                     pr1.setProductcode(product.getProductcode());
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
-                    saveHistory(pr1, store.getId());
+                    saveHistory(pr1, store.getAddress());
                     Product pr2 = new Product();
                     pr2.setColor("Black");
                     pr2.setCategoryId(product.getCategoryId());
@@ -581,12 +589,12 @@ public class ProductDAO {
                     pr2.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr2.setPrice(product.getPrice());
                     pr2.setProducerId(product.getProducerId());
-                    pr2.setStoreId(store.getId());
+                    pr2.setAddress(store.getAddress());
                     pr2.setSilver_weight(product.getSilver_weight());
                     pr2.setProductcode(product.getProductcode());
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
-                    saveHistory(pr2, store.getId());
+                    saveHistory(pr2, store.getAddress());
                     Product pr3 = new Product();
                     pr3.setColor("Rose");
                     pr3.setCategoryId(product.getCategoryId());
@@ -604,12 +612,12 @@ public class ProductDAO {
                     pr3.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr3.setPrice(product.getPrice());
                     pr3.setProducerId(product.getProducerId());
-                    pr3.setStoreId(store.getId());
+                    pr3.setAddress(store.getAddress());
                     pr3.setSilver_weight(product.getSilver_weight());
                     pr3.setProductcode(product.getProductcode());
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
-                    saveHistory(pr3, store.getId());
+                    saveHistory(pr3, store.getAddress());
                     Product pr4 = new Product();
                     pr4.setColor("Yellow");
                     pr4.setCategoryId(product.getCategoryId());
@@ -627,12 +635,12 @@ public class ProductDAO {
                     pr4.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr4.setPrice(product.getPrice());
                     pr4.setProducerId(product.getProducerId());
-                    pr4.setStoreId(store.getId());
+                    pr4.setAddress(store.getAddress());
                     pr4.setSilver_weight(product.getSilver_weight());
                     pr4.setProductcode(product.getProductcode());
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
-                    saveHistory(pr4, store.getId());
+                    saveHistory(pr4, store.getAddress());
                 }
                 if (product.getColor().equals("Rose")) {
                     Product pr1 = new Product();
@@ -652,12 +660,12 @@ public class ProductDAO {
                     pr1.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr1.setPrice(product.getPrice());
                     pr1.setProducerId(product.getProducerId());
-                    pr1.setStoreId(store.getId());
+                    pr1.setAddress(store.getAddress());
                     pr1.setSilver_weight(product.getSilver_weight());
                     pr1.setProductcode(product.getProductcode());
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
-                    saveHistory(pr1, store.getId());
+                    saveHistory(pr1, store.getAddress());
                     Product pr2 = new Product();
                     pr2.setColor("Black");
                     pr2.setProducer(producer);
@@ -675,12 +683,12 @@ public class ProductDAO {
                     pr2.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr2.setPrice(product.getPrice());
                     pr2.setProducerId(product.getProducerId());
-                    pr2.setStoreId(store.getId());
+                    pr2.setAddress(store.getAddress());
                     pr2.setSilver_weight(product.getSilver_weight());
                     pr2.setProductcode(product.getProductcode());
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
-                    saveHistory(pr2, store.getId());
+                    saveHistory(pr2, store.getAddress());
                     Product pr3 = new Product();
                     pr3.setColor("White");
                     pr3.setCategoryId(product.getCategoryId());
@@ -698,12 +706,12 @@ public class ProductDAO {
                     pr3.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr3.setPrice(product.getPrice());
                     pr3.setProducerId(product.getProducerId());
-                    pr3.setStoreId(store.getId());
+                    pr3.setAddress(store.getAddress());
                     pr3.setSilver_weight(product.getSilver_weight());
                     pr3.setProductcode(product.getProductcode());
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
-                    saveHistory(pr3, store.getId());
+                    saveHistory(pr3, store.getAddress());
                     Product pr4 = new Product();
                     pr4.setColor("Rose");
                     pr4.setCategoryId(product.getCategoryId());
@@ -721,12 +729,12 @@ public class ProductDAO {
                     pr4.setOther_stoneWeight(product.getOther_stoneWeight());
                     pr4.setPrice(product.getPrice());
                     pr4.setProducerId(product.getProducerId());
-                    pr4.setStoreId(store.getId());
+                    pr4.setAddress(store.getAddress());
                     pr4.setSilver_weight(product.getSilver_weight());
                     pr4.setProductcode(product.getProductcode());
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
-                    saveHistory(pr4, store.getId());
+                    saveHistory(pr4, store.getAddress());
                 }
             }
         }
@@ -746,22 +754,25 @@ public class ProductDAO {
         productHistory.setProducerId(product.getCategoryId());
         historyrepository.save(productHistory);
     }
-    
-    public ResponseEntity<?> makeItUnUsable(@RequestParam("id") String id) {
-        try {
-            //Stock stock = new Stock();
-            try {
-                //stock = stockrepository.findById(id).get();
-                //stock.setNon_produce(true);
-                //stockrepository.save(stock);
-            } catch (Exception e) {
-                return new ResponseEntity(new CustomErrorType("Cannot find this product", HttpStatus.NOT_FOUND.value()),
-                        HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.NOT_FOUND.value()),
-                    HttpStatus.NOT_FOUND);
+
+    public void makeItDisable(Product product) {
+        product.setNon_produce(true);
+        productRepository.save(product);
+    }
+
+    public List<List<?>> getProductsPerFilterCase(int page, String categoryId, String producerId, String storeId, String limit) {
+        List<Product> products = pagination.getProductsPaginated(page, categoryId, storeId, producerId, limit);
+        List<Map<String, Integer>> listMaxSize = new ArrayList();
+        listMaxSize.add(pagination.getMaxSize(storeId, producerId, categoryId));
+        List<List<?>> productsWithMaxSize = new ArrayList();
+        productsWithMaxSize.add(products);
+        productsWithMaxSize.add(listMaxSize);
+        return productsWithMaxSize;
+    }
+
+    public void deleteProduct(String productCode) {
+        for (Product product : productRepository.findByproductcode(productCode)) {
+            productRepository.delete(product);
         }
     }
 
