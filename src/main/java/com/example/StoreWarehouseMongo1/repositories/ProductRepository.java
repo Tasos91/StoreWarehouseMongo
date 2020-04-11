@@ -24,6 +24,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public interface ProductRepository extends MongoRepository<Product, String>, PagingAndSortingRepository<Product, String> {
 
     Page<Product> findAll(Pageable pageable);
+
     List<Product> findByproductcode(String productCode);
+
     List<Product> findByproductcodeAndStoreId(String productCode, String storeId);
+
+    List<Product> findByproductcodeAndColor(String productCode, String color);
+
 }

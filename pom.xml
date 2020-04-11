@@ -10,7 +10,7 @@
     <groupId>com.example</groupId>
     <artifactId>StoreWarehouseMongo1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>StoreWarehouseMongo1</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -60,6 +60,13 @@
             <version>2.1.8.RELEASE</version>
             <type>jar</type>
         </dependency>
+        <!--        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-releasetrain</artifactId>
+            <version>Lovelace-M3</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>-->
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
@@ -103,7 +110,22 @@
             <version>5.1.5.RELEASE</version>
             <type>jar</type>
         </dependency>-->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
+        </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>

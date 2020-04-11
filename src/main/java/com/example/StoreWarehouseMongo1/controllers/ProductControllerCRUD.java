@@ -2,15 +2,14 @@ package com.example.StoreWarehouseMongo1.controllers;
 
 import com.example.StoreWarehouseMongo1.dao.ProductDAO;
 import com.example.StoreWarehouseMongo1.helpers.Pagination;
-import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,9 +41,6 @@ public class ProductControllerCRUD {
     @Autowired
     private Pagination pagination;
 
-    @Autowired
-    private StoreRepository storerepository;
-
     @GetMapping
     public List<Product> getAll() {
         return productrepository.findAll();
@@ -64,22 +59,42 @@ public class ProductControllerCRUD {
     }
 
     @PostMapping(value = "/create")
-    public void create(@RequestBody Product product) {
+    public void create(@RequestBody Product product) throws Exception {
         productDao.insert(product);
     }
 
     @GetMapping(value = "/get")
     public ResponseEntity<?> getProduct(@RequestParam("productId") String productId) {
         Product product = new Product();
+        List<List<?>> response = new ArrayList();
+        List<Product> prod = new ArrayList();
         try {
             product = productrepository.findById(productId).get();
+            String color = product.getColor();
+            String productCode = product.getProductcode();
+            List<Map<?, ?>> others = new ArrayList();
+            List<List<Map<?, ?>>> responseList = new ArrayList();
+            for (Product pr : productrepository.findByproductcodeAndColor(productCode, color)) {
+                if (!pr.getAddress().equals(product.getAddress())) {
+                    Map<String, Map<?, ?>> jsonObjectAll = new HashMap();
+                    Map<String, String> jsonObject = new HashMap();
+                    jsonObject.put("address", pr.getAddress());
+                    jsonObject.put("quantity", String.valueOf(pr.getQuantity()));
+                    jsonObjectAll.put("other", jsonObject);
+                    others.add(jsonObjectAll);
+                }
+            }
+            responseList.add(others);
+            prod.add(product);
+            response.add(prod);
+            response.add(responseList);
         } catch (Exception IndexOutOfBoundsException) {
         }
         if (product.getProductcode() == null) {
             return new ResponseEntity(new CustomErrorType("Product with productCode " + product.getProductcode()
                     + " not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Product>(product, HttpStatus.OK);
+        return new ResponseEntity<List>(response, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/deleteAll")
@@ -110,7 +125,7 @@ public class ProductControllerCRUD {
                     HttpStatus.NOT_FOUND);
         }
     }
-    
+
     //    @PatchMapping(value = "/update")
 //    public ResponseEntity<?> updatePseudoproduct(@RequestBody PseudoProduct pseudoProduct) {
 //        Product pr = new Product();

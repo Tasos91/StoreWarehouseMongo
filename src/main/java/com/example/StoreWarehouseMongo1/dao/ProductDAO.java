@@ -22,10 +22,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -53,7 +57,8 @@ public class ProductDAO {
     @Autowired
     private Pagination pagination;
 
-    public void insert(Product product) {
+    //@Transactional
+    public void insert(Product product) throws Exception {
         if (!productRepository.findByproductcode(product.getProductcode()).equals(product.getProductcode())) {
             Category category = categoryRepository.findById(product.getCategoryId()).get();
             Producer producer = producerRepository.findById(product.getProducerId()).get();
@@ -61,12 +66,16 @@ public class ProductDAO {
             product.setProducer(producer);
             productRepository.save(product);
             saveHistory(product, product.getAddress());
+            int l = 0;
+            if (l == 0) {
+                throw new Exception();
+            }
             instantiateOtherProducts(product);
             instantiateOtherProductsToOtherStores(product);
         }
     }
 
-    public void instantiateOtherProducts(Product product) {
+    public void instantiateOtherProducts(Product product) throws Exception {
         Category category = categoryRepository.findById(product.getCategoryId()).get();
         Producer producer = producerRepository.findById(product.getProducerId()).get();
         if (product.getColor().equals("White")) {
