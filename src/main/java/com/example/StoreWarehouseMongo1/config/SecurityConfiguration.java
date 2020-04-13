@@ -36,19 +36,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .cors()
-                .and()
                 .authorizeRequests()
-                .antMatchers("/product/api/**").hasAnyRole("ADMIN")
-                .antMatchers("/store/api/**").hasAnyRole("ADMIN")
-                .antMatchers("/user/api/**").hasAnyRole("ADMIN")
-                .antMatchers("/stock/api/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/pseudo/api/get/pseudoProducts/{address}").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/health").permitAll()
-                .antMatchers("/info").permitAll()
+                .antMatchers("/api/product/**").hasAnyRole("ADMIN")
+                .antMatchers("/api/store/**").hasAnyRole("ADMIN")
+                .antMatchers("/api/user/**").hasAnyRole("ADMIN")
+                .antMatchers("/health").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/info").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and().httpBasic()
                 .and().sessionManagement().disable();
+//                .csrf().disable()
+//                .cors()
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/product/api/**").hasAnyRole("ADMIN")
+//                .antMatchers("/store/api/**").hasAnyRole("ADMIN")
+//                .antMatchers("/user/api/**").hasAnyRole("ADMIN")
+//                .antMatchers("/stock/api/**").hasAnyRole("ADMIN", "USER")
+//                .antMatchers("/pseudo/api/get/pseudoProducts/{address}").hasAnyRole("ADMIN", "USER")
+//                .antMatchers("/health").permitAll()
+//                .antMatchers("/info").permitAll()
+//                .anyRequest().authenticated()
+//                .and().httpBasic()
+//                .and().sessionManagement().disable();
     }
 
     @Override
