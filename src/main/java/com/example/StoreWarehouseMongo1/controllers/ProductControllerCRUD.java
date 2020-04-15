@@ -114,16 +114,22 @@ public class ProductControllerCRUD {
         }
     }
 
-    @DeleteMapping(value = "/delete")
-    public ResponseEntity deleteWholeProduct(@RequestParam("productCode") String productCode) {
+    @PatchMapping(value = "/change")
+    public ResponseEntity<Product> changeQuantityOfProduct(@RequestParam("quantity") int quantity,
+            @RequestParam("id") String productId) {
         try {
-            productDao.deleteProduct(productCode);
-            return new ResponseEntity(new CustomErrorType("The product is succesfully deleted", HttpStatus.OK.value()),
+            productDao.updateQuantity(productId, quantity);
+            return new ResponseEntity(new CustomErrorType("The quantity is changed succesfully", HttpStatus.OK.value()),
                     HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType("This productCode not found", HttpStatus.NOT_FOUND.value()),
-                    HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PatchMapping(value = "/update")
+    public void updateProduct(@RequestBody Product product) {
+      productDao.updateProduct(product);
     }
 
     //    @PatchMapping(value = "/update")

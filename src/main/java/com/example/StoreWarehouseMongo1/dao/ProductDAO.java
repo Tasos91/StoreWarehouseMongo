@@ -66,10 +66,10 @@ public class ProductDAO {
             product.setProducer(producer);
             productRepository.save(product);
             saveHistory(product, product.getAddress());
-            int l = 0;
-            if (l == 0) {
-                throw new Exception();
-            }
+//            int l = 0;
+//            if (l == 0) {
+//                throw new Exception();
+//            }
             instantiateOtherProducts(product);
             instantiateOtherProductsToOtherStores(product);
         }
@@ -769,6 +769,21 @@ public class ProductDAO {
         productRepository.save(product);
     }
 
+    public void updateQuantity(String productId, int quantity) {
+        Product product = new Product();
+        try {
+            product = productRepository.findById(productId).get();
+        } catch (Exception e) {
+            throw e;
+        }
+        product.setQuantity(quantity);
+        try {
+            productRepository.save(product);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     public List<List<?>> getProductsPerFilterCase(int page, String categoryId, String producerId, String storeId, String limit) {
         List<Product> products = pagination.getProductsPaginated(page, categoryId, storeId, producerId, limit);
         List<Map<String, Integer>> listMaxSize = new ArrayList();
@@ -782,6 +797,43 @@ public class ProductDAO {
     public void deleteProduct(String productCode) {
         for (Product product : productRepository.findByproductcode(productCode)) {
             productRepository.delete(product);
+        }
+    }
+
+    
+    public void updateProduct(Product product) {
+        Product pr = productRepository.findById(product.getId()).get();
+        if (!pr.getProductcode().equals(product.getProductcode()) || !pr.getDescr().equals(product.getDescr())
+                || !pr.getCost_eu().equals(product.getCost_eu()) || !pr.getCost_usd().equals(product.getCost_usd())
+                || !pr.getPrice().equals(product.getPrice()) || !pr.getCategoryId().equals(product.getCategoryId())
+                || !pr.getProducerId().equals(product.getProducerId()) || !pr.getKarats().equals(product.getKarats())) {
+            productRepository.save(product);
+            Category category = categoryRepository.findById(product.getCategoryId()).get();
+            Producer producer = producerRepository.findById(product.getProducerId()).get();
+            for (Product prod : productRepository.findByproductcode(pr.getProductcode())) {
+                if (!prod.getId().equals(pr.getId())) {
+                    prod.setProductcode(product.getProductcode());
+                    prod.setDescr(product.getDescr());
+                    prod.setCategoryId(product.getCategoryId());
+                    prod.setProducerId(product.getProducerId());
+                    prod.setCost_eu(product.getCost_eu());
+                    prod.setCost_usd(product.getCost_usd());
+                    prod.setPrice(product.getPrice());
+                    prod.setCategory(category);
+                    prod.setProducer(producer);
+                    prod.setKarats(product.getKarats());
+                    productRepository.save(prod);
+                }
+            }
+            for (Product prod : productRepository.findByproductcodeAndColor(pr.getProductcode(), pr.getColor())) {
+                if (!prod.getId().equals(pr.getId())) {
+                    prod.setOther_stone(product.getOther_stone());
+                    prod.setDiamond_weight(product.getDiamond_weight());
+                    prod.setGold_weight(product.getGold_weight());
+                    prod.setSilver_weight(product.getSilver_weight());
+                    productRepository.save(prod);
+                }
+            }
         }
     }
 
