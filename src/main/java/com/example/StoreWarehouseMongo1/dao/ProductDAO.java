@@ -799,7 +799,6 @@ public class ProductDAO {
             productRepository.delete(product);
         }
     }
-
     
     public void updateProduct(Product product) {
         Product pr = productRepository.findById(product.getId()).get();
