@@ -18,7 +18,19 @@ public class Category {
     
     @Id
     private String id;
-    private String kindOfCategory;
+    private String value;
+
+    public Category() {
+    }
+
+    public Category(String id, String value) {
+        this.id = id;
+        this.value = value;
+    }
+
+    public Category(String value) {
+        this.value = value;
+    }
 
     public String getId() {
         return id;
@@ -28,25 +40,11 @@ public class Category {
         this.id = id;
     }
 
-    public String getKindOfCategory() {
-        return kindOfCategory;
+    public String getValue() {
+        return value;
     }
 
-    public void setKindOfCategory(String kindOfCategory) {
-        this.kindOfCategory = kindOfCategory;
+    public void setValue(String value) {
+        this.value = value;
     }
-
-    public Category() {
-
-    }
-
-    public Category(String kindOfCategory) {
-        this.kindOfCategory = kindOfCategory;
-    }
-
-    public Category(String id, String kindOfCategory) {
-        this.id = id;
-        this.kindOfCategory = kindOfCategory;
-    }
-
 }

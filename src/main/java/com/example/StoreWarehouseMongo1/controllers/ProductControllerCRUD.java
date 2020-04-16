@@ -162,14 +162,14 @@ public class ProductControllerCRUD {
 //        }
 //        productrepository.save(product);
 //        stockrepository.save(stock);
-//        if (!stock.getOther_stone().equals(st.getOther_stone()) //GINETAI UPDATE SE OLA TA KATASTHMATA
-//                || !stock.getOther_stoneWeight().equals(st.getOther_stoneWeight())
-//                || !stock.getDiamond_weight().equals(st.getDiamond_weight())) {
+//        if (!stock.getOtherStone().equals(st.getOtherStone()) //GINETAI UPDATE SE OLA TA KATASTHMATA
+//                || !stock.getOtherStoneWeight().equals(st.getOtherStoneWeight())
+//                || !stock.getDiamondWeight().equals(st.getDiamondWeight())) {
 //            List<Stock> stockToUpdate = stockrepository.findByproductIdAndColor(stock.getProductId(), stock.getColor());
 //            for (Stock s : stockToUpdate) {
-//                s.setOther_stone(stock.getOther_stone());
-//                s.setOther_stoneWeight(stock.getOther_stoneWeight());
-//                s.setOther_stoneWeight(stock.getOther_stoneWeight());
+//                s.setOtherStone(stock.getOtherStone());
+//                s.setOtherStoneWeight(stock.getOtherStoneWeight());
+//                s.setOtherStoneWeight(stock.getOtherStoneWeight());
 //                stockrepository.save(s);
 //            }
 //        }

@@ -27,7 +27,7 @@ public interface ProductRepository extends MongoRepository<Product, String>, Pag
 
     List<Product> findByproductcode(String productCode);
 
-    List<Product> findByproductcodeAndStoreId(String productCode, String storeId);
+    List<Product> findByproductcodeAndAddress(String productCode, String address);
 
     List<Product> findByproductcodeAndColor(String productCode, String color);
 

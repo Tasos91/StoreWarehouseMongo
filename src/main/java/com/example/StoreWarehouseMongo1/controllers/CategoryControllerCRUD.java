@@ -36,9 +36,9 @@ public class CategoryControllerCRUD {
     @PostMapping(value = "/create")
     public ResponseEntity<?> createCategory(@RequestBody Category category) {
         try {
-            String kind = category.getKindOfCategory();
+            String kind = category.getValue();
             for (Category cat : categoryrepository.findAll()) {
-                if (cat.getKindOfCategory().equals(kind)) {
+                if (cat.getValue().equals(kind)) {
                     return new ResponseEntity<>("This type of category already exists", HttpStatus.CONFLICT);
                 } else {
                     categoryrepository.save(category);
@@ -73,7 +73,7 @@ public class CategoryControllerCRUD {
     @PatchMapping(value = "/update")
     public void updateCategory(@RequestBody Category category) {
         Category category1 = categoryrepository.findById(category.getId()).get();
-        category1.setKindOfCategory(category.getKindOfCategory());
+        category1.setValue(category.getValue());
         categoryrepository.save(category1);
     }
 
@@ -82,7 +82,7 @@ public class CategoryControllerCRUD {
         try {
             Category category = categoryrepository.findById(categoryId).get();
             categoryrepository.delete(category);
-            return new ResponseEntity<>("Category " + category.getKindOfCategory() + " is succesfully deleted", HttpStatus.OK);
+            return new ResponseEntity<>("Category " + category.getValue() + " is succesfully deleted", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("This kind of category not found", HttpStatus.NOT_FOUND);
         }

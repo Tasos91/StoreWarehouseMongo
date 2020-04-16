@@ -22,6 +22,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public interface CategoryRepository extends MongoRepository<Category, String>, PagingAndSortingRepository<Category, String> {
 
     
-    List<Category> findBykindOfCategory(String kind);
+    List<Category> findByValue(String kind);
 
 }
