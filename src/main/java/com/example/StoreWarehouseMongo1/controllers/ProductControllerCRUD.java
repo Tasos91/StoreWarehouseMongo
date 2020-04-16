@@ -1,15 +1,12 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
 import com.example.StoreWarehouseMongo1.dao.ProductDAO;
-import com.example.StoreWarehouseMongo1.helpers.Pagination;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
-import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,9 +34,6 @@ public class ProductControllerCRUD {
 
     @Autowired
     private ProductDAO productDao;
-
-    @Autowired
-    private Pagination pagination;
 
     @GetMapping
     public List<Product> getAll() {
@@ -71,10 +65,10 @@ public class ProductControllerCRUD {
         try {
             product = productrepository.findById(productId).get();
             String color = product.getColor();
-            String productCode = product.getProductcode();
+            String productCode = product.getproductCode();
             List<Map<?, ?>> others = new ArrayList();
             List<List<Map<?, ?>>> responseList = new ArrayList();
-            for (Product pr : productrepository.findByproductcodeAndColor(productCode, color)) {
+            for (Product pr : productrepository.findByproductCodeAndColor(productCode, color)) {
                 if (!pr.getAddress().equals(product.getAddress())) {
                     Map<String, Map<?, ?>> jsonObjectAll = new HashMap();
                     Map<String, String> jsonObject = new HashMap();
@@ -90,8 +84,8 @@ public class ProductControllerCRUD {
             response.add(responseList);
         } catch (Exception IndexOutOfBoundsException) {
         }
-        if (product.getProductcode() == null) {
-            return new ResponseEntity(new CustomErrorType("Product with productCode " + product.getProductcode()
+        if (product.getproductCode() == null) {
+            return new ResponseEntity(new CustomErrorType("Product with productCode " + product.getproductCode()
                     + " not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<List>(response, HttpStatus.OK);

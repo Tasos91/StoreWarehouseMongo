@@ -28,7 +28,7 @@ public class Pagination {
         int limit = Integer.valueOf(limitString);
         final Pageable pageableRequest = PageRequest.of(page, limit);
         Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "productcode"));
+        query.with(new Sort(Sort.Direction.ASC, "productCode"));
         query.addCriteria(Criteria.where("address").is(address));
         if (!categoryId.isEmpty()) {
             query.addCriteria(Criteria.where("categoryId").is(categoryId));
@@ -43,7 +43,7 @@ public class Pagination {
 
     public Integer getMaxSize(String address) {
         Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "productcode"));
+        query.with(new Sort(Sort.Direction.ASC, "productCode"));
         query.addCriteria(Criteria.where("address").is(address));
         long maxSizelong = mongoTemplate.count(query, Product.class);
         Integer maxSize = (int) (long) maxSizelong;
@@ -52,7 +52,7 @@ public class Pagination {
 
     public Integer getMaxSizeForCategory(String categoryId, String address) {
         Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "productcode"));
+        query.with(new Sort(Sort.Direction.ASC, "productCode"));
         query.addCriteria(Criteria.where("address").is(address)
                 .and("categoryId").is(categoryId));
         long maxSizelong = mongoTemplate.count(query, Product.class);
@@ -62,7 +62,7 @@ public class Pagination {
 
     public Integer getMaxSizeForProducer(String producerId, String address) {
         Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "productcode"));
+        query.with(new Sort(Sort.Direction.ASC, "productCode"));
         query.addCriteria(Criteria.where("address").is(address)
                 .and("producerId").is(producerId));
         long maxSizelong = mongoTemplate.count(query, Product.class);
