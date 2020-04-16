@@ -72,11 +72,11 @@ public class Pagination {
 
     public Map<String, Integer> getMaxSize(String address, String producerId, String categoryId) {
         Map<String, Integer> maxSize = new HashMap<>();
-        if (!producerId.isEmpty() && producerId != null) {
-            maxSize.put("maxSize", getMaxSizeForProducer(producerId, address));
+        if (!categoryId.isEmpty() && producerId.isEmpty()) {
+            maxSize.put("maxSize", getMaxSizeForCategory(categoryId, address));
         }
-        if (!categoryId.isEmpty() && categoryId != null) {
-            maxSize.put("maxSize", getMaxSizeForProducer(categoryId, address));
+        if (categoryId.isEmpty() && !producerId.isEmpty()) {
+            maxSize.put("maxSize", getMaxSizeForProducer(producerId, address));
         }
         if (categoryId.isEmpty() && producerId.isEmpty()) {
             maxSize.put("maxSize", getMaxSize(address));

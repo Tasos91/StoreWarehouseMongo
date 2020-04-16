@@ -786,7 +786,7 @@ public class ProductDAO {
 
     public List<List<?>> getProductsPerFilterCase(int page, String categoryId, String producerId, String storeId, String limit) {
         List<Product> products = pagination.getProductsPaginated(page, categoryId, storeId, producerId, limit);
-        List<Map<String, Integer>> listMaxSize = new ArrayList();
+            List<Map<String, Integer>> listMaxSize = new ArrayList();
         listMaxSize.add(pagination.getMaxSize(storeId, producerId, categoryId));
         List<List<?>> productsWithMaxSize = new ArrayList();
         productsWithMaxSize.add(products);
