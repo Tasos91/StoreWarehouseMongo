@@ -65,10 +65,10 @@ public class ProductControllerCRUD {
         try {
             product = productrepository.findById(productId).get();
             String color = product.getColor();
-            String productCode = product.getproductCode();
+            String sku = product.getsku();
             List<Map<?, ?>> others = new ArrayList();
             List<List<Map<?, ?>>> responseList = new ArrayList();
-            for (Product pr : productrepository.findByproductCodeAndColor(productCode, color)) {
+            for (Product pr : productrepository.findByskuAndColor(sku, color)) {
                 if (!pr.getAddress().equals(product.getAddress())) {
                     Map<String, Map<?, ?>> jsonObjectAll = new HashMap();
                     Map<String, String> jsonObject = new HashMap();
@@ -84,8 +84,8 @@ public class ProductControllerCRUD {
             response.add(responseList);
         } catch (Exception IndexOutOfBoundsException) {
         }
-        if (product.getproductCode() == null) {
-            return new ResponseEntity(new CustomErrorType("Product with productCode " + product.getproductCode()
+        if (product.getsku() == null) {
+            return new ResponseEntity(new CustomErrorType("Product with sku " + product.getsku()
                     + " not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<List>(response, HttpStatus.OK);

@@ -25,10 +25,10 @@ public interface ProductRepository extends MongoRepository<Product, String>, Pag
 
     Page<Product> findAll(Pageable pageable);
 
-    List<Product> findByproductCode(String productCode);
+    List<Product> findBysku(String sku);
 
-    List<Product> findByproductCodeAndAddress(String productCode, String address);
+    List<Product> findByskuAndAddress(String sku, String address);
 
-    List<Product> findByproductCodeAndColor(String productCode, String color);
+    List<Product> findByskuAndColor(String sku, String color);
 
 }

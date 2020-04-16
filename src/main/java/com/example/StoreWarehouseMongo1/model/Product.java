@@ -15,7 +15,7 @@ public class Product implements Comparable<Product> {
 
     @Id
     private String id;
-    private String productCode;
+    private String sku;
     private String costUsd;
     private String costEu;
     private String price;
@@ -39,8 +39,8 @@ public class Product implements Comparable<Product> {
     public Product() {
     }
 
-    public Product(String productCode, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, Category category, Producer producer, String address) {
-        this.productCode = productCode;
+    public Product(String sku, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, Category category, Producer producer, String address) {
+        this.sku = sku;
         this.costUsd = costUsd;
         this.costEu = costEu;
         this.price = price;
@@ -70,12 +70,12 @@ public class Product implements Comparable<Product> {
         this.id = id;
     }
 
-    public String getproductCode() {
-        return productCode;
+    public String getsku() {
+        return sku;
     }
 
-    public void setproductCode(String productCode) {
-        this.productCode = productCode;
+    public void setsku(String sku) {
+        this.sku = sku;
     }
 
     public String getcostUsd() {
@@ -247,7 +247,7 @@ public class Product implements Comparable<Product> {
 
     @Override
     public int compareTo(Product product) {
-        return this.getproductCode().compareTo(product.getproductCode());
+        return this.getsku().compareTo(product.getsku());
     }
 
 }

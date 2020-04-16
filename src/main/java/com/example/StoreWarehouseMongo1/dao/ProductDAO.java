@@ -51,7 +51,7 @@ public class ProductDAO {
 
     //@Transactional
     public void insert(Product product) throws Exception {
-        if (!productRepository.findByproductCode(product.getproductCode()).equals(product.getproductCode())) {
+        if (!productRepository.findBysku(product.getsku()).equals(product.getsku())) {
             Category category = categoryRepository.findById(product.getCategoryId()).get();
             Producer producer = producerRepository.findById(product.getProducerId()).get();
             product.setCategory(category);
@@ -90,7 +90,7 @@ public class ProductDAO {
             pr1.setProducerId(product.getProducerId());
             pr1.setAddress(product.getAddress());
             pr1.setSilverWeight(product.getSilverWeight());
-            pr1.setproductCode(product.getproductCode());
+            pr1.setsku(product.getsku());
             pr1.setQuantity(0);
             productRepository.save(pr1);
             saveHistory(pr1, product.getAddress());
@@ -113,7 +113,7 @@ public class ProductDAO {
             pr2.setProducerId(product.getProducerId());
             pr2.setAddress(product.getAddress());
             pr2.setSilverWeight(product.getSilverWeight());
-            pr2.setproductCode(product.getproductCode());
+            pr2.setsku(product.getsku());
             pr2.setQuantity(0);
             productRepository.save(pr2);
             saveHistory(pr2, product.getAddress());
@@ -136,7 +136,7 @@ public class ProductDAO {
             pr3.setProducerId(product.getProducerId());
             pr3.setAddress(product.getAddress());
             pr3.setSilverWeight(product.getSilverWeight());
-            pr3.setproductCode(product.getproductCode());
+            pr3.setsku(product.getsku());
             pr3.setQuantity(0);
             productRepository.save(pr3);
             saveHistory(pr3, product.getAddress());
@@ -161,7 +161,7 @@ public class ProductDAO {
             pr1.setProducerId(product.getProducerId());
             pr1.setAddress(product.getAddress());
             pr1.setSilverWeight(product.getSilverWeight());
-            pr1.setproductCode(product.getproductCode());
+            pr1.setsku(product.getsku());
             pr1.setQuantity(0);
             productRepository.save(pr1);
             saveHistory(pr1, product.getAddress());
@@ -184,7 +184,7 @@ public class ProductDAO {
             pr2.setProducerId(product.getProducerId());
             pr2.setAddress(product.getAddress());
             pr2.setSilverWeight(product.getSilverWeight());
-            pr2.setproductCode(product.getproductCode());
+            pr2.setsku(product.getsku());
             pr2.setQuantity(0);
             productRepository.save(pr2);
             saveHistory(pr2, product.getAddress());
@@ -207,7 +207,7 @@ public class ProductDAO {
             pr3.setProducerId(product.getProducerId());
             pr3.setAddress(product.getAddress());
             pr3.setSilverWeight(product.getSilverWeight());
-            pr3.setproductCode(product.getproductCode());
+            pr3.setsku(product.getsku());
             pr3.setQuantity(0);
             productRepository.save(pr3);
             saveHistory(pr3, product.getAddress());
@@ -232,7 +232,7 @@ public class ProductDAO {
             pr1.setProducerId(product.getProducerId());
             pr1.setAddress(product.getAddress());
             pr1.setSilverWeight(product.getSilverWeight());
-            pr1.setproductCode(product.getproductCode());
+            pr1.setsku(product.getsku());
             pr1.setQuantity(0);
             productRepository.save(pr1);
             saveHistory(pr1, product.getAddress());
@@ -255,7 +255,7 @@ public class ProductDAO {
             pr2.setProducerId(product.getProducerId());
             pr2.setAddress(product.getAddress());
             pr2.setSilverWeight(product.getSilverWeight());
-            pr2.setproductCode(product.getproductCode());
+            pr2.setsku(product.getsku());
             pr2.setQuantity(0);
             productRepository.save(pr2);
             saveHistory(pr2, product.getAddress());
@@ -278,7 +278,7 @@ public class ProductDAO {
             pr3.setProducerId(product.getProducerId());
             pr3.setAddress(product.getAddress());
             pr3.setSilverWeight(product.getSilverWeight());
-            pr3.setproductCode(product.getproductCode());
+            pr3.setsku(product.getsku());
             pr3.setQuantity(0);
             productRepository.save(pr3);
             saveHistory(pr3, product.getAddress());
@@ -303,7 +303,7 @@ public class ProductDAO {
             pr1.setProducerId(product.getProducerId());
             pr1.setAddress(product.getAddress());
             pr1.setSilverWeight(product.getSilverWeight());
-            pr1.setproductCode(product.getproductCode());
+            pr1.setsku(product.getsku());
             pr1.setQuantity(0);
             productRepository.save(pr1);
             saveHistory(pr1, product.getAddress());
@@ -326,7 +326,7 @@ public class ProductDAO {
             pr2.setProducerId(product.getProducerId());
             pr2.setAddress(product.getAddress());
             pr2.setSilverWeight(product.getSilverWeight());
-            pr2.setproductCode(product.getproductCode());
+            pr2.setsku(product.getsku());
             pr2.setQuantity(0);
             productRepository.save(pr2);
             saveHistory(pr2, product.getAddress());
@@ -349,7 +349,7 @@ public class ProductDAO {
             pr3.setProducerId(product.getProducerId());
             pr3.setAddress(product.getAddress());
             pr3.setSilverWeight(product.getSilverWeight());
-            pr3.setproductCode(product.getproductCode());
+            pr3.setsku(product.getsku());
             pr3.setQuantity(0);
             productRepository.save(pr3);
             saveHistory(pr3, product.getAddress());
@@ -381,7 +381,7 @@ public class ProductDAO {
                     pr1.setProducerId(product.getProducerId());
                     pr1.setAddress(store.getAddress());
                     pr1.setSilverWeight(product.getSilverWeight());
-                    pr1.setproductCode(product.getproductCode());
+                    pr1.setsku(product.getsku());
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
                     saveHistory(pr1, store.getAddress());
@@ -404,7 +404,7 @@ public class ProductDAO {
                     pr2.setProducerId(product.getProducerId());
                     pr2.setAddress(store.getAddress());
                     pr2.setSilverWeight(product.getSilverWeight());
-                    pr2.setproductCode(product.getproductCode());
+                    pr2.setsku(product.getsku());
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
                     saveHistory(pr2, store.getAddress());
@@ -427,7 +427,7 @@ public class ProductDAO {
                     pr3.setProducerId(product.getProducerId());
                     pr3.setAddress(store.getAddress());
                     pr3.setSilverWeight(product.getSilverWeight());
-                    pr3.setproductCode(product.getproductCode());
+                    pr3.setsku(product.getsku());
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
                     saveHistory(pr3, store.getAddress());
@@ -450,7 +450,7 @@ public class ProductDAO {
                     pr4.setProducerId(product.getProducerId());
                     pr4.setAddress(store.getAddress());
                     pr4.setSilverWeight(product.getSilverWeight());
-                    pr4.setproductCode(product.getproductCode());
+                    pr4.setsku(product.getsku());
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
                     saveHistory(pr4, store.getAddress());
@@ -475,7 +475,7 @@ public class ProductDAO {
                     pr1.setProducerId(product.getProducerId());
                     pr1.setAddress(store.getAddress());
                     pr1.setSilverWeight(product.getSilverWeight());
-                    pr1.setproductCode(product.getproductCode());
+                    pr1.setsku(product.getsku());
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
                     saveHistory(pr1, store.getAddress());
@@ -498,7 +498,7 @@ public class ProductDAO {
                     pr2.setProducerId(product.getProducerId());
                     pr2.setAddress(store.getAddress());
                     pr2.setSilverWeight(product.getSilverWeight());
-                    pr2.setproductCode(product.getproductCode());
+                    pr2.setsku(product.getsku());
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
                     saveHistory(pr2, store.getAddress());
@@ -521,7 +521,7 @@ public class ProductDAO {
                     pr3.setProducerId(product.getProducerId());
                     pr3.setAddress(store.getAddress());
                     pr3.setSilverWeight(product.getSilverWeight());
-                    pr3.setproductCode(product.getproductCode());
+                    pr3.setsku(product.getsku());
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
                     saveHistory(pr3, store.getAddress());
@@ -544,7 +544,7 @@ public class ProductDAO {
                     pr4.setProducerId(product.getProducerId());
                     pr4.setAddress(store.getAddress());
                     pr4.setSilverWeight(product.getSilverWeight());
-                    pr4.setproductCode(product.getproductCode());
+                    pr4.setsku(product.getsku());
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
                     saveHistory(pr4, store.getAddress());
@@ -569,7 +569,7 @@ public class ProductDAO {
                     pr1.setProducerId(product.getProducerId());
                     pr1.setAddress(store.getAddress());
                     pr1.setSilverWeight(product.getSilverWeight());
-                    pr1.setproductCode(product.getproductCode());
+                    pr1.setsku(product.getsku());
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
                     saveHistory(pr1, store.getAddress());
@@ -592,7 +592,7 @@ public class ProductDAO {
                     pr2.setProducerId(product.getProducerId());
                     pr2.setAddress(store.getAddress());
                     pr2.setSilverWeight(product.getSilverWeight());
-                    pr2.setproductCode(product.getproductCode());
+                    pr2.setsku(product.getsku());
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
                     saveHistory(pr2, store.getAddress());
@@ -615,7 +615,7 @@ public class ProductDAO {
                     pr3.setProducerId(product.getProducerId());
                     pr3.setAddress(store.getAddress());
                     pr3.setSilverWeight(product.getSilverWeight());
-                    pr3.setproductCode(product.getproductCode());
+                    pr3.setsku(product.getsku());
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
                     saveHistory(pr3, store.getAddress());
@@ -638,7 +638,7 @@ public class ProductDAO {
                     pr4.setProducerId(product.getProducerId());
                     pr4.setAddress(store.getAddress());
                     pr4.setSilverWeight(product.getSilverWeight());
-                    pr4.setproductCode(product.getproductCode());
+                    pr4.setsku(product.getsku());
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
                     saveHistory(pr4, store.getAddress());
@@ -663,7 +663,7 @@ public class ProductDAO {
                     pr1.setProducerId(product.getProducerId());
                     pr1.setAddress(store.getAddress());
                     pr1.setSilverWeight(product.getSilverWeight());
-                    pr1.setproductCode(product.getproductCode());
+                    pr1.setsku(product.getsku());
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
                     saveHistory(pr1, store.getAddress());
@@ -686,7 +686,7 @@ public class ProductDAO {
                     pr2.setProducerId(product.getProducerId());
                     pr2.setAddress(store.getAddress());
                     pr2.setSilverWeight(product.getSilverWeight());
-                    pr2.setproductCode(product.getproductCode());
+                    pr2.setsku(product.getsku());
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
                     saveHistory(pr2, store.getAddress());
@@ -709,7 +709,7 @@ public class ProductDAO {
                     pr3.setProducerId(product.getProducerId());
                     pr3.setAddress(store.getAddress());
                     pr3.setSilverWeight(product.getSilverWeight());
-                    pr3.setproductCode(product.getproductCode());
+                    pr3.setsku(product.getsku());
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
                     saveHistory(pr3, store.getAddress());
@@ -732,7 +732,7 @@ public class ProductDAO {
                     pr4.setProducerId(product.getProducerId());
                     pr4.setAddress(store.getAddress());
                     pr4.setSilverWeight(product.getSilverWeight());
-                    pr4.setproductCode(product.getproductCode());
+                    pr4.setsku(product.getsku());
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
                     saveHistory(pr4, store.getAddress());
@@ -786,15 +786,15 @@ public class ProductDAO {
         return productsWithMaxSize;
     }
 
-    public void deleteProduct(String productCode) {
-        for (Product product : productRepository.findByproductCode(productCode)) {
+    public void deleteProduct(String sku) {
+        for (Product product : productRepository.findBysku(sku)) {
             productRepository.delete(product);
         }
     }
 
     public void updateProduct(Product product) {
         Product pr = productRepository.findById(product.getId()).get();
-        if (!pr.getproductCode().equals(product.getproductCode()) || !pr.getdescription().equals(product.getdescription())
+        if (!pr.getsku().equals(product.getsku()) || !pr.getdescription().equals(product.getdescription())
                 || !pr.getcostEu().equals(product.getcostEu()) || !pr.getcostUsd().equals(product.getcostUsd())
                 || !pr.getPrice().equals(product.getPrice()) || !pr.getCategoryId().equals(product.getCategoryId())
                 || !pr.getProducerId().equals(product.getProducerId()) || !pr.getKarats().equals(product.getKarats())) {
@@ -803,9 +803,9 @@ public class ProductDAO {
             product.setCategory(category);
             product.setProducer(producer);
             productRepository.save(product);
-            for (Product prod : productRepository.findByproductCode(pr.getproductCode())) {
+            for (Product prod : productRepository.findBysku(pr.getsku())) {
                 if (!prod.getId().equals(pr.getId())) {
-                    prod.setproductCode(product.getproductCode());
+                    prod.setsku(product.getsku());
                     prod.setCategoryId(product.getCategoryId());
                     prod.setProducerId(product.getProducerId());
                     prod.setcostEu(product.getcostEu());
@@ -818,7 +818,7 @@ public class ProductDAO {
                 }
             }
         }
-        for (Product prod : productRepository.findByproductCodeAndColor(pr.getproductCode(), pr.getColor())) {
+        for (Product prod : productRepository.findByskuAndColor(pr.getsku(), pr.getColor())) {
                 prod.setOtherStone(product.getOtherStone());
                 prod.setDiamondWeight(product.getDiamondWeight());
                 prod.setGoldWeight(product.getGoldWeight());
