@@ -16,17 +16,17 @@ public class Product implements Comparable<Product> {
     @Id
     private String id;
     private String productcode;
-    private String cost_usd;
-    private String cost_eu;
+    private String costUsd;
+    private String costEu;
     private String price;
-    private String descr;
+    private String description;
     private String karats;
     private String goldWeight;
     private String silverWeight;
     private String color;
     private Integer quantity;
     private String imageUrl;
-    private boolean non_produce;
+    private boolean nonProduce;
     private String otherStone;
     private String otherStoneWeight;
     private String diamondWeight;
@@ -39,19 +39,19 @@ public class Product implements Comparable<Product> {
     public Product() {
     }
 
-    public Product(String productcode, String cost_usd, String cost_eu, String price, String descr, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean non_produce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, Category category, Producer producer, String address) {
+    public Product(String productcode, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, Category category, Producer producer, String address) {
         this.productcode = productcode;
-        this.cost_usd = cost_usd;
-        this.cost_eu = cost_eu;
+        this.costUsd = costUsd;
+        this.costEu = costEu;
         this.price = price;
-        this.descr = descr;
+        this.description = description;
         this.karats = karats;
         this.goldWeight = goldWeight;
         this.silverWeight = silverWeight;
         this.color = color;
         this.quantity = quantity;
         this.imageUrl = imageUrl;
-        this.non_produce = non_produce;
+        this.nonProduce = nonProduce;
         this.otherStone = otherStone;
         this.otherStoneWeight = otherStoneWeight;
         this.diamondWeight = diamondWeight;
@@ -78,20 +78,20 @@ public class Product implements Comparable<Product> {
         this.productcode = productcode;
     }
 
-    public String getCost_usd() {
-        return cost_usd;
+    public String getcostUsd() {
+        return costUsd;
     }
 
-    public void setCost_usd(String cost_usd) {
-        this.cost_usd = cost_usd;
+    public void setcostUsd(String costUsd) {
+        this.costUsd = costUsd;
     }
 
-    public String getCost_eu() {
-        return cost_eu;
+    public String getcostEu() {
+        return costEu;
     }
 
-    public void setCost_eu(String cost_eu) {
-        this.cost_eu = cost_eu;
+    public void setcostEu(String costEu) {
+        this.costEu = costEu;
     }
 
     public String getPrice() {
@@ -102,12 +102,12 @@ public class Product implements Comparable<Product> {
         this.price = price;
     }
 
-    public String getDescr() {
-        return descr;
+    public String getdescription() {
+        return description;
     }
 
-    public void setDescr(String descr) {
-        this.descr = descr;
+    public void setdescription(String description) {
+        this.description = description;
     }
 
     public String getKarats() {
@@ -158,12 +158,12 @@ public class Product implements Comparable<Product> {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isNon_produce() {
-        return non_produce;
+    public boolean isnonProduce() {
+        return nonProduce;
     }
 
-    public void setNon_produce(boolean non_produce) {
-        this.non_produce = non_produce;
+    public void setnonProduce(boolean nonProduce) {
+        this.nonProduce = nonProduce;
     }
 
     public String getOtherStone() {
