@@ -10,7 +10,7 @@
     <groupId>com.example</groupId>
     <artifactId>StoreWarehouseMongo1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>StoreWarehouseMongo1</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -114,6 +114,18 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160810</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.11.766</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>1.11.766</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
     <repositories>

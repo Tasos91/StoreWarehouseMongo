@@ -1,12 +1,24 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.example.StoreWarehouseMongo1.Exceptions.ProductNotFoundException;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.User;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.UserRepository;
+import com.mysema.query.types.Path;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,8 +28,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -34,9 +49,9 @@ public class UserControllerCRUD {
     @Autowired
     private StoreRepository storeRepository;
 
-    @RequestMapping(value = "/show/{username}", method = POST)
-    public User showUserController(@PathVariable("username") String username) {
-        return showSpecificUser(username);
+    @RequestMapping(value = "/get", method = POST)
+    public User get(@RequestParam("username") String username) {
+        return getUser(username);
     }
 
     @GetMapping
@@ -98,14 +113,12 @@ public class UserControllerCRUD {
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
 
-    public User showSpecificUser(String username) {
-        User user = null;
+    public User getUser(String username) {
         try {
-            List<User> users = userrepository.findByUsername(username);
-            user = users.get(0);
+            return userrepository.findByUsername(username).get(0);
         } catch (Exception e) {
+            throw new ProductNotFoundException(e.getMessage());
         }
-        return user;
     }
 
     public User updateUser(User updatedUserFromUi, String username) { //tha erxetai oloklhro to json apo to ui

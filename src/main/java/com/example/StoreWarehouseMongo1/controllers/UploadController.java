@@ -5,6 +5,11 @@
  */
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,5 +70,25 @@ public class UploadController {
 //        stockrepository.save(stock);
 //        return new ResponseEntity<>("File is uploaded successfully", HttpStatus.OK);
 //    }
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+        try {
+            File convFile = new File(file.getOriginalFilename());
+            convFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(file.getBytes());
+            fos.close();
+            BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAT343VQJAC7ANC3WK", "wDf0dGRjISmU4kwjdMPMPNovf29ZeVEO7ZgZR0TH");
+            AmazonS3 s3client = AmazonS3ClientBuilder.standard()
+                    .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                    .withRegion("eu-central-1")
+                    .build();
+            String bucketName = "myanatolimages";
+            s3client.putObject(bucketName, convFile.getName(), convFile);
+        } catch (AmazonServiceException e) {
+            System.out.println("ERROR: " + e.getErrorMessage());
+        }
+        return new ResponseEntity<>("File is uploaded successfully", HttpStatus.OK);
+    }
 
 }

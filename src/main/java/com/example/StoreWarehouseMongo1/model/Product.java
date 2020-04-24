@@ -32,14 +32,12 @@ public class Product implements Comparable<Product> {
     private String diamondWeight;
     private String categoryId;
     private String producerId;
-    private Category category;
-    private Producer producer;
     private String address;
 
     public Product() {
     }
 
-    public Product(String sku, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, Category category, Producer producer, String address) {
+    public Product(String sku, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address) {
         this.sku = sku;
         this.costUsd = costUsd;
         this.costEu = costEu;
@@ -57,10 +55,10 @@ public class Product implements Comparable<Product> {
         this.diamondWeight = diamondWeight;
         this.categoryId = categoryId;
         this.producerId = producerId;
-        this.category = category;
-        this.producer = producer;
         this.address = address;
     }
+    
+    
 
     public String getId() {
         return id;
@@ -204,22 +202,6 @@ public class Product implements Comparable<Product> {
 
     public void setProducerId(String producerId) {
         this.producerId = producerId;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Producer getProducer() {
-        return producer;
-    }
-
-    public void setProducer(Producer producer) {
-        this.producer = producer;
     }
 
     public String getAddress() {

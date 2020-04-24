@@ -23,10 +23,11 @@ public class Pagination {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<Product> getProductsPaginated(int page, String categoryId, String address, String producerId, String limitString) {
-        page = page - 1;
+    public List<Product> getProductsPaginated(String page, String categoryId, String address, String producerId, String limitString) {
+        int paGe = Integer.parseInt(page);
+        paGe = paGe - 1;
         int limit = Integer.valueOf(limitString);
-        final Pageable pageableRequest = PageRequest.of(page, limit);
+        final Pageable pageableRequest = PageRequest.of(paGe, limit);
         Query query = new Query();
         query.with(new Sort(Sort.Direction.ASC, "sku"));
         query.addCriteria(Criteria.where("address").is(address));

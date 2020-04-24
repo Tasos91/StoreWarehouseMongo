@@ -31,4 +31,6 @@ public interface ProductRepository extends MongoRepository<Product, String>, Pag
 
     List<Product> findByskuAndColor(String sku, String color);
 
+    List<Product> findByproducerId(String producerId);
+
 }
