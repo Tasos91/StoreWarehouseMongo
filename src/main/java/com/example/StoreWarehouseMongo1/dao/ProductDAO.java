@@ -125,14 +125,7 @@ public class ProductDAO {
             if (product.getColor().equals("Rose")) {
                 product.setSku(product.getSku() + "-R");
             }
-            Category cat = categoryRepository.findById(product.getCategoryId()).get();
-            List<Category> cats = product.getCategory();
-            cats.add(cat);
-            product.setCategory(cats);
-            Producer producer = producerRepository.findById(product.getProducerId()).get();
-            List<Producer> producers = product.getProducer();
-            producers.add(producer);
-            product.setProducer(producers);
+            setCategoryAndProducer(product);
             productRepository.save(product);
             saveHistory(product, product.getAddress());
             instantiateOtherProducts(product);
@@ -163,6 +156,7 @@ public class ProductDAO {
             pr1.setSilverWeight(product.getSilverWeight());
             pr1.setSku(product.getSku().replaceAll("-W", "-Y"));
             pr1.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr1);
             productRepository.save(pr1);
             saveHistory(pr1, product.getAddress());
             Product pr2 = new Product();
@@ -184,6 +178,7 @@ public class ProductDAO {
             pr2.setSilverWeight(product.getSilverWeight());
             pr2.setSku(product.getSku().replaceAll("-W", "-B"));
             pr2.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr2);
             productRepository.save(pr2);
             saveHistory(pr2, product.getAddress());
             Product pr3 = new Product();
@@ -205,6 +200,7 @@ public class ProductDAO {
             pr3.setSilverWeight(product.getSilverWeight());
             pr3.setSku(product.getSku().replaceAll("-W", "-R"));
             pr3.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr3);
             productRepository.save(pr3);
             saveHistory(pr3, product.getAddress());
         }
@@ -228,6 +224,7 @@ public class ProductDAO {
             pr1.setSilverWeight(product.getSilverWeight());
             pr1.setSku(product.getSku().replaceAll("-B", "-Y"));
             pr1.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr1);
             productRepository.save(pr1);
             saveHistory(pr1, product.getAddress());
             Product pr2 = new Product();
@@ -249,6 +246,7 @@ public class ProductDAO {
             pr2.setSilverWeight(product.getSilverWeight());
             pr2.setSku(product.getSku().replaceAll("-B", "-W"));
             pr2.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr2);
             productRepository.save(pr2);
             saveHistory(pr2, product.getAddress());
             Product pr3 = new Product();
@@ -270,6 +268,7 @@ public class ProductDAO {
             pr3.setSilverWeight(product.getSilverWeight());
             pr3.setSku(product.getSku().replaceAll("-B", "-R"));
             pr3.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr3);
             productRepository.save(pr3);
             saveHistory(pr3, product.getAddress());
         }
@@ -293,6 +292,7 @@ public class ProductDAO {
             pr1.setSilverWeight(product.getSilverWeight());
             pr1.setSku(product.getSku().replaceAll("-Y", "-W"));
             pr1.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr1);
             productRepository.save(pr1);
             saveHistory(pr1, product.getAddress());
             Product pr2 = new Product();
@@ -314,6 +314,7 @@ public class ProductDAO {
             pr2.setSilverWeight(product.getSilverWeight());
             pr2.setSku(product.getSku().replaceAll("-Y", "-B"));
             pr2.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr2);
             productRepository.save(pr2);
             saveHistory(pr2, product.getAddress());
             Product pr3 = new Product();
@@ -335,6 +336,7 @@ public class ProductDAO {
             pr3.setSilverWeight(product.getSilverWeight());
             pr3.setSku(product.getSku().replaceAll("-Y", "-R"));
             pr3.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr3);
             productRepository.save(pr3);
             saveHistory(pr3, product.getAddress());
         }
@@ -358,6 +360,7 @@ public class ProductDAO {
             pr1.setSilverWeight(product.getSilverWeight());
             pr1.setSku(product.getSku().replaceAll("-R", "-Y"));
             pr1.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr1);
             productRepository.save(pr1);
             saveHistory(pr1, product.getAddress());
             Product pr2 = new Product();
@@ -379,6 +382,7 @@ public class ProductDAO {
             pr2.setSilverWeight(product.getSilverWeight());
             pr2.setSku(product.getSku().replaceAll("-R", "-B"));
             pr2.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr2);
             productRepository.save(pr2);
             saveHistory(pr2, product.getAddress());
             Product pr3 = new Product();
@@ -400,6 +404,7 @@ public class ProductDAO {
             pr3.setSilverWeight(product.getSilverWeight());
             pr3.setSku(product.getSku().replaceAll("-R", "-W"));
             pr3.setQuantity(0);
+            setCategoryAndProducerForInstatiationAndOtherStores(pr3);
             productRepository.save(pr3);
             saveHistory(pr3, product.getAddress());
         }
@@ -428,6 +433,7 @@ public class ProductDAO {
                     pr1.setSilverWeight(product.getSilverWeight());
                     pr1.setSku(product.getSku().replaceAll("-W", "-Y"));
                     pr1.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr1);
                     productRepository.save(pr1);
                     saveHistory(pr1, store.getAddress());
                     Product pr2 = new Product();
@@ -449,6 +455,7 @@ public class ProductDAO {
                     pr2.setSilverWeight(product.getSilverWeight());
                     pr2.setSku(product.getSku().replaceAll("-W", "-B"));
                     pr2.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr2);
                     productRepository.save(pr2);
                     saveHistory(pr2, store.getAddress());
                     Product pr3 = new Product();
@@ -470,6 +477,7 @@ public class ProductDAO {
                     pr3.setSilverWeight(product.getSilverWeight());
                     pr3.setSku(product.getSku().replaceAll("-W", "-R"));
                     pr3.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr3);
                     productRepository.save(pr3);
                     saveHistory(pr3, store.getAddress());
                     Product pr4 = new Product();
@@ -491,6 +499,7 @@ public class ProductDAO {
                     pr4.setSilverWeight(product.getSilverWeight());
                     pr4.setSku(product.getSku().replaceAll("-W", "-W"));
                     pr4.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr4);
                     productRepository.save(pr4);
                     saveHistory(pr4, store.getAddress());
                 }
@@ -514,6 +523,7 @@ public class ProductDAO {
                     pr1.setSilverWeight(product.getSilverWeight());
                     pr1.setSku(product.getSku().replaceAll("-B", "-Y"));
                     pr1.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr1);
                     productRepository.save(pr1);
                     saveHistory(pr1, store.getAddress());
                     Product pr2 = new Product();
@@ -535,6 +545,7 @@ public class ProductDAO {
                     pr2.setSilverWeight(product.getSilverWeight());
                     pr2.setSku(product.getSku().replaceAll("-B", "-W"));
                     pr2.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr2);
                     productRepository.save(pr2);
                     saveHistory(pr2, store.getAddress());
                     Product pr3 = new Product();
@@ -556,6 +567,7 @@ public class ProductDAO {
                     pr3.setSilverWeight(product.getSilverWeight());
                     pr3.setSku(product.getSku().replaceAll("-B", "-R"));
                     pr3.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr3);
                     productRepository.save(pr3);
                     saveHistory(pr3, store.getAddress());
                     Product pr4 = new Product();
@@ -577,6 +589,7 @@ public class ProductDAO {
                     pr4.setSilverWeight(product.getSilverWeight());
                     pr4.setSku(product.getSku().replaceAll("-B", "-B"));
                     pr4.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr4);
                     productRepository.save(pr4);
                     saveHistory(pr4, store.getAddress());
                 }
@@ -600,6 +613,7 @@ public class ProductDAO {
                     pr1.setSilverWeight(product.getSilverWeight());
                     pr1.setSku(product.getSku().replaceAll("-Y", "-W"));
                     pr1.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr1);
                     productRepository.save(pr1);
                     saveHistory(pr1, store.getAddress());
                     Product pr2 = new Product();
@@ -621,6 +635,7 @@ public class ProductDAO {
                     pr2.setSilverWeight(product.getSilverWeight());
                     pr2.setSku(product.getSku().replaceAll("-Y", "-B"));
                     pr2.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr2);
                     productRepository.save(pr2);
                     saveHistory(pr2, store.getAddress());
                     Product pr3 = new Product();
@@ -642,6 +657,7 @@ public class ProductDAO {
                     pr3.setSilverWeight(product.getSilverWeight());
                     pr3.setSku(product.getSku().replaceAll("-Y", "-R"));
                     pr3.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr3);
                     productRepository.save(pr3);
                     saveHistory(pr3, store.getAddress());
                     Product pr4 = new Product();
@@ -663,6 +679,7 @@ public class ProductDAO {
                     pr4.setSilverWeight(product.getSilverWeight());
                     pr4.setSku(product.getSku().replaceAll("-Y", "-Y"));
                     pr4.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr4);
                     productRepository.save(pr4);
                     saveHistory(pr4, store.getAddress());
                 }
@@ -686,6 +703,7 @@ public class ProductDAO {
                     pr1.setSilverWeight(product.getSilverWeight());
                     pr1.setSku(product.getSku().replaceAll("-R", "-Y"));
                     pr1.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr1);
                     productRepository.save(pr1);
                     saveHistory(pr1, store.getAddress());
                     Product pr2 = new Product();
@@ -707,6 +725,7 @@ public class ProductDAO {
                     pr2.setSilverWeight(product.getSilverWeight());
                     pr2.setSku(product.getSku().replaceAll("-R", "-B"));
                     pr2.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr2);
                     productRepository.save(pr2);
                     saveHistory(pr2, store.getAddress());
                     Product pr3 = new Product();
@@ -728,6 +747,7 @@ public class ProductDAO {
                     pr3.setSilverWeight(product.getSilverWeight());
                     pr3.setSku(product.getSku().replaceAll("-R", "-W"));
                     pr3.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr3);
                     productRepository.save(pr3);
                     saveHistory(pr3, store.getAddress());
                     Product pr4 = new Product();
@@ -749,6 +769,7 @@ public class ProductDAO {
                     pr4.setSilverWeight(product.getSilverWeight());
                     pr4.setSku(product.getSku().replaceAll("-R", "-R"));
                     pr4.setQuantity(0);
+                    setCategoryAndProducerForInstatiationAndOtherStores(pr4);
                     productRepository.save(pr4);
                     saveHistory(pr4, store.getAddress());
                 }
@@ -847,12 +868,33 @@ public class ProductDAO {
     }
 
     public void testCreate(Product product) {
-        //List<Category> category = new ArrayList();
         Category cat = categoryRepository.findById(product.getCategoryId()).get();
         List<Category> cats = product.getCategory();
         cats.add(cat);
         product.setCategory(cats);
         productRepository.save(product);
+    }
+
+    private void setCategoryAndProducer(Product product){
+        Category category = categoryRepository.findById(product.getCategoryId()).get();
+        List<Category> categories = product.getCategory();
+        categories.add(category);
+        product.setCategory(categories);
+        Producer producer = producerRepository.findById(product.getProducerId()).get();
+        List<Producer> producers = product.getProducer();
+        producers.add(producer);
+        product.setProducer(producers);
+    }
+
+    private void setCategoryAndProducerForInstatiationAndOtherStores(Product product){
+        Category category = categoryRepository.findById(product.getCategoryId()).get();
+        List<Category> categories = new ArrayList();
+        categories.add(category);
+        product.setCategory(categories);
+        Producer producer = producerRepository.findById(product.getProducerId()).get();
+        List<Producer> producers = new ArrayList();
+        producers.add(producer);
+        product.setProducer(producers);
     }
 
 }
