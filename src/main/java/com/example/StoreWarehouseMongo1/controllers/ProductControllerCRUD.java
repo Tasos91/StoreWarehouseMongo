@@ -98,4 +98,14 @@ public class ProductControllerCRUD {
         productDao.updateProduct(product);
     }
 
+    @DeleteMapping(value = "/delete")
+    public void updateProduct(@RequestParam("sku") String sku) {
+        productDao.deleteProduct(sku);
+    }
+
+    @PostMapping(value = "/createTest")
+    public void testCreate(@RequestBody Product product) {
+        productDao.testCreate(product);
+    }
+
 }

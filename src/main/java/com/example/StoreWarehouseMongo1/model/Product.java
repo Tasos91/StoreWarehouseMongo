@@ -3,7 +3,9 @@ package com.example.StoreWarehouseMongo1.model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import java.util.List;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -33,6 +35,10 @@ public class Product implements Comparable<Product> {
     private String categoryId;
     private String producerId;
     private String address;
+    @DBRef
+    private List<Category> category;
+    @DBRef
+    private List<Producer> producer;
 
     public Product() {
     }
@@ -57,8 +63,69 @@ public class Product implements Comparable<Product> {
         this.producerId = producerId;
         this.address = address;
     }
+
+    public Product(String sku, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address, List<Category> category, List<Producer> producer) {
+        this.sku = sku;
+        this.costUsd = costUsd;
+        this.costEu = costEu;
+        this.price = price;
+        this.description = description;
+        this.karats = karats;
+        this.goldWeight = goldWeight;
+        this.silverWeight = silverWeight;
+        this.color = color;
+        this.quantity = quantity;
+        this.imageUrl = imageUrl;
+        this.nonProduce = nonProduce;
+        this.otherStone = otherStone;
+        this.otherStoneWeight = otherStoneWeight;
+        this.diamondWeight = diamondWeight;
+        this.categoryId = categoryId;
+        this.producerId = producerId;
+        this.address = address;
+        this.category = category;
+        this.producer = producer;
+    }
+
+    public Product(String sku, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address, List<Category> category) {
+        this.sku = sku;
+        this.costUsd = costUsd;
+        this.costEu = costEu;
+        this.price = price;
+        this.description = description;
+        this.karats = karats;
+        this.goldWeight = goldWeight;
+        this.silverWeight = silverWeight;
+        this.color = color;
+        this.quantity = quantity;
+        this.imageUrl = imageUrl;
+        this.nonProduce = nonProduce;
+        this.otherStone = otherStone;
+        this.otherStoneWeight = otherStoneWeight;
+        this.diamondWeight = diamondWeight;
+        this.categoryId = categoryId;
+        this.producerId = producerId;
+        this.address = address;
+        this.category = category;
+    }
+
+    public List<Producer> getProducer() {
+        return producer;
+    }
+
+    public void setProducer(List<Producer> producer) {
+        this.producer = producer;
+    }
     
     
+
+    public List<Category> getCategory() {
+        return category;
+    }
+
+    public void setCategory(List<Category> category) {
+        this.category = category;
+    }
 
     public String getId() {
         return id;
@@ -68,27 +135,27 @@ public class Product implements Comparable<Product> {
         this.id = id;
     }
 
-    public String getsku() {
+    public String getSku() {
         return sku;
     }
 
-    public void setsku(String sku) {
+    public void setSku(String sku) {
         this.sku = sku;
     }
 
-    public String getcostUsd() {
+    public String getCostUsd() {
         return costUsd;
     }
 
-    public void setcostUsd(String costUsd) {
+    public void setCostUsd(String costUsd) {
         this.costUsd = costUsd;
     }
 
-    public String getcostEu() {
+    public String getCostEu() {
         return costEu;
     }
 
-    public void setcostEu(String costEu) {
+    public void setCostEu(String costEu) {
         this.costEu = costEu;
     }
 
@@ -100,11 +167,11 @@ public class Product implements Comparable<Product> {
         this.price = price;
     }
 
-    public String getdescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setdescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -156,11 +223,11 @@ public class Product implements Comparable<Product> {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isnonProduce() {
+    public boolean isNonProduce() {
         return nonProduce;
     }
 
-    public void setnonProduce(boolean nonProduce) {
+    public void setNonProduce(boolean nonProduce) {
         this.nonProduce = nonProduce;
     }
 
@@ -229,7 +296,7 @@ public class Product implements Comparable<Product> {
 
     @Override
     public int compareTo(Product product) {
-        return this.getsku().compareTo(product.getsku());
+        return this.getSku().compareTo(product.getSku());
     }
 
 }
