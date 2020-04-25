@@ -35,10 +35,6 @@ public class Product implements Comparable<Product> {
     private String categoryId;
     private String producerId;
     private String address;
-    @DBRef
-    private List<Category> category;
-    @DBRef
-    private List<Producer> producer;
 
     public Product() {
     }
@@ -62,69 +58,6 @@ public class Product implements Comparable<Product> {
         this.categoryId = categoryId;
         this.producerId = producerId;
         this.address = address;
-    }
-
-    public Product(String sku, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address, List<Category> category, List<Producer> producer) {
-        this.sku = sku;
-        this.costUsd = costUsd;
-        this.costEu = costEu;
-        this.price = price;
-        this.description = description;
-        this.karats = karats;
-        this.goldWeight = goldWeight;
-        this.silverWeight = silverWeight;
-        this.color = color;
-        this.quantity = quantity;
-        this.imageUrl = imageUrl;
-        this.nonProduce = nonProduce;
-        this.otherStone = otherStone;
-        this.otherStoneWeight = otherStoneWeight;
-        this.diamondWeight = diamondWeight;
-        this.categoryId = categoryId;
-        this.producerId = producerId;
-        this.address = address;
-        this.category = category;
-        this.producer = producer;
-    }
-
-    public Product(String sku, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address, List<Category> category) {
-        this.sku = sku;
-        this.costUsd = costUsd;
-        this.costEu = costEu;
-        this.price = price;
-        this.description = description;
-        this.karats = karats;
-        this.goldWeight = goldWeight;
-        this.silverWeight = silverWeight;
-        this.color = color;
-        this.quantity = quantity;
-        this.imageUrl = imageUrl;
-        this.nonProduce = nonProduce;
-        this.otherStone = otherStone;
-        this.otherStoneWeight = otherStoneWeight;
-        this.diamondWeight = diamondWeight;
-        this.categoryId = categoryId;
-        this.producerId = producerId;
-        this.address = address;
-        this.category = category;
-    }
-
-    public List<Producer> getProducer() {
-        return producer;
-    }
-
-    public void setProducer(List<Producer> producer) {
-        this.producer = producer;
-    }
-    
-    
-
-    public List<Category> getCategory() {
-        return category;
-    }
-
-    public void setCategory(List<Category> category) {
-        this.category = category;
     }
 
     public String getId() {

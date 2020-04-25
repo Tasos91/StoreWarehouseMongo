@@ -103,9 +103,9 @@ public class ProductControllerCRUD {
         productDao.deleteProduct(sku);
     }
 
-    @PostMapping(value = "/createTest")
-    public void testCreate(@RequestBody Product product) {
-        productDao.testCreate(product);
-    }
+//    @PostMapping(value = "/createTest")
+//    public void testCreate(@RequestBody Product product) {
+//        productDao.testCreate(product);
+//    }
 
 }

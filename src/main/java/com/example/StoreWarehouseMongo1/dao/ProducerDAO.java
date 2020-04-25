@@ -43,10 +43,10 @@ public class ProducerDAO {
     public ResponseEntity<?> update(Producer producer) {
         try {
             String producerCode = producer.getProducerCode();
-            String producerName = producer.getProducerName();
+            String producerName = producer.getValue();
             Producer producerTosave = producerRepository.findById(producer.getId()).get();
             producerTosave.setProducerCode(producerCode);
-            producerTosave.setProducerName(producerName);
+            producerTosave.setValue(producerName);
             producerRepository.save(producerTosave);
             return new ResponseEntity<>("Producer updated", HttpStatus.OK);
         } catch (Exception e) {

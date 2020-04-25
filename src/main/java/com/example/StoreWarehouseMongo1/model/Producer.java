@@ -18,17 +18,17 @@ public class Producer {
     @Id
     private String id;
     private String producerCode;
-    private String producerName;
+    private String value;
 
-    public Producer(String producerCode, String producerName) {
+    public Producer(String producerCode, String value) {
         this.producerCode = producerCode;
-        this.producerName = producerName;
+        this.value = value;
     }
 
-    public Producer(String id, String producerCode, String producerName) {
+    public Producer(String id, String producerCode, String value) {
         this.id = id;
         this.producerCode = producerCode;
-        this.producerName = producerName;
+        this.value = value;
     }
 
     public Producer() {
@@ -50,12 +50,12 @@ public class Producer {
         this.producerCode = producerCode;
     }
 
-    public String getProducerName() {
-        return producerName;
+    public String getValue() {
+        return value;
     }
 
-    public void setProducerName(String producerName) {
-        this.producerName = producerName;
+    public void setValue(String value) {
+        this.value = value;
     }
     
     
