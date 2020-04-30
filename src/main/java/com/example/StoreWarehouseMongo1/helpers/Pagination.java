@@ -71,6 +71,17 @@ public class Pagination {
         return maxSize;
     }
 
+    public Integer getMaxSizeForCategoryAndProducer(String producerId, String categoryId, String address) {
+        Query query = new Query();
+        query.with(new Sort(Sort.Direction.ASC, "sku"));
+        query.addCriteria(Criteria.where("address").is(address)
+                .and("producerId").is(producerId))
+                .addCriteria(Criteria.where("categoryId").is(categoryId));
+        long maxSizelong = mongoTemplate.count(query, Product.class);
+        Integer maxSize = (int) (long) maxSizelong;
+        return maxSize;
+    }
+    
     public Map<String, Integer> getMaxSize(String address, String producerId, String categoryId) {
         Map<String, Integer> maxSize = new HashMap<>();
         if (!categoryId.isEmpty() && producerId.isEmpty()) {
@@ -81,6 +92,9 @@ public class Pagination {
         }
         if (categoryId.isEmpty() && producerId.isEmpty()) {
             maxSize.put("maxSize", getMaxSize(address));
+        }
+        if (!categoryId.isEmpty() && !producerId.isEmpty()) {
+            maxSize.put("maxSize", getMaxSizeForCategoryAndProducer(producerId, categoryId, address));
         }
         return maxSize;
     }

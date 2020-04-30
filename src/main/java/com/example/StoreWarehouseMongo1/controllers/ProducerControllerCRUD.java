@@ -29,6 +29,7 @@ public class ProducerControllerCRUD {
     @PostMapping(value = "/create")
     public ResponseEntity<?> createProducer(@RequestBody Producer producer) {
         return producerdao.create(producer);
+//        return producerdao.createMany(producer);
     }
 
     @GetMapping("/all")
@@ -49,5 +50,10 @@ public class ProducerControllerCRUD {
     @DeleteMapping
     public ResponseEntity<?> deleteProducer(@RequestParam("producerId") String producerId) {
         return producerdao.delete(producerId);
+    }
+
+    @DeleteMapping(value = "/deleteAll")
+    public void deleteΑll() {
+        producerdao.deleteAll();
     }
 }

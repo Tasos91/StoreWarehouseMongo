@@ -4,21 +4,15 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.example.StoreWarehouseMongo1.Exceptions.ProductNotFoundException;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.User;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import com.example.StoreWarehouseMongo1.repositories.UserRepository;
-import com.mysema.query.types.Path;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,11 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -87,18 +79,24 @@ public class UserControllerCRUD {
     }
 
     @RequestMapping(value = "/create/{address}", method = POST)
-    public User createUserController(@RequestBody User user, @PathVariable("address") String address) {
-        return createUser(address, user);
+    public User createUserController(@Valid @RequestBody User user, @PathVariable("address") String address) {
+        try {
+            return createUser(address, user);
+        } catch (Exception e) {
+            return createUser(address, user);
+        }
     }
 
     @PostMapping(value = "/update")//update,reset password
-    public void updateUserController(@RequestBody User user) {
+    public void updateUserController(@RequestBody User user
+    ) {
         user.setPassword(getHashedPassword(user.getPassword()));
         userrepository.save(user);
     }
 
     @DeleteMapping(value = "/{username}")
-    public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
+    public ResponseEntity<?> deleteUser(@PathVariable("username") String username
+    ) {
         User user = new User();
         user = null;
         try {

@@ -1,6 +1,9 @@
 package com.example.StoreWarehouseMongo1.model;
 
 import java.util.List;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -17,10 +20,16 @@ public class User {
     @Id
     private String id;
     @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
+    @NotNull(message = "Username cannot be null")
     private String username;
     @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
+    @NotNull(message = "Email cannot be null")
+    @Email
     private String email;
+    @NotNull(message = "Password cannot be null")
+    @Size(min = 6, max = 10, message = "Password must equal or grater than 6 characters and less than 10 characters")
     private String password;
+    @NotNull(message = "Fullname cannot be null")
     private String fullname;
     private boolean enabled;
     private boolean admin;

@@ -80,4 +80,24 @@ public class ProducerDAO {
         }
     }
 
+    public ResponseEntity<?> createMany(Producer producer) {
+        try {
+            for (int i = 0; i < 1; i++) {
+                Producer producer1 = new Producer();
+                producer1.setId("5e8237f8216bc20ca4c48aef");
+                producer1.setProducerCode("B0005287A06");
+                producer1.setValue("SILVEROS");
+                producerRepository.save(producer1);
+            }
+            return new ResponseEntity<>("This producer succesfully created", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("", HttpStatus.CONFLICT);
+        }
+
+    }
+
+    public void deleteAll() {
+        producerRepository.deleteAll();
+    }
+
 }

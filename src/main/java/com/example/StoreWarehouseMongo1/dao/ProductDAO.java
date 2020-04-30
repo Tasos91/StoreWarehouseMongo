@@ -2,9 +2,7 @@ package com.example.StoreWarehouseMongo1.dao;
 
 import com.example.StoreWarehouseMongo1.Exceptions.ProductFoundException;
 import com.example.StoreWarehouseMongo1.helpers.Pagination;
-import com.example.StoreWarehouseMongo1.model.Category;
 import com.example.StoreWarehouseMongo1.model.History;
-import com.example.StoreWarehouseMongo1.model.Producer;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.repositories.CategoryRepository;
@@ -41,12 +39,6 @@ public class ProductDAO {
 
     @Autowired
     private StoreRepository storeRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ProducerRepository producerRepository;
 
     @Autowired
     private Pagination pagination;
