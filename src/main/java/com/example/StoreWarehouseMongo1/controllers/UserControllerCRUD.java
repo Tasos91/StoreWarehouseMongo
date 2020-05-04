@@ -3,7 +3,6 @@ package com.example.StoreWarehouseMongo1.controllers;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
 import com.example.StoreWarehouseMongo1.Exceptions.ProductNotFoundException;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.User;

@@ -10,7 +10,7 @@
     <groupId>com.example</groupId>
     <artifactId>StoreWarehouseMongo1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>StoreWarehouseMongo1</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -119,11 +119,21 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
-            <version>1.11.766</version>
+            <version>1.11.133</version>
+        </dependency>
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
+            <version>1.11.766</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
             <version>1.11.766</version>
             <type>jar</type>
         </dependency>

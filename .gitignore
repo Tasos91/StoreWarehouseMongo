@@ -2,3 +2,4 @@
 /target/
 StoreWarehouseMongo1.iml
 nb-configuration.xml
+application.yml

@@ -1,6 +1,7 @@
 package com.example.StoreWarehouseMongo1.dao;
 
 import com.example.StoreWarehouseMongo1.Exceptions.ProductFoundException;
+import com.example.StoreWarehouseMongo1.helpers.CachingService;
 import com.example.StoreWarehouseMongo1.helpers.Pagination;
 import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.Product;
@@ -17,11 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,6 +34,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ProductDAO {
+
+    @Autowired
+    private CachingService cachingService;
 
     @Autowired
     private ProductRepository productRepository;
@@ -775,13 +782,16 @@ public class ProductDAO {
         }
     }
 
-    public List<List<?>> getProductsPerFilterCase(String page, String categoryId, String producerId, String storeId, String limit) {
+    @Cacheable(value = "productsWithMaxSize")
+    @CacheEvict("productsWithMaxSize")
+    public List<List<?>> getProductsPerFilterCase(String page, String categoryId, String producerId, String storeId, String limit) throws InterruptedException {
         List<Product> products = pagination.getProductsPaginated(page, categoryId, storeId, producerId, limit);
         List<Map<String, Integer>> listMaxSize = new ArrayList();
         listMaxSize.add(pagination.getMaxSize(storeId, producerId, categoryId));
         List<List<?>> productsWithMaxSize = new ArrayList();
         productsWithMaxSize.add(products);
         productsWithMaxSize.add(listMaxSize);
+//        cachingService.evictAllcachesAtIntervals();
         return productsWithMaxSize;
     }
 
