@@ -471,7 +471,7 @@ public class ProductDAO {
                     pr4.setDescription(product.getDescription());
                     pr4.setDiamondWeight(product.getDiamondWeight());
                     pr4.setGoldWeight(product.getGoldWeight());
-                    pr4.setImageUrl("");
+                    pr4.setImageUrl(product.getImageUrl());
                     pr4.setKarats(product.getKarats());
                     pr4.setNonProduce(false);
                     pr4.setOtherStone(product.getOtherStone());
@@ -557,7 +557,7 @@ public class ProductDAO {
                     pr4.setDescription(product.getDescription());
                     pr4.setDiamondWeight(product.getDiamondWeight());
                     pr4.setGoldWeight(product.getGoldWeight());
-                    pr4.setImageUrl("");
+                    pr4.setImageUrl(product.getImageUrl());
                     pr4.setKarats(product.getKarats());
                     pr4.setNonProduce(false);
                     pr4.setOtherStone(product.getOtherStone());
@@ -643,7 +643,7 @@ public class ProductDAO {
                     pr4.setDescription(product.getDescription());
                     pr4.setDiamondWeight(product.getDiamondWeight());
                     pr4.setGoldWeight(product.getGoldWeight());
-                    pr4.setImageUrl("");
+                    pr4.setImageUrl(product.getImageUrl());
                     pr4.setKarats(product.getKarats());
                     pr4.setNonProduce(false);
                     pr4.setOtherStone(product.getOtherStone());
@@ -729,7 +729,7 @@ public class ProductDAO {
                     pr4.setDescription(product.getDescription());
                     pr4.setDiamondWeight(product.getDiamondWeight());
                     pr4.setGoldWeight(product.getGoldWeight());
-                    pr4.setImageUrl("");
+                    pr4.setImageUrl(product.getImageUrl());
                     pr4.setKarats(product.getKarats());
                     pr4.setNonProduce(false);
                     pr4.setOtherStone(product.getOtherStone());
