@@ -3,19 +3,19 @@ package com.example.StoreWarehouseMongo1.controllers;
 import com.example.StoreWarehouseMongo1.dao.ProductDAO;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  *
@@ -54,15 +54,18 @@ public class ProductControllerCRUD {
     }
 
     @PostMapping(value = "/create")
-    public void create(@RequestBody Product product) throws Exception {
+    public void create(@Valid  @RequestBody Product product) throws Exception {
         productDao.insert(product);
     }
 
+
+
+    
     @GetMapping(value = "/get")
     public ResponseEntity<?> getProduct(@RequestParam("productId") String productId) {
         return productDao.get(productId);
     }
-
+    
     @DeleteMapping(value = "/deleteAll")
     public void deleteProducts() {
         productrepository.deleteAll();
@@ -107,5 +110,18 @@ public class ProductControllerCRUD {
 //    public void testCreate(@RequestBody Product product) {
 //        productDao.testCreate(product);
 //    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 
 }

@@ -7,6 +7,9 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import software.amazon.ion.Decimal;
+
+import javax.validation.constraints.*;
 
 /**
  *
@@ -17,29 +20,67 @@ public class Product implements Comparable<Product> {
 
     @Id
     private String id;
+
+    @Size(min=5, max=5)
+    @NotBlank
     private String sku;
-    private String costUsd;
-    private String costEu;
-    private String price;
+
+    @DecimalMin(value = "10.0", inclusive = true)
+    @DecimalMax(value = "99999.99", inclusive = true)
+    private Decimal costUsd;
+
+    @DecimalMin(value = "10.0", inclusive = true)
+    @DecimalMax(value = "99999.99", inclusive = true)
+    private Decimal costEu;
+
+    @DecimalMin(value = "10.0", inclusive = true)
+    @DecimalMax(value = "999999.99", inclusive = true)
+    private Decimal price;
+
+    @Size(min=0, max=500)
     private String description;
-    private String karats;
-    private String goldWeight;
-    private String silverWeight;
+
+    @Min(value = 9)
+    @Max(value = 24)
+    private Integer karats;
+
+    @DecimalMin(value = "0.01", inclusive = true)
+    @DecimalMax(value = "99.99", inclusive = true)
+    private Decimal goldWeight;
+
     private String color;
+
+    @Min(value = 0)
+    @Max(value = 1000)
     private Integer quantity;
+
     private String imageUrl;
+
     private boolean nonProduce;
+
+    @Size(min=0, max=100)
     private String otherStone;
-    private String otherStoneWeight;
-    private String diamondWeight;
+
+    @DecimalMin(value = "0.001", inclusive = true)
+    @DecimalMax(value = "99.99", inclusive = true)
+    private Decimal otherStoneWeight;
+
+    @DecimalMin(value = "0.001", inclusive = true)
+    @DecimalMax(value = "99.99", inclusive = true)
+    private Decimal diamondWeight;
+
     private String categoryId;
+
     private String producerId;
+
     private String address;
+
+
 
     public Product() {
     }
 
-    public Product(String sku, String costUsd, String costEu, String price, String description, String karats, String goldWeight, String silverWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address) {
+    public Product(String sku, Decimal costUsd, Decimal costEu, Decimal price, String description, Integer karats, Decimal goldWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, Decimal otherStoneWeight, Decimal diamondWeight, String categoryId, String producerId, String address) {
         this.sku = sku;
         this.costUsd = costUsd;
         this.costEu = costEu;
@@ -47,7 +88,6 @@ public class Product implements Comparable<Product> {
         this.description = description;
         this.karats = karats;
         this.goldWeight = goldWeight;
-        this.silverWeight = silverWeight;
         this.color = color;
         this.quantity = quantity;
         this.imageUrl = imageUrl;
@@ -76,27 +116,27 @@ public class Product implements Comparable<Product> {
         this.sku = sku;
     }
 
-    public String getCostUsd() {
+    public Decimal getCostUsd() {
         return costUsd;
     }
 
-    public void setCostUsd(String costUsd) {
+    public void setCostUsd(Decimal costUsd) {
         this.costUsd = costUsd;
     }
 
-    public String getCostEu() {
+    public Decimal getCostEu() {
         return costEu;
     }
 
-    public void setCostEu(String costEu) {
+    public void setCostEu(Decimal costEu) {
         this.costEu = costEu;
     }
 
-    public String getPrice() {
+    public Decimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Decimal price) {
         this.price = price;
     }
 
@@ -108,28 +148,20 @@ public class Product implements Comparable<Product> {
         this.description = description;
     }
 
-    public String getKarats() {
+    public Integer getKarats() {
         return karats;
     }
 
-    public void setKarats(String karats) {
+    public void setKarats(Integer karats) {
         this.karats = karats;
     }
 
-    public String getGoldWeight() {
+    public Decimal getGoldWeight() {
         return goldWeight;
     }
 
-    public void setGoldWeight(String goldWeight) {
+    public void setGoldWeight(Decimal goldWeight) {
         this.goldWeight = goldWeight;
-    }
-
-    public String getSilverWeight() {
-        return silverWeight;
-    }
-
-    public void setSilverWeight(String silverWeight) {
-        this.silverWeight = silverWeight;
     }
 
     public String getColor() {
@@ -172,19 +204,19 @@ public class Product implements Comparable<Product> {
         this.otherStone = otherStone;
     }
 
-    public String getOtherStoneWeight() {
+    public Decimal getOtherStoneWeight() {
         return otherStoneWeight;
     }
 
-    public void setOtherStoneWeight(String otherStoneWeight) {
+    public void setOtherStoneWeight(Decimal otherStoneWeight) {
         this.otherStoneWeight = otherStoneWeight;
     }
 
-    public String getDiamondWeight() {
+    public Decimal getDiamondWeight() {
         return diamondWeight;
     }
 
-    public void setDiamondWeight(String diamondWeight) {
+    public void setDiamondWeight(Decimal diamondWeight) {
         this.diamondWeight = diamondWeight;
     }
 

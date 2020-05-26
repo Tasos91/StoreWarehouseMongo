@@ -151,7 +151,6 @@ public class ProductDAO {
             pr1.setPrice(product.getPrice());
             pr1.setProducerId(product.getProducerId());
             pr1.setAddress(product.getAddress());
-            pr1.setSilverWeight(product.getSilverWeight());
             pr1.setSku(product.getSku().replaceAll("-W", "-Y"));
             pr1.setQuantity(0);
             productRepository.save(pr1);
@@ -172,7 +171,6 @@ public class ProductDAO {
             pr2.setPrice(product.getPrice());
             pr2.setProducerId(product.getProducerId());
             pr2.setAddress(product.getAddress());
-            pr2.setSilverWeight(product.getSilverWeight());
             pr2.setSku(product.getSku().replaceAll("-W", "-B"));
             pr2.setQuantity(0);
             productRepository.save(pr2);
@@ -193,7 +191,6 @@ public class ProductDAO {
             pr3.setPrice(product.getPrice());
             pr3.setProducerId(product.getProducerId());
             pr3.setAddress(product.getAddress());
-            pr3.setSilverWeight(product.getSilverWeight());
             pr3.setSku(product.getSku().replaceAll("-W", "-R"));
             pr3.setQuantity(0);
             productRepository.save(pr3);
@@ -216,7 +213,6 @@ public class ProductDAO {
             pr1.setPrice(product.getPrice());
             pr1.setProducerId(product.getProducerId());
             pr1.setAddress(product.getAddress());
-            pr1.setSilverWeight(product.getSilverWeight());
             pr1.setSku(product.getSku().replaceAll("-B", "-Y"));
             pr1.setQuantity(0);
             productRepository.save(pr1);
@@ -237,7 +233,6 @@ public class ProductDAO {
             pr2.setPrice(product.getPrice());
             pr2.setProducerId(product.getProducerId());
             pr2.setAddress(product.getAddress());
-            pr2.setSilverWeight(product.getSilverWeight());
             pr2.setSku(product.getSku().replaceAll("-B", "-W"));
             pr2.setQuantity(0);
             productRepository.save(pr2);
@@ -258,7 +253,6 @@ public class ProductDAO {
             pr3.setPrice(product.getPrice());
             pr3.setProducerId(product.getProducerId());
             pr3.setAddress(product.getAddress());
-            pr3.setSilverWeight(product.getSilverWeight());
             pr3.setSku(product.getSku().replaceAll("-B", "-R"));
             pr3.setQuantity(0);
             productRepository.save(pr3);
@@ -281,7 +275,6 @@ public class ProductDAO {
             pr1.setPrice(product.getPrice());
             pr1.setProducerId(product.getProducerId());
             pr1.setAddress(product.getAddress());
-            pr1.setSilverWeight(product.getSilverWeight());
             pr1.setSku(product.getSku().replaceAll("-Y", "-W"));
             pr1.setQuantity(0);
             productRepository.save(pr1);
@@ -302,7 +295,6 @@ public class ProductDAO {
             pr2.setPrice(product.getPrice());
             pr2.setProducerId(product.getProducerId());
             pr2.setAddress(product.getAddress());
-            pr2.setSilverWeight(product.getSilverWeight());
             pr2.setSku(product.getSku().replaceAll("-Y", "-B"));
             pr2.setQuantity(0);
             productRepository.save(pr2);
@@ -323,7 +315,6 @@ public class ProductDAO {
             pr3.setPrice(product.getPrice());
             pr3.setProducerId(product.getProducerId());
             pr3.setAddress(product.getAddress());
-            pr3.setSilverWeight(product.getSilverWeight());
             pr3.setSku(product.getSku().replaceAll("-Y", "-R"));
             pr3.setQuantity(0);
             productRepository.save(pr3);
@@ -346,7 +337,6 @@ public class ProductDAO {
             pr1.setPrice(product.getPrice());
             pr1.setProducerId(product.getProducerId());
             pr1.setAddress(product.getAddress());
-            pr1.setSilverWeight(product.getSilverWeight());
             pr1.setSku(product.getSku().replaceAll("-R", "-Y"));
             pr1.setQuantity(0);
             productRepository.save(pr1);
@@ -367,7 +357,6 @@ public class ProductDAO {
             pr2.setPrice(product.getPrice());
             pr2.setProducerId(product.getProducerId());
             pr2.setAddress(product.getAddress());
-            pr2.setSilverWeight(product.getSilverWeight());
             pr2.setSku(product.getSku().replaceAll("-R", "-B"));
             pr2.setQuantity(0);
             productRepository.save(pr2);
@@ -388,7 +377,6 @@ public class ProductDAO {
             pr3.setPrice(product.getPrice());
             pr3.setProducerId(product.getProducerId());
             pr3.setAddress(product.getAddress());
-            pr3.setSilverWeight(product.getSilverWeight());
             pr3.setSku(product.getSku().replaceAll("-R", "-W"));
             pr3.setQuantity(0);
             productRepository.save(pr3);
@@ -416,7 +404,6 @@ public class ProductDAO {
                     pr1.setPrice(product.getPrice());
                     pr1.setProducerId(product.getProducerId());
                     pr1.setAddress(store.getAddress());
-                    pr1.setSilverWeight(product.getSilverWeight());
                     pr1.setSku(product.getSku().replaceAll("-W", "-Y"));
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
@@ -437,7 +424,6 @@ public class ProductDAO {
                     pr2.setPrice(product.getPrice());
                     pr2.setProducerId(product.getProducerId());
                     pr2.setAddress(store.getAddress());
-                    pr2.setSilverWeight(product.getSilverWeight());
                     pr2.setSku(product.getSku().replaceAll("-W", "-B"));
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
@@ -458,7 +444,6 @@ public class ProductDAO {
                     pr3.setPrice(product.getPrice());
                     pr3.setProducerId(product.getProducerId());
                     pr3.setAddress(store.getAddress());
-                    pr3.setSilverWeight(product.getSilverWeight());
                     pr3.setSku(product.getSku().replaceAll("-W", "-R"));
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
@@ -479,7 +464,6 @@ public class ProductDAO {
                     pr4.setPrice(product.getPrice());
                     pr4.setProducerId(product.getProducerId());
                     pr4.setAddress(store.getAddress());
-                    pr4.setSilverWeight(product.getSilverWeight());
                     pr4.setSku(product.getSku().replaceAll("-W", "-W"));
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
@@ -502,7 +486,6 @@ public class ProductDAO {
                     pr1.setPrice(product.getPrice());
                     pr1.setProducerId(product.getProducerId());
                     pr1.setAddress(store.getAddress());
-                    pr1.setSilverWeight(product.getSilverWeight());
                     pr1.setSku(product.getSku().replaceAll("-B", "-Y"));
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
@@ -523,7 +506,6 @@ public class ProductDAO {
                     pr2.setPrice(product.getPrice());
                     pr2.setProducerId(product.getProducerId());
                     pr2.setAddress(store.getAddress());
-                    pr2.setSilverWeight(product.getSilverWeight());
                     pr2.setSku(product.getSku().replaceAll("-B", "-W"));
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
@@ -544,7 +526,6 @@ public class ProductDAO {
                     pr3.setPrice(product.getPrice());
                     pr3.setProducerId(product.getProducerId());
                     pr3.setAddress(store.getAddress());
-                    pr3.setSilverWeight(product.getSilverWeight());
                     pr3.setSku(product.getSku().replaceAll("-B", "-R"));
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
@@ -565,7 +546,6 @@ public class ProductDAO {
                     pr4.setPrice(product.getPrice());
                     pr4.setProducerId(product.getProducerId());
                     pr4.setAddress(store.getAddress());
-                    pr4.setSilverWeight(product.getSilverWeight());
                     pr4.setSku(product.getSku().replaceAll("-B", "-B"));
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
@@ -588,7 +568,6 @@ public class ProductDAO {
                     pr1.setPrice(product.getPrice());
                     pr1.setProducerId(product.getProducerId());
                     pr1.setAddress(store.getAddress());
-                    pr1.setSilverWeight(product.getSilverWeight());
                     pr1.setSku(product.getSku().replaceAll("-Y", "-W"));
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
@@ -609,7 +588,6 @@ public class ProductDAO {
                     pr2.setPrice(product.getPrice());
                     pr2.setProducerId(product.getProducerId());
                     pr2.setAddress(store.getAddress());
-                    pr2.setSilverWeight(product.getSilverWeight());
                     pr2.setSku(product.getSku().replaceAll("-Y", "-B"));
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
@@ -630,7 +608,6 @@ public class ProductDAO {
                     pr3.setPrice(product.getPrice());
                     pr3.setProducerId(product.getProducerId());
                     pr3.setAddress(store.getAddress());
-                    pr3.setSilverWeight(product.getSilverWeight());
                     pr3.setSku(product.getSku().replaceAll("-Y", "-R"));
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
@@ -651,7 +628,6 @@ public class ProductDAO {
                     pr4.setPrice(product.getPrice());
                     pr4.setProducerId(product.getProducerId());
                     pr4.setAddress(store.getAddress());
-                    pr4.setSilverWeight(product.getSilverWeight());
                     pr4.setSku(product.getSku().replaceAll("-Y", "-Y"));
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
@@ -674,7 +650,6 @@ public class ProductDAO {
                     pr1.setPrice(product.getPrice());
                     pr1.setProducerId(product.getProducerId());
                     pr1.setAddress(store.getAddress());
-                    pr1.setSilverWeight(product.getSilverWeight());
                     pr1.setSku(product.getSku().replaceAll("-R", "-Y"));
                     pr1.setQuantity(0);
                     productRepository.save(pr1);
@@ -695,7 +670,6 @@ public class ProductDAO {
                     pr2.setPrice(product.getPrice());
                     pr2.setProducerId(product.getProducerId());
                     pr2.setAddress(store.getAddress());
-                    pr2.setSilverWeight(product.getSilverWeight());
                     pr2.setSku(product.getSku().replaceAll("-R", "-B"));
                     pr2.setQuantity(0);
                     productRepository.save(pr2);
@@ -716,7 +690,6 @@ public class ProductDAO {
                     pr3.setPrice(product.getPrice());
                     pr3.setProducerId(product.getProducerId());
                     pr3.setAddress(store.getAddress());
-                    pr3.setSilverWeight(product.getSilverWeight());
                     pr3.setSku(product.getSku().replaceAll("-R", "-W"));
                     pr3.setQuantity(0);
                     productRepository.save(pr3);
@@ -737,7 +710,6 @@ public class ProductDAO {
                     pr4.setPrice(product.getPrice());
                     pr4.setProducerId(product.getProducerId());
                     pr4.setAddress(store.getAddress());
-                    pr4.setSilverWeight(product.getSilverWeight());
                     pr4.setSku(product.getSku().replaceAll("-R", "-R"));
                     pr4.setQuantity(0);
                     productRepository.save(pr4);
@@ -828,7 +800,6 @@ public class ProductDAO {
             prod.setOtherStone(product.getOtherStone());
             prod.setDiamondWeight(product.getDiamondWeight());
             prod.setGoldWeight(product.getGoldWeight());
-            prod.setSilverWeight(product.getSilverWeight());
             prod.setOtherStoneWeight(product.getOtherStoneWeight());
             productRepository.save(prod);
         }
