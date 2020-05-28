@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- *
  * @author Tasos
  */
 @RestController
@@ -39,8 +38,8 @@ public class ProductControllerCRUD {
 
     @GetMapping(value = "/all")
     public ResponseEntity<?> getProductsPaginatedAndFiltered(@RequestParam("page") String page,
-            @RequestParam("categoryId") String categoryId, @RequestParam("producerId") String producerId,
-            @RequestParam("address") String address, @RequestParam("limit") String limit) {
+                                                             @RequestParam("categoryId") String categoryId, @RequestParam("producerId") String producerId,
+                                                             @RequestParam("address") String address, @RequestParam("limit") String limit) {
         if (page == null || page.equals("")) {
             return new ResponseEntity(new CustomErrorType("Error: Page cannot be null"
                     + " ", 666), HttpStatus.BAD_REQUEST);
@@ -54,18 +53,16 @@ public class ProductControllerCRUD {
     }
 
     @PostMapping(value = "/create")
-    public void create(@Valid  @RequestBody Product product) throws Exception {
+    public void create(@Valid @RequestBody Product product) throws Exception {
         productDao.insert(product);
     }
 
 
-
-    
     @GetMapping(value = "/get")
     public ResponseEntity<?> getProduct(@RequestParam("productId") String productId) {
         return productDao.get(productId);
     }
-    
+
     @DeleteMapping(value = "/deleteAll")
     public void deleteProducts() {
         productrepository.deleteAll();
@@ -85,7 +82,7 @@ public class ProductControllerCRUD {
 
     @PatchMapping(value = "/change")
     public ResponseEntity<Product> changeQuantityOfProduct(@RequestParam("quantity") int quantity,
-            @RequestParam("id") String productId) {
+                                                           @RequestParam("id") String productId) {
         try {
             productDao.updateQuantity(productId, quantity);
             return new ResponseEntity(new CustomErrorType("The quantity is changed succesfully", HttpStatus.OK.value()),
