@@ -8,6 +8,9 @@ package com.example.StoreWarehouseMongo1.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 /**
  *
  * @author Tasos
@@ -18,6 +21,9 @@ public class Category {
     
     @Id
     private String id;
+
+    @Size(min=0, max=30)
+    @NotBlank
     private String value;
 
     public Category() {

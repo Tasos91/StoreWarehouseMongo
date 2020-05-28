@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Tasos
  */
 @Component
-public class AmazonClient {
+public class S3Client {
 
     private AmazonS3 s3client;
 
@@ -98,7 +98,7 @@ public class AmazonClient {
         String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
-            fileUrl = endpointUrl + "/" + file.getName();
+            fileUrl = endpointUrl + "/" + bucketName + "/" + file.getName();
             uploadFileTos3bucket(file.getName(), file);
             file.delete();
         } catch (Exception e) {

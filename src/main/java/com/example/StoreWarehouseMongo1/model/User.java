@@ -1,9 +1,8 @@
 package com.example.StoreWarehouseMongo1.model;
 
 import java.util.List;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -27,9 +26,14 @@ public class User {
     @Email
     private String email;
     @NotNull(message = "Password cannot be null")
-    @Size(min = 6, max = 10, message = "Password must equal or grater than 6 characters and less than 10 characters")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[-@#$%^&+*()!_=])(?=\\S+$).{6,10}$",
+    message = "The password length must be from 6 to 10 characters and has the following restrictions: must contain at least 1 number, a lower case letter must occur at least once, " +
+            "an upper case letter must occur at least once, a special character must occur at least once eg. (!@#$%^&*())," +
+            " no whitespace allowed in the entire string ")
     private String password;
     @NotNull(message = "Fullname cannot be null")
+    @Size(min=0, max=20)
+    @NotBlank
     private String fullname;
     private boolean enabled;
     private boolean admin;
