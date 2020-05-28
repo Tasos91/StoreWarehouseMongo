@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.example.StoreWarehouseMongo1.helpers.RegexUtils.filePathRegex;
+
 /**
- *
  * @author Tasos
  */
 @RestController
@@ -40,10 +41,14 @@ public class UploadController {
 
     @DeleteMapping("/delete")
     public String deleteFile(@RequestPart(value = "url") String fileUrl,
-            @RequestParam("sku") String sku) {
+                             @RequestParam("sku") String sku) {
         for (Product pr : productRepository.findBysku(sku)) {
             productRepository.delete(pr);
         }
-        return s3Client.deleteFileFromS3Bucket(fileUrl);
+        if (filePathRegex(fileUrl)) {
+            return s3Client.deleteFileFromS3Bucket(fileUrl);
+        } else {
+            return null;
+        }
     }
 }
