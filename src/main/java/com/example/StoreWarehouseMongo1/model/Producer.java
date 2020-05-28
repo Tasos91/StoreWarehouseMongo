@@ -8,6 +8,10 @@ package com.example.StoreWarehouseMongo1.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
  *
  * @author Tasos
@@ -17,7 +21,13 @@ public class Producer {
 
     @Id
     private String id;
+
+    @Size(min=0, max=30)
+    @NotBlank
     private String producerCode;
+
+    @Size(min=0, max=30)
+    @NotBlank
     private String value;
 
     public Producer(String producerCode, String value) {

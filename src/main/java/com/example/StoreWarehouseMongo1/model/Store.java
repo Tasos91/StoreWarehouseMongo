@@ -5,6 +5,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 /**
  *
  * @author Tasos
@@ -14,7 +17,11 @@ public class Store {
 
     @Id
     private String id;
+
+    @Size(min=0, max=30)
+    @NotBlank
     private String address;
+
     @DBRef
     private List<User> users;
 
