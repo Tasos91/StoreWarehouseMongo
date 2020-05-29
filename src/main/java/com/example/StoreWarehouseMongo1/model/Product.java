@@ -3,11 +3,9 @@ package com.example.StoreWarehouseMongo1.model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import java.util.List;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import software.amazon.ion.Decimal;
+
 
 import javax.validation.constraints.*;
 
@@ -25,17 +23,20 @@ public class Product implements Comparable<Product> {
     @NotBlank
     private String sku;
 
-    @DecimalMin(value = "10.0", inclusive = true)
-    @DecimalMax(value = "99999.99", inclusive = true)
-    private Decimal costUsd;
+    @Size(min=3, max=8)
+    @Pattern(regexp = "^(\\d{2,5}\\.)\\d+$",
+            message = "Yout must include dot")
+    private String costUsd;
 
-    @DecimalMin(value = "10.0", inclusive = true)
-    @DecimalMax(value = "99999.99", inclusive = true)
-    private Decimal costEu;
+    @Size(min=3, max=8)
+    @Pattern(regexp = "^(\\d{1,5}\\.)\\d+$",
+            message = "Yout must include dot")
+    private String costEu;
 
-    @DecimalMin(value = "10.0", inclusive = true)
-    @DecimalMax(value = "999999.99", inclusive = true)
-    private Decimal price;
+    @Size(min=3, max=9)
+    @Pattern(regexp = "^(\\d{1,6}\\.)\\d+$",
+            message = "Yout must include dot")
+    private String price;
 
     @Size(min=0, max=500)
     private String description;
@@ -44,9 +45,10 @@ public class Product implements Comparable<Product> {
     @Max(value = 24)
     private Integer karats;
 
-    @DecimalMin(value = "0.01", inclusive = true)
-    @DecimalMax(value = "99.99", inclusive = true)
-    private Decimal goldWeight;
+    @Size(min=3, max=5)
+    @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
+            message = "Yout must include dot")
+    private String goldWeight;
 
     private String color;
 
@@ -61,13 +63,15 @@ public class Product implements Comparable<Product> {
     @Size(min=0, max=100)
     private String otherStone;
 
-    @DecimalMin(value = "0.001", inclusive = true)
-    @DecimalMax(value = "99.99", inclusive = true)
-    private Decimal otherStoneWeight;
+    @Size(min=3, max=5)
+    @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
+            message = "Yout must include dot")
+    private String otherStoneWeight;
 
-    @DecimalMin(value = "0.001", inclusive = true)
-    @DecimalMax(value = "99.99", inclusive = true)
-    private Decimal diamondWeight;
+    @Size(min=3, max=5)
+    @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
+            message = "Yout must include dot")
+    private String diamondWeight;
 
     private String categoryId;
 
@@ -75,12 +79,10 @@ public class Product implements Comparable<Product> {
 
     private String address;
 
-
-
     public Product() {
     }
 
-    public Product(String sku, Decimal costUsd, Decimal costEu, Decimal price, String description, Integer karats, Decimal goldWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, Decimal otherStoneWeight, Decimal diamondWeight, String categoryId, String producerId, String address) {
+    public Product(String sku, String costUsd, String costEu, String price, String description, Integer karats, String goldWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address) {
         this.sku = sku;
         this.costUsd = costUsd;
         this.costEu = costEu;
@@ -116,27 +118,27 @@ public class Product implements Comparable<Product> {
         this.sku = sku;
     }
 
-    public Decimal getCostUsd() {
+    public String getCostUsd() {
         return costUsd;
     }
 
-    public void setCostUsd(Decimal costUsd) {
+    public void setCostUsd(String costUsd) {
         this.costUsd = costUsd;
     }
 
-    public Decimal getCostEu() {
+    public String getCostEu() {
         return costEu;
     }
 
-    public void setCostEu(Decimal costEu) {
+    public void setCostEu(String costEu) {
         this.costEu = costEu;
     }
 
-    public Decimal getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Decimal price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -156,11 +158,11 @@ public class Product implements Comparable<Product> {
         this.karats = karats;
     }
 
-    public Decimal getGoldWeight() {
+    public String getGoldWeight() {
         return goldWeight;
     }
 
-    public void setGoldWeight(Decimal goldWeight) {
+    public void setGoldWeight(String goldWeight) {
         this.goldWeight = goldWeight;
     }
 
@@ -204,19 +206,19 @@ public class Product implements Comparable<Product> {
         this.otherStone = otherStone;
     }
 
-    public Decimal getOtherStoneWeight() {
+    public String getOtherStoneWeight() {
         return otherStoneWeight;
     }
 
-    public void setOtherStoneWeight(Decimal otherStoneWeight) {
+    public void setOtherStoneWeight(String otherStoneWeight) {
         this.otherStoneWeight = otherStoneWeight;
     }
 
-    public Decimal getDiamondWeight() {
+    public String getDiamondWeight() {
         return diamondWeight;
     }
 
-    public void setDiamondWeight(Decimal diamondWeight) {
+    public void setDiamondWeight(String diamondWeight) {
         this.diamondWeight = diamondWeight;
     }
 
