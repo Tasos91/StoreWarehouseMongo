@@ -2,13 +2,11 @@ package com.example.StoreWarehouseMongo1.dao;
 
 import com.example.StoreWarehouseMongo1.Exceptions.ProductFoundException;
 import com.example.StoreWarehouseMongo1.helpers.CachingService;
-import com.example.StoreWarehouseMongo1.helpers.Pagination;
+import com.example.StoreWarehouseMongo1.helpers.ProductPagination;
 import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Store;
-import com.example.StoreWarehouseMongo1.repositories.CategoryRepository;
 import com.example.StoreWarehouseMongo1.repositories.HistoryRepository;
-import com.example.StoreWarehouseMongo1.repositories.ProducerRepository;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
 import java.time.LocalDateTime;
@@ -25,7 +23,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,7 +45,7 @@ public class ProductDAO {
     private StoreRepository storeRepository;
 
     @Autowired
-    private Pagination pagination;
+    private ProductPagination productPagination;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -757,9 +754,9 @@ public class ProductDAO {
     @Cacheable(value = "productsWithMaxSize")
     @CacheEvict("productsWithMaxSize")
     public List<List<?>> getProductsPerFilterCase(String page, String categoryId, String producerId, String storeId, String limit) throws InterruptedException {
-        List<Product> products = pagination.getProductsPaginated(page, categoryId, storeId, producerId, limit);
+        List<Product> products = productPagination.getProductsPaginated(page, categoryId, storeId, producerId, limit);
         List<Map<String, Integer>> listMaxSize = new ArrayList();
-        listMaxSize.add(pagination.getMaxSize(storeId, producerId, categoryId));
+        listMaxSize.add(productPagination.getMaxSize(storeId, producerId, categoryId));
         List<List<?>> productsWithMaxSize = new ArrayList();
         productsWithMaxSize.add(products);
         productsWithMaxSize.add(listMaxSize);

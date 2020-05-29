@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @author Tasos
  */
 @Component
-public class Pagination {
+public class ProductPagination {
 
     @Autowired
     private MongoTemplate mongoTemplate;
