@@ -775,14 +775,14 @@ public class ProductDAO {
 
     public void updateProduct(Product product) {
         Product pr = productRepository.findById(product.getId()).get();
+        String color = pr.getColor();
         if (!pr.getSku().equals(product.getSku()) || !pr.getDescription().equals(product.getDescription())
                 || !pr.getCostEu().equals(product.getCostEu()) || !pr.getCostUsd().equals(product.getCostUsd())
                 || !pr.getPrice().equals(product.getPrice()) || !pr.getCategoryId().equals(product.getCategoryId())
                 || !pr.getProducerId().equals(product.getProducerId()) || !pr.getKarats().equals(product.getKarats())) {
-            productRepository.save(product);
             for (Product prod : productRepository.findBysku(pr.getSku())) {
                 if (!prod.getId().equals(pr.getId())) {
-                    prod.setSku(product.getSku());
+                    prod.setSku(product.getSku() + getColorWithDash(color));
                     prod.setCategoryId(product.getCategoryId());
                     prod.setProducerId(product.getProducerId());
                     prod.setCostEu(product.getCostEu());
@@ -792,6 +792,8 @@ public class ProductDAO {
                     productRepository.save(prod);
                 }
             }
+            product.setSku(product.getSku() + getColorWithDash(color));
+            productRepository.save(product);
         }
         for (Product prod : productRepository.findByskuAndColor(pr.getSku(), pr.getColor())) {
             prod.setOtherStone(product.getOtherStone());
@@ -803,16 +805,19 @@ public class ProductDAO {
 
     }
 
+    public String getColorWithDash(String color) {
+        char[] colorArray = color.toCharArray();
+        char colorLetter = '\0';
+        for(char i : colorArray) {
+            colorLetter = i;
+            break;
+        }
+       return "-" + String.valueOf(colorLetter);
+    }
+
     public void throwE() {
         List<String> kk = new ArrayList();
         kk.get(5);
     }
 
-//    public void testCreate(Product product) {
-//        Category cat = categoryRepository.findById(product.getCategoryId()).get();
-//        List<Category> cats = product.getCategory();
-//        cats.add(cat);
-//        product.setCategory(cats);
-//        productRepository.save(product);
-//    }
 }

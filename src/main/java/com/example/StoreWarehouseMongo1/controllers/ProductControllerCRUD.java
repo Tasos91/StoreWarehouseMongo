@@ -94,7 +94,7 @@ public class ProductControllerCRUD {
     }
 
     @PatchMapping(value = "/update")
-    public void updateProduct(@RequestBody Product product) {
+    public void updateProduct(@Valid @RequestBody Product product) {
         productDao.updateProduct(product);
     }
 

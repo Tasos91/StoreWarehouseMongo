@@ -19,23 +19,24 @@ public class Product implements Comparable<Product> {
     @Id
     private String id;
 
-    @Size(min=5, max=5)
+    @Pattern(regexp = "^[a-zA-Z0-9]{5,5}$",
+            message = "Address must be contained of 2-24 characters (letters only)")
     @NotBlank
     private String sku;
 
     @Size(min=3, max=8)
     @Pattern(regexp = "^(\\d{2,5}\\.)\\d+$",
-            message = "Yout must include dot")
+            message = "You must include dot")
     private String costUsd;
 
     @Size(min=3, max=8)
     @Pattern(regexp = "^(\\d{1,5}\\.)\\d+$",
-            message = "Yout must include dot")
+            message = "You must include dot")
     private String costEu;
 
     @Size(min=3, max=9)
     @Pattern(regexp = "^(\\d{1,6}\\.)\\d+$",
-            message = "Yout must include dot")
+            message = "You must include dot")
     private String price;
 
     @Size(min=0, max=500)
@@ -47,7 +48,7 @@ public class Product implements Comparable<Product> {
 
     @Size(min=3, max=5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
-            message = "Yout must include dot")
+            message = "You must include dot")
     private String goldWeight;
 
     private String color;
@@ -65,18 +66,24 @@ public class Product implements Comparable<Product> {
 
     @Size(min=3, max=5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
-            message = "Yout must include dot")
+            message = "You must include dot")
     private String otherStoneWeight;
 
     @Size(min=3, max=5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
-            message = "Yout must include dot")
+            message = "You must include dot")
     private String diamondWeight;
 
+    @Pattern(regexp = "^[a-zA-Z0-9]{24,24}$",
+            message = "Category Id must be contained of 24 characters (numbers and letters only)")
     private String categoryId;
 
+    @Pattern(regexp = "^[a-zA-Z0-9]{24,24}$",
+            message = "Producer Id must be contained of 24 characters (numbers and letters only)")
     private String producerId;
 
+    @Pattern(regexp = "^[a-zA-Z]{2,20}$",
+            message = "Address must be contained of 2-24 characters (letters only)")
     private String address;
 
     public Product() {
