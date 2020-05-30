@@ -10,66 +10,75 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.*;
 
 /**
- *
  * @author Tasos
  */
 @Document(collection = "products")
 public class Product implements Comparable<Product> {
 
     @Id
+    @Pattern(regexp = "^[a-zA-Z0-9]{24,24}$",
+            message = "Id must be contained of 24 characters")
     private String id;
 
     @Pattern(regexp = "^[a-zA-Z0-9]{5,5}$",
-            message = "Address must be contained of 2-24 characters (letters only)")
+            message = "SKU must be contained of 5 characters (letters and numbers only)")
     @NotBlank
     private String sku;
 
-    @Size(min=3, max=8)
+    @Size(min = 3, max = 8)
     @Pattern(regexp = "^(\\d{2,5}\\.)\\d+$",
             message = "You must include dot")
     private String costUsd;
 
-    @Size(min=3, max=8)
+    @Size(min = 3, max = 8)
     @Pattern(regexp = "^(\\d{1,5}\\.)\\d+$",
             message = "You must include dot")
     private String costEu;
 
-    @Size(min=3, max=9)
+    @Size(min = 3, max = 9)
     @Pattern(regexp = "^(\\d{1,6}\\.)\\d+$",
             message = "You must include dot")
     private String price;
 
-    @Size(min=0, max=500)
+    @Pattern(regexp = "^[a-zA-Z0-9_.-]{0,500}$",
+            message = "You must include dot")
     private String description;
 
     @Min(value = 9)
     @Max(value = 24)
     private Integer karats;
 
-    @Size(min=3, max=5)
+    @Size(min = 3, max = 5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
             message = "You must include dot")
     private String goldWeight;
 
+    @Pattern(regexp = "^[a-zA-Z]{4,6}$",
+            message = "Color could be only White, Black, Yellow, White and Rose")
     private String color;
 
     @Min(value = 0)
     @Max(value = 1000)
     private Integer quantity;
 
+    @Pattern(regexp = "^$|https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)",
+            message = "The url is incorrect")
     private String imageUrl;
 
+    //    @Pattern(regexp = "//^(true|false)$",
+//            message = "The value should be true or false only")
     private boolean nonProduce;
 
-    @Size(min=0, max=100)
+    @Pattern(regexp = "^[a-zA-Z0-9,]{0,500}$",
+            message = "You must include dot")
     private String otherStone;
 
-    @Size(min=3, max=5)
+    @Size(min = 3, max = 5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
             message = "You must include dot")
     private String otherStoneWeight;
 
-    @Size(min=3, max=5)
+    @Size(min = 3, max = 5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
             message = "You must include dot")
     private String diamondWeight;
