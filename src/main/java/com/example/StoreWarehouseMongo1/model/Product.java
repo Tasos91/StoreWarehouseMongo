@@ -41,7 +41,7 @@ public class Product implements Comparable<Product> {
     private String price;
 
     @Pattern(regexp = "^[a-zA-Z0-9_.-]{0,500}$",
-            message = "You must include dot")
+            message = "You exceed 500 characters")
     private String description;
 
     @Min(value = 9)
@@ -65,12 +65,12 @@ public class Product implements Comparable<Product> {
             message = "The url is incorrect")
     private String imageUrl;
 
-    //    @Pattern(regexp = "//^(true|false)$",
+//        @Pattern(regexp = "//^(true|false)$",
 //            message = "The value should be true or false only")
-    private boolean nonProduce;
+    private Boolean nonProduce;
 
     @Pattern(regexp = "^[a-zA-Z0-9,]{0,500}$",
-            message = "You must include dot")
+            message = "You exceed 500 characters")
     private String otherStone;
 
     @Size(min = 3, max = 5)
@@ -98,7 +98,7 @@ public class Product implements Comparable<Product> {
     public Product() {
     }
 
-    public Product(String sku, String costUsd, String costEu, String price, String description, Integer karats, String goldWeight, String color, Integer quantity, String imageUrl, boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address) {
+    public Product(String sku, String costUsd, String costEu, String price, String description, Integer karats, String goldWeight, String color, Integer quantity, String imageUrl, Boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address) {
         this.sku = sku;
         this.costUsd = costUsd;
         this.costEu = costEu;
@@ -206,11 +206,11 @@ public class Product implements Comparable<Product> {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isNonProduce() {
+    public Boolean isNonProduce() {
         return nonProduce;
     }
 
-    public void setNonProduce(boolean nonProduce) {
+    public void setNonProduce(Boolean nonProduce) {
         this.nonProduce = nonProduce;
     }
 
