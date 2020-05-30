@@ -65,7 +65,7 @@ public class Product implements Comparable<Product> {
             message = "The url is incorrect")
     private String imageUrl;
 
-//        @Pattern(regexp = "//^(true|false)$",
+    //        @Pattern(regexp = "//^(true|false)$",
 //            message = "The value should be true or false only")
     private Boolean nonProduce;
 
