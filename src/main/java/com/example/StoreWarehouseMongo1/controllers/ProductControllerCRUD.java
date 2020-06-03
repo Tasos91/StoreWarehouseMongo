@@ -44,19 +44,14 @@ public class ProductControllerCRUD {
             return new ResponseEntity(new CustomErrorType("Error: Page cannot be null"
                     + " ", 666), HttpStatus.BAD_REQUEST);
         }
-        try {
-            return new ResponseEntity<List<List<?>>>(productDao.getProductsPerFilterCase(page, categoryId, producerId, address, limit), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType("Error: " + e.getMessage()
-                    + " ", HttpStatus.GATEWAY_TIMEOUT.value()), HttpStatus.GATEWAY_TIMEOUT);
-        }
+        return new ResponseEntity<List<List<?>>>(productDao.getProductsPerFilterCase(page, categoryId, producerId, address, limit), HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/create")
     public void create(@Valid @RequestBody Product product) throws Exception {
         productDao.insert(product);
     }
-
 
     @GetMapping(value = "/get")
     public ResponseEntity<?> getProduct(@RequestParam("productId") String productId) {
@@ -69,7 +64,7 @@ public class ProductControllerCRUD {
     }
 
     @PatchMapping(value = "/disable")
-    public ResponseEntity<Product> disableProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> disableProduct(@Valid @RequestBody Product product) {
         try {
             productDao.makeItDisable(product);
             return new ResponseEntity(new CustomErrorType("The product is not produced anymore", HttpStatus.OK.value()),
@@ -81,25 +76,18 @@ public class ProductControllerCRUD {
     }
 
     @PatchMapping(value = "/change")
-    public ResponseEntity<Product> changeQuantityOfProduct(@RequestParam("quantity") int quantity,
-                                                           @RequestParam("id") String productId) {
-        try {
-            productDao.updateQuantity(productId, quantity);
-            return new ResponseEntity(new CustomErrorType("The quantity is changed succesfully", HttpStatus.OK.value()),
-                    HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(new CustomErrorType(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public void changeQuantityOfProduct(@RequestParam("quantity") int quantity,
+                                        @RequestParam("id") String productId) {
+        productDao.updateQuantity(productId, quantity);
     }
 
     @PatchMapping(value = "/update")
     public void updateProduct(@Valid @RequestBody Product product) {
-        productDao.updateProduct(product);
+        productDao.edit(product);
     }
 
     @DeleteMapping(value = "/delete")
-    public void updateProduct(@RequestParam("sku") String sku) {
+    public void deleteProduct(@RequestParam("sku") String sku) {
         productDao.deleteProduct(sku);
     }
 

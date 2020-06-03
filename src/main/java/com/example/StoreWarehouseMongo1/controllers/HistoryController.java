@@ -1,5 +1,6 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.example.StoreWarehouseMongo1.helpers.HistoryPagination;
 import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.repositories.HistoryRepository;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +27,9 @@ public class HistoryController {
 
     @Autowired
     private HistoryRepository historyrepository;
+
+    @Autowired
+    private HistoryPagination pagination;
 
     @GetMapping
     public ResponseEntity<?> getHistory() {
@@ -54,6 +58,11 @@ public class HistoryController {
         } catch (Exception e) {
             return new ResponseEntity(new CustomErrorType("Product not found", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(value = "/test")
+    public void getHistoryByDatse() {
+        pagination.getHistoryPaginated("1","Kifisia","5e8e0dcf46a89e3fac413074","12","2020/04/08 17:45:51", "2020/04/08 17:45:51");
     }
     
     private void dateFromString(History history) {

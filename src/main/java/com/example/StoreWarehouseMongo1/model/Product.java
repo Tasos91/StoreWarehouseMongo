@@ -20,79 +20,92 @@ public class Product implements Comparable<Product> {
             message = "Id must be contained of 24 characters")
     private String id;
 
-    @Pattern(regexp = "^[a-zA-Z0-9]{5,5}$",
-            message = "SKU must be contained of 5 characters (letters and numbers only)")
     @NotBlank
+    @NotNull
     private String sku;
 
     @Size(min = 3, max = 8)
-    @Pattern(regexp = "^(\\d{2,5}\\.)\\d+$",
-            message = "You must include dot")
+    @Pattern(regexp = "^(\\d{1,5}\\.)\\d+$",
+            message = "The correct value could be something like 99999.99 (max 5 digits before dot and min 1)")
+    @NotNull
     private String costUsd;
 
     @Size(min = 3, max = 8)
     @Pattern(regexp = "^(\\d{1,5}\\.)\\d+$",
-            message = "You must include dot")
+            message = "The correct value could be something like 99999.99 (max 5 digits before dot and min 1)")
+    @NotNull
     private String costEu;
 
     @Size(min = 3, max = 9)
     @Pattern(regexp = "^(\\d{1,6}\\.)\\d+$",
-            message = "You must include dot")
+            message = "The correct value could be something like 99999.99 (max 6 digits before dot and min 1)")
+    @NotNull
     private String price;
 
-    @Pattern(regexp = "^[a-zA-Z0-9_.-]{0,500}$",
+    @Pattern(regexp = "^[a-zA-Z0-9_ (?)-?]{0,500}$",
             message = "You exceed 500 characters")
+    @NotNull
     private String description;
 
     @Min(value = 9)
     @Max(value = 24)
+    @NotNull
     private Integer karats;
 
     @Size(min = 3, max = 5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
             message = "You must include dot")
+    @NotNull
     private String goldWeight;
 
     @Pattern(regexp = "^[a-zA-Z]{4,6}$",
             message = "Color could be only White, Black, Yellow, White and Rose")
+    @NotNull
     private String color;
 
     @Min(value = 0)
     @Max(value = 1000)
+    @NotNull
     private Integer quantity;
 
     @Pattern(regexp = "^$|https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)",
             message = "The url is incorrect")
+    @NotNull
     private String imageUrl;
 
-    //        @Pattern(regexp = "//^(true|false)$",
-//            message = "The value should be true or false only")
+    @NotNull
     private Boolean nonProduce;
 
     @Pattern(regexp = "^[a-zA-Z0-9,]{0,500}$",
             message = "You exceed 500 characters")
+    @NotNull
     private String otherStone;
 
     @Size(min = 3, max = 5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
             message = "You must include dot")
+    @NotNull
     private String otherStoneWeight;
 
     @Size(min = 3, max = 5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
             message = "You must include dot")
+    @NotNull
     private String diamondWeight;
 
     @Pattern(regexp = "^[a-zA-Z0-9]{24,24}$",
             message = "Category Id must be contained of 24 characters (numbers and letters only)")
+    @NotNull
     private String categoryId;
 
     @Pattern(regexp = "^[a-zA-Z0-9]{24,24}$",
             message = "Producer Id must be contained of 24 characters (numbers and letters only)")
+    @NotNull
     private String producerId;
 
     @Pattern(regexp = "^[a-zA-Z]{2,20}$",
             message = "Address must be contained of 2-24 characters (letters only)")
+    @NotNull
     private String address;
 
     public Product() {

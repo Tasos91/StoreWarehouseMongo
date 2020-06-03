@@ -5,7 +5,6 @@
  */
 package com.example.StoreWarehouseMongo1.Exceptions;
 
-import com.example.StoreWarehouseMongo1.Exceptions.ProductNotFoundException;
 import java.util.Date;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +55,62 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                 HttpStatus.NOT_FOUND.value(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(QuantityNotValidException.class)
+    public final ResponseEntity<ExceptionResponse> handleWrongQuantityException(QuantityNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PageNotValidException.class)
+    public final ResponseEntity<ExceptionResponse> handlePageNotValidException(PageNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CategoryIdNotValidException.class)
+    public final ResponseEntity<ExceptionResponse> handleCategoryIdNotValidExceptionException(CategoryIdNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProducerIdNotValidException.class)
+    public final ResponseEntity<ExceptionResponse> handleProducerIdNotValidExceptionException(ProducerIdNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(StoreIdNotValidException.class)
+    public final ResponseEntity<ExceptionResponse> handleStoreIdNotValidExceptionException(StoreIdNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(LimitNotValidException.class)
+    public final ResponseEntity<ExceptionResponse> handleLimitNotValidExceptionException(LimitNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AddressNotValidException.class)
+    public final ResponseEntity<ExceptionResponse> handleLimitNotValidExceptionException(AddressNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SKUNotValidException.class)
+    public final ResponseEntity<ExceptionResponse> handleSKUNotValidExceptionExceptionException(SKUNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

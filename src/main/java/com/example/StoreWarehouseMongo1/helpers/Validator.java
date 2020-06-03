@@ -9,12 +9,20 @@ public class Validator {
         return sku.matches("^[a-zA-Z0-9]{5,5}$");
     }
 
+    public boolean validateSKUComingFromDB(String sku) {
+        return sku.matches("^[a-zA-Z0-9-]{7,7}$");
+    }
+
     public boolean validateProductId(String productId) {
         return productId.matches("^[a-zA-Z0-9]{24,24}$");
     }
 
     public boolean validateCategoryId(String categoryId) {
         return categoryId.matches("^[a-zA-Z0-9]{24,24}$");
+    }
+
+    public boolean validateStoreId(String storeId) {
+        return storeId.matches("^[a-zA-Z0-9]{24,24}$");
     }
 
     public boolean validateProducerId(String producerId) {
@@ -26,23 +34,24 @@ public class Validator {
     }
 
     public boolean validateLimit(String limit) {
-        boolean isLimitOk = true;
-        if (!limit.equals("12")) {
-            isLimitOk = false;
+        boolean limitIsOk = true;
+        if (limit.equals("12")) {
+            return limitIsOk;
         }
-        if (!limit.equals("16")) {
-            isLimitOk = false;
+        if (limit.equals("16")) {
+            return limitIsOk;
         }
-        if (!limit.equals("20")) {
-            isLimitOk = false;
+        if (limit.equals("20")) {
+            return limitIsOk;
         }
-        if (!limit.equals("24")) {
-            isLimitOk = false;
+        if (limit.equals("24")) {
+            return limitIsOk;
         }
-        if (!limit.equals("28")) {
-            isLimitOk = false;
+        if (limit.equals("28")) {
+            return limitIsOk;
+        } else {
+            return false;
         }
-        return isLimitOk;
     }
 
     public boolean validatePage(String page) {

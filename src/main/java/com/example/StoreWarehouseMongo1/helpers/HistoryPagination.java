@@ -1,9 +1,7 @@
 package com.example.StoreWarehouseMongo1.helpers;
 
+import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.Product;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,33 +11,31 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
- *
  * @author Tasos
  */
 @Component
-public class ProductPagination {
+public class HistoryPagination {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<Product> getProductsPaginated(String page, String categoryId, String address, String producerId, String limitString) {
+    public List<History> getHistoryPaginated(String page, String address, String productId, String limitString, String startDate, String endDate) {
         int paGe = Integer.parseInt(page);
         paGe = paGe - 1;
         int limit = Integer.valueOf(limitString);
         final Pageable pageableRequest = PageRequest.of(paGe, limit);
         Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "sku"));
-        query.addCriteria(Criteria.where("address").is(address));
-        if (!categoryId.isEmpty()) {
-            query.addCriteria(Criteria.where("categoryId").is(categoryId));
-        }
-        if (!producerId.isEmpty()) {
-            query.addCriteria(Criteria.where("producerId").is(producerId));
-        }
+        query.addCriteria(Criteria.where("storeId").is(address));
+        query.addCriteria(Criteria.where("productId").is(productId));
+//        query.addCriteria(Criteria.where("timestamp").gte(startDate).lt(endDate));
         query.with(pageableRequest);
-        List<Product> products = mongoTemplate.find(query, Product.class);
-        return products;
+        List<History> history = mongoTemplate.find(query, History.class);
+        return history;
     }
 
     public Integer getMaxSize(String address) {
@@ -81,7 +77,7 @@ public class ProductPagination {
         Integer maxSize = (int) (long) maxSizelong;
         return maxSize;
     }
-    
+
     public Map<String, Integer> getMaxSize(String address, String producerId, String categoryId) {
         Map<String, Integer> maxSize = new HashMap<>();
         if (!categoryId.isEmpty() && producerId.isEmpty()) {

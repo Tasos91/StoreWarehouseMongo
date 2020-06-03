@@ -1,20 +1,25 @@
 package com.example.StoreWarehouseMongo1.dao;
 
-import com.example.StoreWarehouseMongo1.Exceptions.ProductFoundException;
+import com.example.StoreWarehouseMongo1.Exceptions.*;
+import com.example.StoreWarehouseMongo1.controllers.CustomErrorType;
 import com.example.StoreWarehouseMongo1.helpers.CachingService;
 import com.example.StoreWarehouseMongo1.helpers.ProductPagination;
+import com.example.StoreWarehouseMongo1.helpers.Validator;
 import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.repositories.HistoryRepository;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,7 +31,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
- *
  * @author Tasos
  */
 @Component
@@ -50,30 +54,41 @@ public class ProductDAO {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Autowired
+    private Validator validator;
+
     public ResponseEntity<?> get(String productId) {
-        Product product = new Product();
-        List<List<?>> response = new ArrayList();
-        List<Product> prod = new ArrayList();
-        product = productRepository.findById(productId).get();
-        String color = product.getColor();
-        String sku = product.getSku();
-        List<Map<?, ?>> others = new ArrayList();
-        List<List<Map<?, ?>>> responseList = new ArrayList();
-        for (Product pr : productRepository.findByskuAndColor(sku, color)) {
-            if (!pr.getAddress().equals(product.getAddress())) {
-                Map<String, Map<?, ?>> jsonObjectAll = new HashMap();
-                Map<String, String> jsonObject = new HashMap();
-                jsonObject.put("address", pr.getAddress());
-                jsonObject.put("quantity", String.valueOf(pr.getQuantity()));
-                jsonObjectAll.put("other", jsonObject);
-                others.add(jsonObjectAll);
+        if (validator.validateProductId(productId)) {
+            Product product = new Product();
+            List<List<?>> response = new ArrayList();
+            List<Product> prod = new ArrayList();
+            try {
+                product = productRepository.findById(productId).get();
+            } catch (Exception e) {
+                throw new ProductNotFoundException("Product not found");
             }
+            String color = product.getColor();
+            String sku = product.getSku();
+            List<Map<?, ?>> others = new ArrayList();
+            List<List<Map<?, ?>>> responseList = new ArrayList();
+            for (Product pr : productRepository.findByskuAndColor(sku, color)) {
+                if (!pr.getAddress().equals(product.getAddress())) {
+                    Map<String, Map<?, ?>> jsonObjectAll = new HashMap();
+                    Map<String, String> jsonObject = new HashMap();
+                    jsonObject.put("address", pr.getAddress());
+                    jsonObject.put("quantity", String.valueOf(pr.getQuantity()));
+                    jsonObjectAll.put("other", jsonObject);
+                    others.add(jsonObjectAll);
+                }
+            }
+            responseList.add(others);
+            prod.add(product);
+            response.add(prod);
+            response.add(responseList);
+            return new ResponseEntity<List>(response, HttpStatus.OK);
+        } else {
+            throw new ProductIdWrongException("The productId is not valid");
         }
-        responseList.add(others);
-        prod.add(product);
-        response.add(prod);
-        response.add(responseList);
-        return new ResponseEntity<List>(response, HttpStatus.OK);
     }
 
     //@Transactional
@@ -82,6 +97,9 @@ public class ProductDAO {
         Product pr2 = new Product();
         Product pr3 = new Product();
         Product pr4 = new Product();
+        if (!validator.validateSKU(product.getSku())) {
+            throw new SKUNotValidException("The sku is not valid");
+        }
         try {
             pr1 = productRepository.findBysku(product.getSku() + "-Y").get(0);
             pr2 = productRepository.findBysku(product.getSku() + "-W").get(0);
@@ -736,27 +754,35 @@ public class ProductDAO {
         productRepository.save(product);
     }
 
-    public void updateQuantity(String productId, int quantity) {
+    public ResponseEntity<Product> updateQuantity(String productId, int quantity) {
         Product product = new Product();
-        try {
-            product = productRepository.findById(productId).get();
-        } catch (Exception e) {
-            throw e;
+        if (validator.validateProductId(productId)) {
+            try {
+                product = productRepository.findById(productId).get();
+            } catch (Exception e) {
+                throw new ProductNotFoundException("Product not found");
+            }
+            if (validator.validateQuantity(String.valueOf(quantity))) {
+                product.setQuantity(quantity);
+                productRepository.save(product);
+                return new ResponseEntity(new CustomErrorType("The quantity is changed succesfully", HttpStatus.OK.value()),
+                        HttpStatus.OK);
+            } else {
+                throw new QuantityNotValidException("The quantity value is not valid");
+            }
+        } else {
+            throw new ProductIdWrongException("The productId is not valid");
         }
-        product.setQuantity(quantity);
-        try {
-            productRepository.save(product);
-        } catch (Exception e) {
-            throw e;
-        }
+
     }
 
     @Cacheable(value = "productsWithMaxSize")
     @CacheEvict("productsWithMaxSize")
-    public List<List<?>> getProductsPerFilterCase(String page, String categoryId, String producerId, String storeId, String limit) throws InterruptedException {
-        List<Product> products = productPagination.getProductsPaginated(page, categoryId, storeId, producerId, limit);
+    public List<List<?>> getProductsPerFilterCase(String page, String categoryId, String producerId, String address, String limit) {
+        validateParams(page, categoryId, producerId, address, limit);
+        List<Product> products = productPagination.getProductsPaginated(page, categoryId, address, producerId, limit);
         List<Map<String, Integer>> listMaxSize = new ArrayList();
-        listMaxSize.add(productPagination.getMaxSize(storeId, producerId, categoryId));
+        listMaxSize.add(productPagination.getMaxSize(address, producerId, categoryId));
         List<List<?>> productsWithMaxSize = new ArrayList();
         productsWithMaxSize.add(products);
         productsWithMaxSize.add(listMaxSize);
@@ -764,25 +790,39 @@ public class ProductDAO {
         return productsWithMaxSize;
     }
 
-    public void deleteProduct(String sku) {
-        sku = sku.substring(0, (sku.length() - 2));
-        Query query = new Query();
-        query.addCriteria(Criteria.where("sku").regex(sku));
-        for (Product product : mongoTemplate.find(query, Product.class)) {
-            productRepository.delete(product);
+    public ResponseEntity<?> deleteProduct(String sku) {
+        if (validator.validateSKUComingFromDB(sku)) {
+            sku = sku.substring(0, (sku.length() - 2));
+            if (validator.validateSKU(sku)) {
+                Query query = new Query();
+                query.addCriteria(Criteria.where("sku").regex(sku));
+                List<Product> products = mongoTemplate.find(query, Product.class);
+                if (!products.isEmpty() && products != null) {
+                    for (Product product : products) {
+                        productRepository.delete(product);
+                    }
+                    return ResponseEntity.ok("The product is successfully deleted");
+                } else {
+                    throw new ProductNotFoundException("There is no product with this sku to delete");
+                }
+            } else {
+                throw new SKUNotValidException("The sku is not valid");
+            }
+        } else {
+            throw new SKUNotValidException("The sku is not valid");
         }
     }
 
-    public void updateProduct(Product product) {
+    public void edit(Product product) {
         Product pr = productRepository.findById(product.getId()).get();
         String color = pr.getColor();
-        if (!pr.getSku().equals(product.getSku()) || !pr.getDescription().equals(product.getDescription())
-                || !pr.getCostEu().equals(product.getCostEu()) || !pr.getCostUsd().equals(product.getCostUsd())
-                || !pr.getPrice().equals(product.getPrice()) || !pr.getCategoryId().equals(product.getCategoryId())
-                || !pr.getProducerId().equals(product.getProducerId()) || !pr.getKarats().equals(product.getKarats())) {
+        if (pr.getDescription() == null) {
+            pr.setDescription("");
+        }
+        if (!pr.getSku().equals(product.getSku()) || !pr.getDescription().equals(product.getDescription()) || !pr.getCostEu().equals(product.getCostEu()) || !pr.getCostUsd().equals(product.getCostUsd()) || !pr.getPrice().equals(product.getPrice()) || !pr.getCategoryId().equals(product.getCategoryId()) || !pr.getProducerId().equals(product.getProducerId()) || !pr.getKarats().equals(product.getKarats())) {
             for (Product prod : productRepository.findBysku(pr.getSku())) {
                 if (!prod.getId().equals(pr.getId())) {
-                    prod.setSku(product.getSku() + getColorWithDash(color));
+                    prod.setSku(setColorInSIgnatureOrNot(product.getSku(), product.getColor()));
                     prod.setCategoryId(product.getCategoryId());
                     prod.setProducerId(product.getProducerId());
                     prod.setCostEu(product.getCostEu());
@@ -792,7 +832,7 @@ public class ProductDAO {
                     productRepository.save(prod);
                 }
             }
-            product.setSku(product.getSku() + getColorWithDash(color));
+            product.setSku(setColorInSIgnatureOrNot(product.getSku(), product.getColor()));
             productRepository.save(product);
         }
         for (Product prod : productRepository.findByskuAndColor(pr.getSku(), pr.getColor())) {
@@ -805,19 +845,45 @@ public class ProductDAO {
 
     }
 
-    public String getColorWithDash(String color) {
+    private String getColorWithDash(String color) {
         char[] colorArray = color.toCharArray();
         char colorLetter = '\0';
-        for(char i : colorArray) {
+        for (char i : colorArray) {
             colorLetter = i;
             break;
         }
-       return "-" + String.valueOf(colorLetter);
+        return "-" + String.valueOf(colorLetter);
+    }
+
+    private String setColorInSIgnatureOrNot(String sku, String color) {
+        if (sku.contains("-")) {
+            return sku;
+        } else {
+            return sku + getColorWithDash(color);
+        }
     }
 
     public void throwE() {
         List<String> kk = new ArrayList();
         kk.get(5);
+    }
+
+    private void validateParams(String page, String categoryId, String producerId, String address, String limit) {
+        if (validator.validatePage(page) == false) {
+            throw new PageNotValidException("Page is not valid");
+        }
+        if (validator.validateCategoryId(categoryId) == false) {
+            throw new CategoryIdNotValidException("CategoryId is not valid");
+        }
+        if (validator.validateProducerId(producerId) == false) {
+            throw new ProducerIdNotValidException("ProducerId is not valid");
+        }
+        if (validator.validateAddress(address) == false) {
+            throw new AddressNotValidException("Address is not valid");
+        }
+        if (validator.validateLimit(limit) == false) {
+            throw new LimitNotValidException("Limit is not valid");
+        }
     }
 
 }
