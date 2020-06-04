@@ -42,7 +42,7 @@ public class Product implements Comparable<Product> {
     @NotNull
     private String price;
 
-    @Pattern(regexp = "^[a-zA-Z0-9_ (?)-?]{0,500}$",
+    @Pattern(regexp = "^[a-zA-Z0-9_ (?)-? ?]{0,500}$",
             message = "You exceed 500 characters")
     @NotNull
     private String description;
@@ -76,7 +76,7 @@ public class Product implements Comparable<Product> {
     @NotNull
     private Boolean nonProduce;
 
-    @Pattern(regexp = "^[a-zA-Z0-9,]{0,500}$",
+    @Pattern(regexp = "^[a-zA-Z0-9, ?]{0,500}$",
             message = "You exceed 500 characters")
     @NotNull
     private String otherStone;

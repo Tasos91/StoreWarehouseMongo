@@ -781,6 +781,9 @@ public class ProductDAO {
     public List<List<?>> getProductsPerFilterCase(String page, String categoryId, String producerId, String address, String limit) {
         validateParams(page, categoryId, producerId, address, limit);
         List<Product> products = productPagination.getProductsPaginated(page, categoryId, address, producerId, limit);
+        if (products.isEmpty()) {
+            throw new ProductsNotFoundException("There is not products with these filters");
+        }
         List<Map<String, Integer>> listMaxSize = new ArrayList();
         listMaxSize.add(productPagination.getMaxSize(address, producerId, categoryId));
         List<List<?>> productsWithMaxSize = new ArrayList();
@@ -813,16 +816,34 @@ public class ProductDAO {
         }
     }
 
-    public void edit(Product product) {
-        Product pr = productRepository.findById(product.getId()).get();
+    public ResponseEntity<?> edit(Product product) {
+        Product pr = new Product();
+        Product produc = new Product();
+        Product produc2 = new Product();
         String color = pr.getColor();
+        if (validator.validateSKUComingFromDB(product.getSku()) == false) {
+            throw new SKUNotValidException("The sku is not valid");
+        }
+        try {
+            pr = productRepository.findById(product.getId()).get();
+        } catch (Exception e) {
+            throw new ProductNotFoundException("There is no product with this id");
+        }
         if (pr.getDescription() == null) {
             pr.setDescription("");
         }
+        try {
+            produc = productRepository.findByskuAndColor(pr.getSku(), pr.getColor()).get(0);
+            produc2 = productRepository.findBysku(pr.getSku()).get(0);
+        } catch (Exception e) {
+            throw new ProductNotFoundException("There is no product with this sku and color");
+        }
         if (!pr.getSku().equals(product.getSku()) || !pr.getDescription().equals(product.getDescription()) || !pr.getCostEu().equals(product.getCostEu()) || !pr.getCostUsd().equals(product.getCostUsd()) || !pr.getPrice().equals(product.getPrice()) || !pr.getCategoryId().equals(product.getCategoryId()) || !pr.getProducerId().equals(product.getProducerId()) || !pr.getKarats().equals(product.getKarats())) {
-            for (Product prod : productRepository.findBysku(pr.getSku())) {
+            for (Product prod : productPagination.getSKULikeQuery(pr.getSku())) {
                 if (!prod.getId().equals(pr.getId())) {
-                    prod.setSku(setColorInSIgnatureOrNot(product.getSku(), product.getColor()));
+                    String colorForEveryOf12 = prod.getColor();
+                    colorOption(colorForEveryOf12);
+                    prod.setSku(setColorInSIgnatureOrNot(skuSpliter(product.getSku()), colorOption(colorForEveryOf12)));
                     prod.setCategoryId(product.getCategoryId());
                     prod.setProducerId(product.getProducerId());
                     prod.setCostEu(product.getCostEu());
@@ -832,7 +853,7 @@ public class ProductDAO {
                     productRepository.save(prod);
                 }
             }
-            product.setSku(setColorInSIgnatureOrNot(product.getSku(), product.getColor()));
+            product.setSku(setColorInSIgnatureOrNot(skuSpliter(product.getSku()), colorOption(product.getColor())));
             productRepository.save(product);
         }
         for (Product prod : productRepository.findByskuAndColor(pr.getSku(), pr.getColor())) {
@@ -842,7 +863,7 @@ public class ProductDAO {
             prod.setOtherStoneWeight(product.getOtherStoneWeight());
             productRepository.save(prod);
         }
-
+        return ResponseEntity.ok("The product is successfully updated");
     }
 
     private String getColorWithDash(String color) {
@@ -856,11 +877,7 @@ public class ProductDAO {
     }
 
     private String setColorInSIgnatureOrNot(String sku, String color) {
-        if (sku.contains("-")) {
-            return sku;
-        } else {
-            return sku + getColorWithDash(color);
-        }
+        return sku + color;
     }
 
     public void throwE() {
@@ -884,6 +901,30 @@ public class ProductDAO {
         if (validator.validateLimit(limit) == false) {
             throw new LimitNotValidException("Limit is not valid");
         }
+    }
+
+    public String colorOption(String color) {
+        String preffixColor = "";
+        if (color.equals("Yellow")) {
+            preffixColor = "-Y";
+        }
+        if (color.equals("Black")) {
+            preffixColor = "-B";
+
+        }
+        if (color.equals("White")) {
+            preffixColor = "-W";
+
+        }
+        if (color.equals("Rose")) {
+            preffixColor = "-R";
+        }
+        return preffixColor;
+    }
+
+    public String skuSpliter(String sku) {
+        String[] skuArray = sku.split("-");
+        return skuArray[0];
     }
 
 }

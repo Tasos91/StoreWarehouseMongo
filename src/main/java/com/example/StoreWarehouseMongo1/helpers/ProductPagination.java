@@ -1,6 +1,7 @@
 package com.example.StoreWarehouseMongo1.helpers;
 
 import com.example.StoreWarehouseMongo1.model.Product;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 /**
- *
  * @author Tasos
  */
 @Component
@@ -81,7 +81,7 @@ public class ProductPagination {
         Integer maxSize = (int) (long) maxSizelong;
         return maxSize;
     }
-    
+
     public Map<String, Integer> getMaxSize(String address, String producerId, String categoryId) {
         Map<String, Integer> maxSize = new HashMap<>();
         if (!categoryId.isEmpty() && producerId.isEmpty()) {
@@ -97,6 +97,15 @@ public class ProductPagination {
             maxSize.put("maxSize", getMaxSizeForCategoryAndProducer(producerId, categoryId, address));
         }
         return maxSize;
+    }
+
+    public List<Product> getSKULikeQuery(String sku) {
+        String[] skuArray = sku.split("-");
+        String baseName = skuArray[0];
+        Query query = new Query();
+        query.addCriteria(Criteria.where("sku").regex(baseName));
+        List<Product> products = mongoTemplate.find(query, Product.class);
+        return products;
     }
 
 }

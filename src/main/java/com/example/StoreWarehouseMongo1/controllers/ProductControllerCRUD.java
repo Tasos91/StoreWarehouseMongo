@@ -45,7 +45,6 @@ public class ProductControllerCRUD {
                     + " ", 666), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<List<List<?>>>(productDao.getProductsPerFilterCase(page, categoryId, producerId, address, limit), HttpStatus.OK);
-
     }
 
     @PostMapping(value = "/create")

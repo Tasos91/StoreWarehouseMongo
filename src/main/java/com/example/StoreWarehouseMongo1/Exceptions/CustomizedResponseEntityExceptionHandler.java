@@ -106,11 +106,11 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(SKUNotValidException.class)
-    public final ResponseEntity<ExceptionResponse> handleSKUNotValidExceptionExceptionException(SKUNotValidException ex, WebRequest request) {
+    @ExceptionHandler(ProductsNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleProductsNotFoundExceptionException(ProductsNotFoundException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+                HttpStatus.NOT_FOUND.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
 }
