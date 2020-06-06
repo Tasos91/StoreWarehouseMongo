@@ -8,9 +8,7 @@ import com.example.StoreWarehouseMongo1.helpers.Validator;
 import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.model.Store;
-import com.example.StoreWarehouseMongo1.repositories.HistoryRepository;
-import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
-import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
+import com.example.StoreWarehouseMongo1.repositories.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -57,6 +55,12 @@ public class ProductDAO {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProducerRepository producerRepository;
+
     public ResponseEntity<?> get(String productId) {
         if (validator.validateProductId(productId)) {
             Product product = new Product();
@@ -92,7 +96,7 @@ public class ProductDAO {
     }
 
     //@Transactional
-    public void insert(Product product) throws Exception {
+    public ResponseEntity<?> insert(Product product) throws Exception {
         Product pr1 = new Product();
         Product pr2 = new Product();
         Product pr3 = new Product();
@@ -100,6 +104,7 @@ public class ProductDAO {
         if (!validator.validateSKU(product.getSku())) {
             throw new SKUNotValidException("The sku is not valid");
         }
+        isColorValidOnCreation(product.getColor());
         try {
             pr1 = productRepository.findBysku(product.getSku() + "-Y").get(0);
             pr2 = productRepository.findBysku(product.getSku() + "-W").get(0);
@@ -139,10 +144,26 @@ public class ProductDAO {
             if (product.getColor().equals("Rose")) {
                 product.setSku(product.getSku() + "-R");
             }
+            try {
+                storeRepository.findByaddress(product.getAddress()).get(0);
+            } catch (Exception e) {
+                throw new StoreNotFoundException("This address you want to add in the product there is not found");
+            }
+            try {
+                categoryRepository.findById(product.getCategoryId()).get();
+            } catch (Exception e) {
+                throw new CategoryNotFoundException("This category you want to add in the product there is not found");
+            }
+            try {
+                producerRepository.findById(product.getProducerId()).get();
+            } catch (Exception e) {
+                throw new ProducerNotFoundException("This producer you want to add in the product there is not found");
+            }
             productRepository.save(product);
             saveHistory(product, product.getAddress());
             instantiateOtherProducts(product);
             instantiateOtherProductsToOtherStores(product);
+            return ResponseEntity.ok("The product is successfully inserted");
         } else {
             throw new ProductFoundException("This product is already exist");
         }
@@ -824,6 +845,7 @@ public class ProductDAO {
         if (validator.validateSKUComingFromDB(product.getSku()) == false) {
             throw new SKUNotValidException("The sku is not valid");
         }
+        isColorValidOnEdit(product);
         try {
             pr = productRepository.findById(product.getId()).get();
         } catch (Exception e) {
@@ -880,7 +902,7 @@ public class ProductDAO {
         return sku + color;
     }
 
-    public void throwE() {
+    private void throwE() {
         List<String> kk = new ArrayList();
         kk.get(5);
     }
@@ -903,7 +925,7 @@ public class ProductDAO {
         }
     }
 
-    public String colorOption(String color) {
+    private String colorOption(String color) {
         String preffixColor = "";
         if (color.equals("Yellow")) {
             preffixColor = "-Y";
@@ -922,9 +944,44 @@ public class ProductDAO {
         return preffixColor;
     }
 
-    public String skuSpliter(String sku) {
+    private String skuSpliter(String sku) {
         String[] skuArray = sku.split("-");
         return skuArray[0];
+    }
+
+    private String skuColorPrefix(String sku) {
+        String[] skuArray = sku.split("-");
+        return skuArray[1];
+    }
+
+    private void isColorValidOnCreation(String color) {
+        if (!color.equals("Yellow") && !color.equals("Black") && !color.equals("White") && !color.equals("Rose")) {
+            throw new ColorException("The color should be one of the following values: Yellow, White, Rose or Black");
+        }
+    }
+
+    private void isColorValidOnEdit(Product product) {
+        String prefixColor = skuColorPrefix(product.getSku());
+        if (prefixColor.equals("Y")) {
+            if (!product.getColor().equals("Yellow")) {
+                throw new ColorNotEqualWithPrefixException("The color should follow the value of prefix");
+            }
+        }
+        if (prefixColor.equals("W")) {
+            if (!product.getColor().equals("White")) {
+                throw new ColorNotEqualWithPrefixException("The color should follow the value of prefix");
+            }
+        }
+        if (prefixColor.equals("R")) {
+            if (!product.getColor().equals("Rose")) {
+                throw new ColorNotEqualWithPrefixException("The color should follow the value of prefix");
+            }
+        }
+        if (prefixColor.equals("B")) {
+            if (!product.getColor().equals("Black")) {
+                throw new ColorNotEqualWithPrefixException("The color should follow the value of prefix");
+            }
+        }
     }
 
 }

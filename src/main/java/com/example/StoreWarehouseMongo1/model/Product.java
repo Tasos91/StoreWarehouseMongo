@@ -54,7 +54,7 @@ public class Product implements Comparable<Product> {
 
     @Size(min = 3, max = 5)
     @Pattern(regexp = "^(\\d{1,2}\\.)\\d+$",
-            message = "You must include dot")
+            message = "Before dot the max range of digits should be 2. Also You dot is mandatory")
     @NotNull
     private String goldWeight;
 
@@ -74,6 +74,8 @@ public class Product implements Comparable<Product> {
     private String imageUrl;
 
     @NotNull
+//    @Pattern(regexp = "^(true|false)$",
+//            message = "NonProduce variable should be of boolean type")
     private Boolean nonProduce;
 
     @Pattern(regexp = "^[a-zA-Z0-9, ?]{0,500}$",

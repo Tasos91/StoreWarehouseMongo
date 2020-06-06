@@ -10,7 +10,11 @@ public class Validator {
     }
 
     public boolean validateSKUComingFromDB(String sku) {
-        return sku.matches("^[a-zA-Z0-9-]{7,7}$");
+        if (sku.matches("^[a-zA-Z0-9-]{7,7}$") && sku.contains("-")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean validateProductId(String productId) {

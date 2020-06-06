@@ -6,6 +6,7 @@
 package com.example.StoreWarehouseMongo1.Exceptions;
 
 import java.util.Date;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +16,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- *
  * @author Tasos
  */
 @ControllerAdvice
@@ -112,5 +112,35 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
                 HttpStatus.NOT_FOUND.value(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(StoreNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleStoreNotFoundExceptionExceptionException(StoreNotFoundException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NonProduceWrongTypeVariableException.class)
+    public final ResponseEntity<ExceptionResponse> handleNonProduceWrongTypeVariableExceptionExceptionException(NonProduceWrongTypeVariableException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ColorException.class)
+    public final ResponseEntity<ExceptionResponse> handleColorExceptionExceptionException(ColorException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ColorNotEqualWithPrefixException.class)
+    public final ResponseEntity<ExceptionResponse> handleColorNotEqualWithPrefixException(ColorNotEqualWithPrefixException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }
