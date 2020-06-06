@@ -32,67 +32,23 @@ public class HistoryPagination {
         Query query = new Query();
         query.addCriteria(Criteria.where("storeId").is(address));
         query.addCriteria(Criteria.where("productId").is(productId));
-//        query.addCriteria(Criteria.where("timestamp").gte(startDate).lt(endDate));
+        query.addCriteria(Criteria.where("timestamp").gte(startDate).lt(endDate));
         query.with(pageableRequest);
         List<History> history = mongoTemplate.find(query, History.class);
         return history;
     }
 
-    public Integer getMaxSize(String address) {
+    public Map<String, Integer> getMaxSize(String productId, String address, String startDate, String endDate) {
+        Map<String, Integer> maxSizeMap = new HashMap<>();
         Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "sku"));
-        query.addCriteria(Criteria.where("address").is(address));
-        long maxSizelong = mongoTemplate.count(query, Product.class);
+        query.with(new Sort(Sort.Direction.ASC, "timestamp"));
+        query.addCriteria(Criteria.where("storeId").is(address)
+                .and("productId").is(productId));
+        query.addCriteria(Criteria.where("timestamp").gte(startDate).lt(endDate));
+        long maxSizelong = mongoTemplate.count(query, History.class);
         Integer maxSize = (int) (long) maxSizelong;
-        return maxSize;
-    }
-
-    public Integer getMaxSizeForCategory(String categoryId, String address) {
-        Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "sku"));
-        query.addCriteria(Criteria.where("address").is(address)
-                .and("categoryId").is(categoryId));
-        long maxSizelong = mongoTemplate.count(query, Product.class);
-        Integer maxSize = (int) (long) maxSizelong;
-        return maxSize;
-    }
-
-    public Integer getMaxSizeForProducer(String producerId, String address) {
-        Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "sku"));
-        query.addCriteria(Criteria.where("address").is(address)
-                .and("producerId").is(producerId));
-        long maxSizelong = mongoTemplate.count(query, Product.class);
-        Integer maxSize = (int) (long) maxSizelong;
-        return maxSize;
-    }
-
-    public Integer getMaxSizeForCategoryAndProducer(String producerId, String categoryId, String address) {
-        Query query = new Query();
-        query.with(new Sort(Sort.Direction.ASC, "sku"));
-        query.addCriteria(Criteria.where("address").is(address)
-                .and("producerId").is(producerId))
-                .addCriteria(Criteria.where("categoryId").is(categoryId));
-        long maxSizelong = mongoTemplate.count(query, Product.class);
-        Integer maxSize = (int) (long) maxSizelong;
-        return maxSize;
-    }
-
-    public Map<String, Integer> getMaxSize(String address, String producerId, String categoryId) {
-        Map<String, Integer> maxSize = new HashMap<>();
-        if (!categoryId.isEmpty() && producerId.isEmpty()) {
-            maxSize.put("maxSize", getMaxSizeForCategory(categoryId, address));
-        }
-        if (categoryId.isEmpty() && !producerId.isEmpty()) {
-            maxSize.put("maxSize", getMaxSizeForProducer(producerId, address));
-        }
-        if (categoryId.isEmpty() && producerId.isEmpty()) {
-            maxSize.put("maxSize", getMaxSize(address));
-        }
-        if (!categoryId.isEmpty() && !producerId.isEmpty()) {
-            maxSize.put("maxSize", getMaxSizeForCategoryAndProducer(producerId, categoryId, address));
-        }
-        return maxSize;
+        maxSizeMap.put("maxSize", maxSize);
+        return maxSizeMap;
     }
 
 }

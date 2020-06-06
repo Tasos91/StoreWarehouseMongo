@@ -786,6 +786,7 @@ public class ProductDAO {
             if (validator.validateQuantity(String.valueOf(quantity))) {
                 product.setQuantity(quantity);
                 productRepository.save(product);
+                saveHistory(product, product.getAddress());
                 return new ResponseEntity(new CustomErrorType("The quantity is changed succesfully", HttpStatus.OK.value()),
                         HttpStatus.OK);
             } else {

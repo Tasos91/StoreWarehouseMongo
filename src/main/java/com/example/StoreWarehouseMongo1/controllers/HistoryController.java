@@ -1,5 +1,6 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.example.StoreWarehouseMongo1.dao.HistoryDAO;
 import com.example.StoreWarehouseMongo1.helpers.HistoryPagination;
 import com.example.StoreWarehouseMongo1.model.History;
 import com.example.StoreWarehouseMongo1.repositories.HistoryRepository;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
  * @author Tasos
  */
 @RestController
@@ -30,6 +30,10 @@ public class HistoryController {
 
     @Autowired
     private HistoryPagination pagination;
+
+    @Autowired
+    private HistoryDAO historyDAO;
+
 
     @GetMapping
     public ResponseEntity<?> getHistory() {
@@ -49,10 +53,10 @@ public class HistoryController {
             return new ResponseEntity(new CustomErrorType("History is not deleted", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @GetMapping(value = "/product")
     public ResponseEntity<?> getHistoryByDate(@RequestParam("storeId") String storeId,
-            @RequestParam("productId") String productId) {
+                                              @RequestParam("productId") String productId) {
         try {
             return new ResponseEntity<List<History>>(historyrepository.findByProductIdAndStoreId(productId, storeId), HttpStatus.OK);
         } catch (Exception e) {
@@ -61,17 +65,16 @@ public class HistoryController {
     }
 
     @GetMapping(value = "/test")
-    public void getHistoryByDatse() {
-        pagination.getHistoryPaginated("1","Kifisia","5e8e0dcf46a89e3fac413074","12","2020/04/08 17:45:51", "2020/04/08 17:45:51");
+    public List<List<?>> getHistoryByDate() {
+        return historyDAO.get("5edb9885d7607e1a5c92c4ec","Kifisia", "2020/06/06 16:22:13", "2020/06/06 16:35:33", "12", "1");
     }
-    
+
     private void dateFromString(History history) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         Date dt = (Date) dtf.parse(history.getTimestamp());
 //        String timestamp = dtf.format(now);
         History productHistory = new History();
     }
-    
-    
+
 
 }
