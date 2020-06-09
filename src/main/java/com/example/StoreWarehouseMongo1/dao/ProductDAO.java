@@ -801,7 +801,7 @@ public class ProductDAO {
     @Cacheable(value = "productsWithMaxSize")
     @CacheEvict("productsWithMaxSize")
     public List<List<?>> getProductsPerFilterCase(String page, String categoryId, String producerId, String address, String limit) {
-        validateParams(page, categoryId, producerId, address, limit);
+        validator.validateParamsOfGetProducts(page, categoryId, producerId, address, limit);
         List<Product> products = productPagination.getProductsPaginated(page, categoryId, address, producerId, limit);
         if (products.isEmpty()) {
             throw new ProductsNotFoundException("There is not products with these filters");
@@ -908,23 +908,6 @@ public class ProductDAO {
         kk.get(5);
     }
 
-    private void validateParams(String page, String categoryId, String producerId, String address, String limit) {
-        if (validator.validatePage(page) == false) {
-            throw new PageNotValidException("Page is not valid");
-        }
-        if (validator.validateCategoryId(categoryId) == false) {
-            throw new CategoryIdNotValidException("CategoryId is not valid");
-        }
-        if (validator.validateProducerId(producerId) == false) {
-            throw new ProducerIdNotValidException("ProducerId is not valid");
-        }
-        if (validator.validateAddress(address) == false) {
-            throw new AddressNotValidException("Address is not valid");
-        }
-        if (validator.validateLimit(limit) == false) {
-            throw new LimitNotValidException("Limit is not valid");
-        }
-    }
 
     private String colorOption(String color) {
         String preffixColor = "";
