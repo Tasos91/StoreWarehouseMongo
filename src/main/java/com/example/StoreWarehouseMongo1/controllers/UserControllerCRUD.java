@@ -4,6 +4,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.example.StoreWarehouseMongo1.Exceptions.ProductNotFoundException;
+import com.example.StoreWarehouseMongo1.helpers.Validator;
 import com.example.StoreWarehouseMongo1.model.Store;
 import com.example.StoreWarehouseMongo1.model.User;
 import com.example.StoreWarehouseMongo1.repositories.StoreRepository;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- *
  * @author Tasos
  */
 @RestController
@@ -37,6 +38,9 @@ public class UserControllerCRUD {
 
     @Autowired
     private StoreRepository storeRepository;
+
+    @Autowired
+    private Validator validator;
 
     @RequestMapping(value = "/get", method = POST)
     public User get(@RequestParam("username") String username) {
@@ -78,7 +82,7 @@ public class UserControllerCRUD {
     @RequestMapping(value = "/create/{address}", method = POST)
     public User createUserController(@Valid @RequestBody User user, @PathVariable("address") String address) {
         try {
-           // return createUser(address, user);
+            return createUser(address, user);
         } catch (Exception e) {
             //return createUser(address, user);
         }
@@ -129,15 +133,18 @@ public class UserControllerCRUD {
     }
 
     public User createUser(String address, User user) {
-        user.setPassword(getHashedPassword(user.getPassword()));
-        List<Store> stores = storeRepository.findByaddress(address);
-        Store store = stores.get(0);
-        List<User> users = store.getUsers();
-        users.add(user);
-        store.setUsers(users);
-        userrepository.save(user);
-        storeRepository.save(store);
-        return user;
+        if (validator.validateUserPassword(user.getPassword())) {
+            user.setPassword(getHashedPassword(user.getPassword()));
+            List<Store> stores = storeRepository.findByaddress(address);
+            Store store = stores.get(0);
+            List<User> users = store.getUsers();
+            users.add(user);
+            store.setUsers(users);
+            userrepository.save(user);
+            storeRepository.save(store);
+            return user;
+        }
+        return null;
     }
 
     private String getHashedPassword(String password) {

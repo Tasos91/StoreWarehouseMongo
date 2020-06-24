@@ -26,10 +26,6 @@ public class User {
     @Email
     private String email;
     @NotNull(message = "Password cannot be null")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[-@#$%^&+*()!_=])(?=\\S+$).{6,10}$",
-    message = "The password length must be from 6 to 10 characters and has the following restrictions: must contain at least 1 number, a lower case letter must occur at least once, " +
-            "an upper case letter must occur at least once, a special character must occur at least once eg. (!@#$%^&*())," +
-            " no whitespace allowed in the entire string ")
     private String password;
     @NotNull(message = "Fullname cannot be null")
     @Size(min=0, max=20)

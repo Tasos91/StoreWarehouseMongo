@@ -22,6 +22,10 @@ public class Validator {
         return producerId.matches("^[a-zA-Z0-9]{24,24}$");
     }
 
+    public boolean validateUserPassword(String producerId) {
+        return producerId.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[-@#$%^&+*()!_=])(?=\\S+$).{6,10}$");
+    }
+
     public boolean validateAddress(String address) {
         return address.matches("^[a-zA-Z]{2,20}$");
     }

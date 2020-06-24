@@ -13,16 +13,18 @@ import org.springframework.stereotype.Service;
 public class MongoUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = repository.findByUsername(username).get(0);
+        User user = userRepository.findByUsername(username).get(0);
         UserBuilder builder = null;
         if (user != null) {
-            builder = org.springframework.security.core.userdetails.User.withUsername(username);
-            builder.roles(user.getRoles());
-            builder.password(user.getPassword());
+            if (user.isEnabled()) {
+                builder = org.springframework.security.core.userdetails.User.withUsername(username);
+                builder.roles(user.getRoles());
+                builder.password(user.getPassword());
+            }
         } else {
             throw new UsernameNotFoundException("User not found.");
         }
