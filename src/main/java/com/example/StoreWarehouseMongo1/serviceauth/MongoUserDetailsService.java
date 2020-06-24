@@ -20,11 +20,11 @@ public class MongoUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsername(username).get(0);
         UserBuilder builder = null;
         if (user != null) {
-            if (user.isEnabled()) {
+         //   if (user.isEnabled()) {
                 builder = org.springframework.security.core.userdetails.User.withUsername(username);
                 builder.roles(user.getRoles());
                 builder.password(user.getPassword());
-            }
+           // }
         } else {
             throw new UsernameNotFoundException("User not found.");
         }
