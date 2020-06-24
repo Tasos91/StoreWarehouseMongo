@@ -11,7 +11,7 @@ public class Validator {
     }
 
     public boolean validateCategoryId(String categoryId) {
-        return categoryId.matches("^[a-zA-Z0-9]{24,24}$");
+        return categoryId.matches("^[a-zA-Z0-9]{0,24}$");
     }
 
     public boolean validateStoreId(String storeId) {
@@ -19,7 +19,7 @@ public class Validator {
     }
 
     public boolean validateProducerId(String producerId) {
-        return producerId.matches("^[a-zA-Z0-9]{24,24}$");
+        return producerId.matches("^[a-zA-Z0-9]{0,24}$");
     }
 
     public boolean validateUserPassword(String producerId) {
