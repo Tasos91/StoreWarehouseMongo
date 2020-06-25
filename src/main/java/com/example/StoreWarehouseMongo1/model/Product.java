@@ -114,8 +114,6 @@ public class Product implements Comparable<Product> {
     }
 
 
-
-
     public Product(String sku, String costUsd, String costEu, String price, String description, Integer karats, String goldWeight, String color, Integer quantity, String imageUrl, Boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address) {
         this.sku = sku;
         this.costUsd = costUsd;
