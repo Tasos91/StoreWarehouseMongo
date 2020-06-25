@@ -110,7 +110,6 @@ public class Product implements Comparable<Product> {
     @NotNull
     private String address;
 
-
     public Product() {
     }
 
