@@ -106,6 +106,8 @@ public class Validator {
         return sku.matches("^[a-zA-Z0-9]{5,5}$");
     }
 
+
+
     public boolean validateSKUComingFromDB(String sku) {
         if (sku.matches("^[a-zA-Z0-9-]{7,7}$") && sku.contains("-")) {
             return true;
