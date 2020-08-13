@@ -29,7 +29,6 @@ public class Category {
     public Category() {
     }
 
-
     public String getBabyPins() {
         return babyPins;
     }
