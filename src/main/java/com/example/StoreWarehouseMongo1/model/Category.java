@@ -47,6 +47,7 @@ public class Category {
         this.pendants = pendants;
     }
 
+
     public String getNecklaces() {
         return Necklaces;
     }
