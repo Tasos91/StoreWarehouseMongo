@@ -43,7 +43,6 @@ public class Category {
         return pendants;
     }
 
-
     public void setPendants(String pendants) {
         this.pendants = pendants;
     }
