@@ -34,6 +34,7 @@ public class Category {
         return babyPins;
     }
 
+
     public void setBabyPins(String babyPins) {
         this.babyPins = babyPins;
     }
