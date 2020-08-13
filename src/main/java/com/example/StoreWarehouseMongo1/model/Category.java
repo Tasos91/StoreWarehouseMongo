@@ -6,11 +6,10 @@
 package com.example.StoreWarehouseMongo1.model;
 
 /**
- *
  * @author Tasos
  */
 public class Category {
-    
+
     private String babyPins;
     private String pendants;
     private String Necklaces;
@@ -26,11 +25,9 @@ public class Category {
         this.Earrings = Earrings;
         this.cross = cross;
     }
-    
-    public Category(){
+
+    public Category() {
     }
-
-
 
 
     public String getBabyPins() {
