@@ -29,11 +29,9 @@ public class Category {
     public Category() {
     }
 
-
     public String getBabyPins() {
         return babyPins;
     }
-
 
     public void setBabyPins(String babyPins) {
         this.babyPins = babyPins;
