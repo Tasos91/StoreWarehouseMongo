@@ -89,10 +89,25 @@ public class UserControllerCRUD {
         return new User();
     }
 
-    @PostMapping(value = "/update")//update,reset password
-    public void updateUserController(@RequestBody User user
-    ) {
-        user.setPassword(getHashedPassword(user.getPassword()));
+    @PatchMapping(value = "/update")//update,reset password
+    public void updateUserController(@RequestBody User user, @RequestParam("id") String userId) {
+        User userByDb = new User();
+        try {
+            userByDb = userrepository.findById(userId).get();
+            if (!user.getEmail().equals("") && user.getEmail() != null) {
+                userByDb.setEmail(user.getEmail());
+            }
+            if (!user.getFullname().equals("") && user.getFullname() != null) {
+                userByDb.setFullname(user.getFullname());
+            }
+            if (!user.getPassword().equals("") && user.getPassword() != null) {
+                userByDb.setPassword(getHashedPassword(user.getPassword()));
+            }
+            if (!user.getUsername().equals("") && user.getUsername() != null) {
+                userByDb.setUsername(user.getUsername());
+            }
+        } catch (Exception e) {
+        }
         userrepository.save(user);
     }
 

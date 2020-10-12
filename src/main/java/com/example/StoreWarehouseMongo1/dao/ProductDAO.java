@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.catalina.connector.Response;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,6 +29,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Tasos
@@ -844,13 +847,15 @@ public class ProductDAO {
         Product produc2 = new Product();
         String color = pr.getColor();
         if (validator.validateSKUComingFromDB(product.getSku()) == false) {
-            throw new SKUNotValidException("The sku is not valid");
+            return new ResponseEntity<Exception>(new SKUNotValidException("The sku is not valid"), HttpStatus.BAD_REQUEST);
         }
         isColorValidOnEdit(product);
         try {
             pr = productRepository.findById(product.getId()).get();
+            pr.setQuantity(product.getQuantity());
+            pr.setDescription(product.getDescription());
         } catch (Exception e) {
-            throw new ProductNotFoundException("There is no product with this id");
+            return new ResponseEntity<Exception>(new ProductNotFoundException("There is no product with this id"), HttpStatus.BAD_REQUEST);
         }
         if (pr.getDescription() == null) {
             pr.setDescription("");
@@ -859,10 +864,10 @@ public class ProductDAO {
             produc = productRepository.findByskuAndColor(pr.getSku(), pr.getColor()).get(0);
             produc2 = productRepository.findBysku(pr.getSku()).get(0);
         } catch (Exception e) {
-            throw new ProductNotFoundException("There is no product with this sku and color");
+            return new ResponseEntity<Exception>(new ProductNotFoundException("There is no product with this sku and color"), HttpStatus.BAD_REQUEST);
         }
         if (!pr.getSku().equals(product.getSku()) || !pr.getDescription().equals(product.getDescription()) || !pr.getCostEu().equals(product.getCostEu()) || !pr.getCostUsd().equals(product.getCostUsd()) || !pr.getPrice().equals(product.getPrice()) || !pr.getCategoryId().equals(product.getCategoryId()) || !pr.getProducerId().equals(product.getProducerId()) || !pr.getKarats().equals(product.getKarats())) {
-            for (Product prod : productPagination.getSKULikeQuery(pr.getSku())) {
+            for (Product prod : productPagination.getSKULikeQuery(pr.getSku())) { //edw allazei kai sta 12 proionta me auto to query!!
                 if (!prod.getId().equals(pr.getId())) {
                     String colorForEveryOf12 = prod.getColor();
                     colorOption(colorForEveryOf12);
@@ -884,6 +889,8 @@ public class ProductDAO {
             prod.setDiamondWeight(product.getDiamondWeight());
             prod.setGoldWeight(product.getGoldWeight());
             prod.setOtherStoneWeight(product.getOtherStoneWeight());
+            prod.setImageUrl(product.getImageUrl());
+            prod.setNonProduce(product.isNonProduce());
             productRepository.save(prod);
         }
         return ResponseEntity.ok("The product is successfully updated");
@@ -966,6 +973,85 @@ public class ProductDAO {
                 throw new ColorNotEqualWithPrefixException("The color should follow the value of prefix");
             }
         }
+    }
+
+    public Product convertJsonToProduct(String jsonProduct) {
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = new JSONObject();
+        Product product = new Product();
+        try {
+            jsonObject = (JSONObject) parser.parse(jsonProduct);
+        } catch (Exception e) {
+        }
+        product.setSku(jsonObject.get("sku").toString());
+        product.setId(jsonObject.get("id").toString());
+        product.setKarats(Integer.parseInt(jsonObject.get("karats").toString()));
+        product.setDescription(jsonObject.get("description").toString());
+        product.setCostEu(jsonObject.get("costEu").toString());
+        product.setCostUsd(jsonObject.get("costUsd").toString());
+        product.setPrice(jsonObject.get("price").toString());
+        product.setCategoryId(jsonObject.get("categoryId").toString());
+        product.setColor(jsonObject.get("color").toString());
+        product.setProducerId(jsonObject.get("producerId").toString());
+        product.setDiamondWeight(jsonObject.get("diamondWeight").toString());
+        product.setOtherStoneWeight(jsonObject.get("otherStoneWeight").toString());
+        product.setOtherStone(jsonObject.get("otherStone").toString());
+        product.setGoldWeight(jsonObject.get("goldWeight").toString());
+        product.setAddress(jsonObject.get("address").toString());
+        product.setNonProduce((Boolean) jsonObject.get("nonProduce"));
+        product.setQuantity(Integer.parseInt(jsonObject.get("quantity").toString()));
+        return product;
+    }
+
+    public JSONObject customErrorsFromValidation(Product product) {
+        JSONObject jsonErrors = new JSONObject();
+        List<String> validationErrors = new ArrayList<>();
+        if (!validator.validateCost(product.getCostEu())) {
+            jsonErrors.put("costEu", "The correct value could be something like 99999.99 (max 5 digits before dot and min 1)");
+        }
+        if (!validator.validateCost(product.getCostUsd())) {
+            jsonErrors.put("costUsd", "The correct value could be something like 99999.99 (max 5 digits before dot and min 1)");
+        }
+        if (!validator.validateSKUComingFromDB(product.getSku())) {
+            jsonErrors.put("sku", "The sku is not valid");
+        }
+        if (!validator.validateDescription(product.getDescription())) {
+            jsonErrors.put("description", "You exceed 500 characters");
+        }
+        if (!validator.validateKarats(product.getKarats())) {
+            jsonErrors.put("karats", "Karats have specific values");
+        }
+        if (!validator.validatePrice(product.getPrice())) {
+            jsonErrors.put("price", "The correct value could be something like 99999.99 (max 6 digits before dot and min 1)");
+        }
+        if (!validator.validateCategoryId(product.getCategoryId())) {
+            jsonErrors.put("categoryId", "Category Id must be contained of 24 characters (numbers and letters only)");
+        }
+        if (!validator.validateProducerId(product.getProducerId())) {
+            jsonErrors.put("producerId", "Producer Id must be contained of 24 characters (numbers and letters only)");
+        }
+        if (!validator.validateColor(product.getColor())) {
+            jsonErrors.put("color", "Color could be only White, Black, Yellow, White and Rose");
+        }
+        if (!validator.validateGoldWeight(product.getGoldWeight())) {
+            jsonErrors.put("goldWeight", "Before dot the max range of digits should be 2. Also You dot is mandatory");
+        }
+        if (!validator.validateOtherStone(product.getOtherStone())) {
+            jsonErrors.put("otherStone", "You exceed 500 characters");
+        }
+        if (!validator.validateOtherStoneWeight(product.getOtherStoneWeight())) {
+            jsonErrors.put("otherStoneWeight", "You exceed 500 characters");
+        }
+        if (!validator.validateDiamondWeight(product.getDiamondWeight())) {
+            jsonErrors.put("diamondWeight", "You exceed 500 characters");
+        }
+        if (!validator.validateQuantity(product.getQuantity())) {
+            jsonErrors.put("quantity", "You exceed 10000 pieces");
+        }
+        if (!validator.validateProductId(product.getId())) {
+            jsonErrors.put("id", "Incorrect id");
+        }
+        return jsonErrors;
     }
 
 }

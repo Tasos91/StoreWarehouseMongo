@@ -22,6 +22,14 @@ public class Validator {
         return producerId.matches("^[a-zA-Z0-9]{0,24}$");
     }
 
+    public boolean validateCost(String cost) {
+        if (cost.length() == 3 || cost.length() == 4 || cost.length() == 5 || cost.length() == 6 || cost.length() == 7 || cost.length() == 8) {
+            return cost.matches("^(\\d{1,5}\\.)\\d+$");
+        } else {
+            return false;
+        }
+    }
+
     public boolean validateUserPassword(String producerId) {
         return producerId.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[-@#$%^&+*()!_=])(?=\\S+$).{6,10}$");
     }
@@ -106,7 +114,65 @@ public class Validator {
         return sku.matches("^[a-zA-Z0-9]{5,5}$");
     }
 
+    public boolean validateColor(String color) {
+        return color.matches("^[a-zA-Z]{4,6}$");
+    }
 
+    public boolean validateDescription(String description) {
+        return description.matches("^[a-zA-Z0-9_ (?)-? ?]{0,500}$");
+    }
+
+    public boolean validateGoldWeight(String goldWeight) {
+        if (goldWeight.matches("^(\\d{1,2}\\.)\\d+$") && goldWeight.length() == 3
+                || goldWeight.length() == 4 || goldWeight.length() == 5) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean validateKarats(Integer karats) {
+        if (karats == 6 || karats == 8 || karats == 9 || karats == 18 || karats == 22 || karats == 24) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean validatePrice(String price) {
+        if (price.matches("^(\\d{1,6}\\.)\\d+$") && (price.length() == 3 || price.length() == 4 ||
+                price.length() == 5 || price.length() == 6 || price.length() == 7 || price.length() == 8 || price.length() == 9)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean validateOtherStoneWeight(String otherStoneWeight) {
+        if (otherStoneWeight.matches("^(\\d{1,2}\\.)\\d+$") && (otherStoneWeight.length() == 3 || otherStoneWeight.length() == 4 ||
+                otherStoneWeight.length() == 5)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean validateDiamondWeight(String diamondWeight) {
+        if (diamondWeight.matches("^(\\d{1,2}\\.)\\d+$") && (diamondWeight.length() == 3 || diamondWeight.length() == 4 ||
+                diamondWeight.length() == 5)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean validateQuantity(Integer quantity) {
+        if (quantity >= 0 && quantity <= 1000) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public boolean validateSKUComingFromDB(String sku) {
         if (sku.matches("^[a-zA-Z0-9-]{7,7}$") && sku.contains("-")) {
@@ -114,6 +180,10 @@ public class Validator {
         } else {
             return false;
         }
+    }
+
+    public boolean validateOtherStone(String otherStone) {
+        return otherStone.matches("^[a-zA-Z0-9, ?]{0,500}$");
     }
 
 }

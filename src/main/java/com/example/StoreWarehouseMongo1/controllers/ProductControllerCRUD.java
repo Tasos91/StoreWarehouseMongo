@@ -1,19 +1,23 @@
 package com.example.StoreWarehouseMongo1.controllers;
 
 import com.example.StoreWarehouseMongo1.dao.ProductDAO;
+import com.example.StoreWarehouseMongo1.helpers.S3Client;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -24,6 +28,9 @@ import javax.validation.Valid;
 @RequestMapping("/api/product")
 @CrossOrigin(origins = "*")
 public class ProductControllerCRUD {
+
+    @Autowired
+    private S3Client s3Client;
 
     @Autowired
     private ProductRepository productrepository;
@@ -80,9 +87,25 @@ public class ProductControllerCRUD {
         productDao.updateQuantity(productId, quantity);
     }
 
-    @PatchMapping(value = "/update")
-    public void updateProduct(@Valid @RequestBody Product product) {
-        productDao.edit(product);
+    @PatchMapping(value = "/update")//!!!!!THA PREPEI NA GINEI VALIDATION GIA TO PRODUCT BY HAND!!!den exei testaristei apo to UI oute apo kwdika...
+    public ResponseEntity updateProduct(@RequestPart(value = "file") MultipartFile file, @RequestParam("text") String productString) {
+        Product product = productDao.convertJsonToProduct(productString); // updated product
+        String id = product.getId();
+        JSONObject errors = productDao.customErrorsFromValidation(product);
+        if (!errors.isEmpty()) {
+            return new ResponseEntity<JSONObject>(errors, HttpStatus.BAD_REQUEST);
+        }
+        Product pr = productrepository.findById(id).get(); //apo db prin to update
+        if (!file.getName().equals("") && file.getName() != null) {
+            s3Client.deleteFileFromS3Bucket(pr.getImageUrl());
+            product.setImageUrl(s3Client.returnFilePath(file));
+            try {
+                s3Client.uploadFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return productDao.edit(product);
     }
 
     @DeleteMapping(value = "/delete")

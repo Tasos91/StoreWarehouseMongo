@@ -103,7 +103,7 @@ public class ProductPagination {
         String[] skuArray = sku.split("-");
         String baseName = skuArray[0];
         Query query = new Query();
-        query.addCriteria(Criteria.where("sku").regex(baseName));
+        query.addCriteria(Criteria.where("sku").regex(baseName)); //like
         List<Product> products = mongoTemplate.find(query, Product.class);
         return products;
     }

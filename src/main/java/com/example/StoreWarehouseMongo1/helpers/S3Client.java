@@ -1,5 +1,6 @@
 package com.example.StoreWarehouseMongo1.helpers;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
@@ -7,17 +8,18 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- *
  * @author Tasos
  */
 @Component
@@ -93,14 +95,22 @@ public class S3Client {
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
-    public String uploadFile(MultipartFile multipartFile) {
+    public String uploadFile(MultipartFile multipartFile) throws IOException {
 
+        String fileUrl = "";
+        File file = convertMultiPartToFile(multipartFile);
+        fileUrl = endpointUrl + "/" + bucketName + "/" + file.getName();
+        uploadFileTos3bucket(file.getName(), file);
+        file.delete();
+
+        return fileUrl;
+    }
+
+    public String returnFilePath(MultipartFile multipartFile) {
         String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
             fileUrl = endpointUrl + "/" + bucketName + "/" + file.getName();
-            uploadFileTos3bucket(file.getName(), file);
-            file.delete();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,7 +119,11 @@ public class S3Client {
 
     public String deleteFileFromS3Bucket(String fileUrl) {
         String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-        s3client.deleteObject(new DeleteObjectRequest(bucketName + "/", fileName));
+        try {
+            s3client.deleteObject(new DeleteObjectRequest(bucketName, fileName.toString()));
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        }
         return "Successfully deleted";
     }
 }

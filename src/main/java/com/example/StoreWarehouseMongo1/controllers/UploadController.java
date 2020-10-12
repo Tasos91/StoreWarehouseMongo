@@ -5,6 +5,7 @@
  */
 package com.example.StoreWarehouseMongo1.controllers;
 
+import com.example.StoreWarehouseMongo1.dao.ProductDAO;
 import com.example.StoreWarehouseMongo1.helpers.S3Client;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static com.example.StoreWarehouseMongo1.helpers.RegexUtils.filePathRegex;
 
@@ -34,9 +37,16 @@ public class UploadController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProductDAO productDAO;
+
     @PostMapping("/upload")
     public String uploadFile(@RequestPart(value = "file") MultipartFile file) {
-        return s3Client.uploadFile(file);
+        try {
+            return s3Client.uploadFile(file);
+        } catch (IOException e) {
+            return "Cannot upload!";
+        }
     }
 
     @DeleteMapping("/delete")

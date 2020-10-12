@@ -64,7 +64,7 @@ public class Product implements Comparable<Product> {
     private String color;
 
     @Min(value = 0)
-    @Max(value = 1000)
+    @Max(value = 10000)
     @NotNull
     private Integer quantity;
 
