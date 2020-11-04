@@ -96,10 +96,9 @@ public class S3Client {
     }
 
     public String uploadFile(MultipartFile multipartFile) throws IOException {
-
         String fileUrl = "";
         File file = convertMultiPartToFile(multipartFile);
-        fileUrl = endpointUrl + "/" + bucketName + "/" + file.getName();
+        fileUrl = endpointUrl + "/" + file.getName();
         uploadFileTos3bucket(file.getName(), file);
         file.delete();
 
@@ -110,7 +109,7 @@ public class S3Client {
         String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + file.getName();
+            fileUrl = endpointUrl + "/" + file.getName();
         } catch (Exception e) {
             e.printStackTrace();
         }
