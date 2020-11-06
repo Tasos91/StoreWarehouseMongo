@@ -133,6 +133,25 @@ public class Product implements Comparable<Product> {
         this.address = address;
     }
 
+    public Product(String sku, String costUsd, String costEu, String price, String description, Integer karats, String goldWeight, String color, Integer quantity, Boolean nonProduce, String otherStone, String otherStoneWeight, String diamondWeight, String categoryId, String producerId, String address) {
+        this.sku = sku;
+        this.costUsd = costUsd;
+        this.costEu = costEu;
+        this.price = price;
+        this.description = description;
+        this.karats = karats;
+        this.goldWeight = goldWeight;
+        this.color = color;
+        this.quantity = quantity;
+        this.nonProduce = nonProduce;
+        this.otherStone = otherStone;
+        this.otherStoneWeight = otherStoneWeight;
+        this.diamondWeight = diamondWeight;
+        this.categoryId = categoryId;
+        this.producerId = producerId;
+        this.address = address;
+    }
+
     public String getId() {
         return id;
     }
