@@ -91,17 +91,22 @@ public class ProductControllerCRUD {
     public ResponseEntity updateProduct(@RequestPart(value = "file") MultipartFile file, @RequestParam("text") String productString) {
         Product product = productDao.convertJsonToProduct(productString); // updated product
         String id = product.getId();
+        System.out.println("First");
         JSONObject errors = productDao.customErrorsFromValidation(product);
         if (!errors.isEmpty()) {
+            System.out.println("Second");
             return new ResponseEntity<JSONObject>(errors, HttpStatus.BAD_REQUEST);
         }
         Product pr = productrepository.findById(id).get(); //apo db prin to update
         if (!file.getName().equals("") && file.getName() != null) {
+            System.out.println("Third");
             s3Client.deleteFileFromS3Bucket(pr.getImageUrl());
             product.setImageUrl(s3Client.returnFilePath(file));
             try {
+                System.out.println("Fourth");
                 s3Client.uploadFile(file);
             } catch (IOException e) {
+                System.out.println("Fifth");
                 e.printStackTrace();
             }
         }
