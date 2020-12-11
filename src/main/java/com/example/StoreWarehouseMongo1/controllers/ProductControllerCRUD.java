@@ -4,12 +4,10 @@ import com.example.StoreWarehouseMongo1.dao.ProductDAO;
 import com.example.StoreWarehouseMongo1.helpers.S3Client;
 import com.example.StoreWarehouseMongo1.model.Product;
 import com.example.StoreWarehouseMongo1.repositories.ProductRepository;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +89,10 @@ public class ProductControllerCRUD {
     public ResponseEntity updateProduct(@RequestPart(value = "file") MultipartFile file, @RequestParam("text") String productString) {
         Product product = productDao.convertJsonToProduct(productString); // updated product
         String id = product.getId();
+        System.out.println("First");
         JSONObject errors = productDao.customErrorsFromValidation(product);
         if (!errors.isEmpty()) {
+            System.out.println("Second");
             return new ResponseEntity<JSONObject>(errors, HttpStatus.BAD_REQUEST);
         }
         Product pr = productrepository.findById(id).get(); //apo db prin to update
@@ -100,8 +100,10 @@ public class ProductControllerCRUD {
             s3Client.deleteFileFromS3Bucket(pr.getImageUrl());
             product.setImageUrl(s3Client.returnFilePath(file));
             try {
+                System.out.println("Fourth");
                 s3Client.uploadFile(file);
             } catch (IOException e) {
+                System.out.println("Fifth");
                 e.printStackTrace();
             }
         }
