@@ -96,7 +96,7 @@ public class ProductControllerCRUD {
             return new ResponseEntity<JSONObject>(errors, HttpStatus.BAD_REQUEST);
         }
         Product pr = productrepository.findById(id).get(); //apo db prin to update
-        if (!file.getName().equals("") && file.getName() != null) {
+        if (!file.getOriginalFilename().equals("") && file.getName() != null) {
             s3Client.deleteFileFromS3Bucket(pr.getImageUrl());
             product.setImageUrl(s3Client.returnFilePath(file));
             try {
